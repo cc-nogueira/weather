@@ -7,7 +7,6 @@ linter:
     - prefer_relative_imports
     - sort_constructors_first
     - sort_pub_dependencies
-    - sort_unnamed_constructors_first
 
 analyzer:
   exclude:

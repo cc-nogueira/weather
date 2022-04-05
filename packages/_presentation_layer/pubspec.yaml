@@ -13,10 +13,15 @@ dependencies:
   _domain_layer:
     path: ../_domain_layer
     
+  country_picker: ^2.0.12
   faker: ^2.0.0
   flutter:
     sdk: flutter
-  flutter_riverpod: ^1.0.3
+  flutter_hooks: ^0.18.0
+  flutter_slidable: ^1.2.0
+  hooks_riverpod: ^1.0.3
+  qty: any
+  weather_icons: ^3.0.0
 
 dev_dependencies:
   flutter_lints: ^1.0.0

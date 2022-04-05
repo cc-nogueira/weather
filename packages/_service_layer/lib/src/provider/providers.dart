@@ -1,13 +1,12 @@
-import 'package:_domain_layer/domain_layer.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../layer/service_layer.dart';
+import '../service/open_weather_service.dart';
 
 /// Layer provider
-final serviceLayerProvider = Provider((ref) => ServiceLayer(ref.read));
+final serviceLayerProvider = Provider((_) => ServiceLayer());
 
-/// MessageService interface implementation provider
-final messageServiceProvider = Provider<MessageService>(
-  ((ref) =>
-      ref.watch(serviceLayerProvider.select((layer) => layer.messageService))),
-);
+final weatherServiceProvider = Provider((_) => OpenWeatherService(
+      appId: ServiceLayer.openWeatherAppId,
+      language: 'en',
+    ));

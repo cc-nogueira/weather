@@ -16,6 +16,8 @@ dependencies:
   faker: ^2.0.0
   flutter:
     sdk: flutter
+  http: ^0.13.4
+  json_annotation: ^4.4.0
   riverpod: any
 
 dev_dependencies:

@@ -4,31 +4,75 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:2494291159928628980",
-      "lastPropertyId": "3:7536516255235607232",
-      "name": "ContactModel",
+      "id": "1:7087833527141829159",
+      "lastPropertyId": "7:6755117612504196283",
+      "name": "CityModel",
       "properties": [
         {
-          "id": "1:8842629899034856986",
+          "id": "1:1861683602730264053",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:6105021033641353541",
+          "id": "2:2909187035970131406",
+          "name": "order",
+          "type": 6
+        },
+        {
+          "id": "3:6958164882556945889",
           "name": "name",
           "type": 9
         },
         {
-          "id": "3:7536516255235607232",
-          "name": "uuid",
+          "id": "4:2213943319569901023",
+          "name": "state",
+          "type": 9
+        },
+        {
+          "id": "5:6475586856650879323",
+          "name": "country",
+          "type": 9
+        },
+        {
+          "id": "6:4645165578086086533",
+          "name": "latitude",
+          "type": 8
+        },
+        {
+          "id": "7:6755117612504196283",
+          "name": "longitude",
+          "type": 8
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:2317240913754043061",
+      "lastPropertyId": "3:1276967198858112343",
+      "name": "PreferenceModel",
+      "properties": [
+        {
+          "id": "1:3797611820959307235",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6586050143127413144",
+          "name": "key",
+          "type": 9
+        },
+        {
+          "id": "3:1276967198858112343",
+          "name": "value",
           "type": 9
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "1:2494291159928628980",
+  "lastEntityId": "2:2317240913754043061",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

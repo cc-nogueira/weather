@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../common/page/message_page.dart';
-import '../feature/contacts/page/contacts_page.dart';
-import '../feature/contacts/page/view_contact_page.dart';
-import '../feature/home/home_page.dart';
+import '../feature/city/page/city_page.dart';
+import '../feature/weather/page/weather_list_page.dart';
 
 /// Routes management class.
 ///
@@ -13,20 +12,15 @@ class Routes {
   const Routes();
 
   static const home = '/';
-  static const contacts = '/contacts';
-  static const viewContact = '/viewContact';
+  static const city = '/city';
 
   Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
-        return _route((_) => const HomePage());
-      case contacts:
-        return _route((_) => const ContactsPage());
-      case viewContact:
-        return _routeWithArg<int>(
-          arg: settings.arguments,
-          builder: (_, arg) => ViewContactPage(id: arg),
-        );
+        return _route((_) => const WeatherListPage());
+      case city:
+        return _route((_) => CityPage());
+
       default:
         return _route(
           (_) => MessagePage.error('Unknown route "${settings.name}"'),

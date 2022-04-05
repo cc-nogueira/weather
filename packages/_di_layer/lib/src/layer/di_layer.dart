@@ -76,8 +76,9 @@ class DiLayer extends AppLayer {
   void _configureDomainLayer() {
     final domainConfiguration = _read(domainConfigurationProvider);
     domainConfiguration(
-      contactsRepository: _read(contactsRepositoryProvider),
-      messageService: _read(messageServiceProvider),
+      preferencesRepository: _read(preferencesRepositoryProvider),
+      citiesRepository: _read(citiesRepositoryProvider),
+      weatherService: _read(weatherServiceProvider),
     );
   }
 }

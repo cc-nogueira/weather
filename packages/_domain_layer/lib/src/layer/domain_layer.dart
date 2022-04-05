@@ -1,13 +1,18 @@
 import 'package:_core_layer/core_layer.dart';
+import 'package:riverpod/riverpod.dart';
 
-import '../repository/example/contacts_repository.dart';
-import '../service/example/message_service.dart';
-import '../usecase/example/contacts_usecase.dart';
+import '../repository/cities_repository.dart';
+import '../repository/preferences_repository.dart';
+import '../service/weather_service.dart';
+import '../usecase/cities_usecase.dart';
+import '../usecase/preferences_usecase.dart';
+import '../usecase/weather_usecase.dart';
 
 /// Function definition for Domain Layer dependencies
 typedef DomainConfiguration = void Function({
-  required ContactsRepository contactsRepository,
-  required MessageService messageService,
+  required PreferencesRepository preferencesRepository,
+  required CitiesRepository citiesRepository,
+  required WeatherService weatherService,
 });
 
 /// DomainLayer has the responsibility to provide domain usecases.
@@ -19,17 +24,24 @@ typedef DomainConfiguration = void Function({
 /// DomainLayer configuration is also available through [domainConfigurationProvider].
 ///
 /// Domains usecases are available through usecase providers:
-///   - [contactsUsecaseProvider]
+///   - [citiesUsecase]
+///   - [weatherUsecase]
 class DomainLayer extends AppLayer {
-  late final ContactsUsecase contactsUsecase;
+  DomainLayer({required this.read});
+
+  final Reader read;
+  late final PreferencesUsecase preferencesUsecase;
+  late final CitiesUsecase citiesUsecase;
+  late final WeatherUsecase weatherUsecase;
 
   void configure({
-    required ContactsRepository contactsRepository,
-    required MessageService messageService,
+    required PreferencesRepository preferencesRepository,
+    required CitiesRepository citiesRepository,
+    required WeatherService weatherService,
   }) {
-    contactsUsecase = ContactsUsecase(
-      repository: contactsRepository,
-      messageService: messageService,
-    );
+    preferencesUsecase =
+        PreferencesUsecase(read: read, repository: preferencesRepository);
+    citiesUsecase = CitiesUsecase(repository: citiesRepository);
+    weatherUsecase = WeatherUsecase(service: weatherService);
   }
 }

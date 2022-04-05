@@ -1,5 +1,5 @@
-name: flutter_objectbox_layered_template
-description: Flutter Layered Template with ObjectBox Persistence
+name: weather
+description: Single page weather app with multiple locations
 
 publish_to: 'none'
 version: 0.0.1

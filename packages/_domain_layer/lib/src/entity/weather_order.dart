@@ -1,0 +1,4 @@
+enum WeatherOrder {
+  byName,
+  byTemp,
+}
