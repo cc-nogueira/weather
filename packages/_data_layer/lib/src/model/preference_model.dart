@@ -19,10 +19,7 @@ class PreferenceModel implements Model {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PreferenceModel &&
-          other.id == id &&
-          other.key == key &&
-          other.value == value;
+      other is PreferenceModel && other.id == id && other.key == key && other.value == value;
 
   @override
   int get hashCode => Object.hash(id, key, value);

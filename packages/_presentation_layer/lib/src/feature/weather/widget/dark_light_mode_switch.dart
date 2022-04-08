@@ -29,9 +29,7 @@ class DarkLightModeSwitch extends ConsumerWidget {
           Icon(darkMode ? Icons.dark_mode_outlined : Icons.light_mode_outlined),
         if (keepIconSpaces && showIconPosition != ShowIconPosition.before)
           SizedBox(width: resolvedIconSize),
-        Switch(
-            value: darkMode,
-            onChanged: (value) => _onThemeChange(ref.read, value)),
+        Switch(value: darkMode, onChanged: (value) => _onThemeChange(ref.read, value)),
         if (showIconPosition == ShowIconPosition.after)
           Icon(darkMode ? Icons.dark_mode_outlined : Icons.light_mode_outlined),
         if (keepIconSpaces && showIconPosition != ShowIconPosition.after)
@@ -45,7 +43,6 @@ class DarkLightModeSwitch extends ConsumerWidget {
   }
 
   void _onThemeChange(Reader read, bool option) {
-    read(preferencesUsecaseProvider).theme =
-        option ? ThemeMode.dark : ThemeMode.light;
+    read(preferencesUsecaseProvider).theme = option ? ThemeMode.dark : ThemeMode.light;
   }
 }

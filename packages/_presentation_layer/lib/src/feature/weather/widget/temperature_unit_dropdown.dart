@@ -5,23 +5,23 @@ import 'package:qty/qty.dart';
 
 import 'unit_dropdown.dart';
 
-class TemperatureUnitDropdown extends UnitDropdown {
+class TemperatureUnitDropdown extends UnitDropdown<Temperature> {
   const TemperatureUnitDropdown({Key? key}) : super(key: key);
 
   @override
-  StateProvider<Unit> unitProvider(Reader read) =>
+  StateProvider<Unit<Temperature>> unitProvider(Reader read) =>
       read(preferencesUsecaseProvider).temperatureUnitProvider;
 
   @override
-  List<Unit> unitOptions(Reader read) =>
+  List<Unit<Temperature>> unitOptions(Reader read) =>
       read(preferencesUsecaseProvider).temperatureUnits;
 
   @override
-  void onChanged(Unit selection, Reader read) =>
+  void onChanged(Unit<Temperature> selection, Reader read) =>
       read(preferencesUsecaseProvider).temperatureUnit = selection;
 
   @override
-  String unitName(Unit unit) {
+  String unitLabel(Unit<Temperature> unit) {
     final name = unit.name;
     return name.startsWith('degrees ') ? name.substring(8) : name;
   }

@@ -8,10 +8,7 @@ import 'package:http/http.dart' as http;
 ///
 /// Remote invocations to OpenWeather API.
 class OpenWeatherClient {
-  OpenWeatherClient({
-    required this.appId,
-    required this.language,
-  });
+  OpenWeatherClient({required this.appId, required this.language});
 
   final String appId;
   final String language;

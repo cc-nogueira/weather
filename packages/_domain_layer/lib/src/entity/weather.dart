@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:qty/qty.dart' as qty;
 
 part 'weather.freezed.dart';
 
@@ -17,12 +18,22 @@ class Weather with _$Weather {
 
 @freezed
 class Temperature with _$Temperature {
+  const Temperature._();
   const factory Temperature({
     @Default(0) double feelsLike,
     @Default(0) double now,
     @Default(0) double min,
     @Default(0) double max,
   }) = _Temperature;
+
+  qty.Quantity<qty.Temperature> get currentTemperature =>
+      qty.Quantity(unit: qty.Temperature().celcius, amount: now);
+  qty.Quantity<qty.Temperature> get feelsLikeTemperature =>
+      qty.Quantity(unit: qty.Temperature().celcius, amount: feelsLike);
+  qty.Quantity<qty.Temperature> get minTemperature =>
+      qty.Quantity(unit: qty.Temperature().celcius, amount: min);
+  qty.Quantity<qty.Temperature> get maxTemperature =>
+      qty.Quantity(unit: qty.Temperature().celcius, amount: max);
 }
 
 @freezed
@@ -34,9 +45,12 @@ class Wind with _$Wind {
     @Default(0) int directionFrom,
   }) = _Wind;
 
+  qty.Quantity<qty.Speed> get windSpeed =>
+      qty.Quantity(unit: qty.Speed().meterPerSecond, amount: speed);
+  qty.Quantity<qty.Speed> get gustSpeed =>
+      qty.Quantity(unit: qty.Speed().meterPerSecond, amount: speed);
+
   int get directionTo => (180 + directionFrom) % 360;
-  double get speedInKnots => speed * 1.9438444924574;
-  double get gustInKnots => gust * 1.9438444924574;
 }
 
 @freezed
@@ -51,15 +65,11 @@ class Geo with _$Geo {
     @Default(0) int sunsetMillis,
   }) = _Geo;
 
-  DateTime get utcDateTime =>
-      DateTime.fromMillisecondsSinceEpoch(dateTimeMillis, isUtc: true);
+  DateTime get utcDateTime => DateTime.fromMillisecondsSinceEpoch(dateTimeMillis, isUtc: true);
   DateTime get localDateTime =>
-      DateTime.fromMillisecondsSinceEpoch(dateTimeMillis + timeShiftMillis,
-          isUtc: true);
+      DateTime.fromMillisecondsSinceEpoch(dateTimeMillis + timeShiftMillis, isUtc: true);
   DateTime get localSunrise =>
-      DateTime.fromMillisecondsSinceEpoch(sunriseMillis + timeShiftMillis,
-          isUtc: true);
+      DateTime.fromMillisecondsSinceEpoch(sunriseMillis + timeShiftMillis, isUtc: true);
   DateTime get localSunset =>
-      DateTime.fromMillisecondsSinceEpoch(sunsetMillis + timeShiftMillis,
-          isUtc: true);
+      DateTime.fromMillisecondsSinceEpoch(sunsetMillis + timeShiftMillis, isUtc: true);
 }

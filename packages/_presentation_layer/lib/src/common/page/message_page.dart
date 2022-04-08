@@ -6,14 +6,9 @@ import '../widget/message_widget.dart';
 ///
 /// Presents a page with title and a centralized message.
 class MessagePage extends StatelessWidget {
-  const MessagePage({
-    Key? key,
-    required this.title,
-    required this.message,
-  }) : super(key: key);
+  const MessagePage({Key? key, required this.title, required this.message}) : super(key: key);
 
-  factory MessagePage.error(Object error) =>
-      MessagePage(title: 'Error', message: error.toString());
+  factory MessagePage.error(Object error) => MessagePage(title: 'Error', message: error.toString());
 
   factory MessagePage.errorBuilder(Object error, StackTrace? stackTrace) =>
       MessagePage.error(error);

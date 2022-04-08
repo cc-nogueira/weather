@@ -11,6 +11,5 @@ abstract class EntityMapper<E extends Entity, M extends Model> {
   List<E> mapEntities(Iterable<M> models) =>
       List.unmodifiable(models.map((model) => mapEntity(model)));
 
-  List<M> mapModels(Iterable<E> entities) =>
-      List.unmodifiable(entities.map((e) => mapModel(e)));
+  List<M> mapModels(Iterable<E> entities) => List.unmodifiable(entities.map((e) => mapModel(e)));
 }

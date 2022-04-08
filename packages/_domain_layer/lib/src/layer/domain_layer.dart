@@ -39,8 +39,7 @@ class DomainLayer extends AppLayer {
     required CitiesRepository citiesRepository,
     required WeatherService weatherService,
   }) {
-    preferencesUsecase =
-        PreferencesUsecase(read: read, repository: preferencesRepository);
+    preferencesUsecase = PreferencesUsecase(read: read, repository: preferencesRepository);
     citiesUsecase = CitiesUsecase(repository: citiesRepository);
     weatherUsecase = WeatherUsecase(service: weatherService);
   }

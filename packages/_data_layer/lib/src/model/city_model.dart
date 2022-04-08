@@ -37,8 +37,7 @@ class CityModel implements Model {
           other.longitude == longitude;
 
   @override
-  int get hashCode =>
-      Object.hash(id, order, name, state, country, latitude, longitude);
+  int get hashCode => Object.hash(id, order, name, state, country, latitude, longitude);
 
   @override
   String toString() =>

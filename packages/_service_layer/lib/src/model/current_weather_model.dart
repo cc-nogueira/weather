@@ -30,8 +30,7 @@ class CoordModel with _$CoordModel {
     @Default(0) double lon,
   }) = _CoordModel;
 
-  factory CoordModel.fromJson(Map<String, dynamic> json) =>
-      _$CoordModelFromJson(json);
+  factory CoordModel.fromJson(Map<String, dynamic> json) => _$CoordModelFromJson(json);
 }
 
 @freezed
@@ -42,8 +41,7 @@ class WeatherModel with _$WeatherModel {
     @Default('') String description,
   }) = _WeatherModel;
 
-  factory WeatherModel.fromJson(Map<String, dynamic> json) =>
-      _$WeatherModelFromJson(json);
+  factory WeatherModel.fromJson(Map<String, dynamic> json) => _$WeatherModelFromJson(json);
 }
 
 @freezed
@@ -56,8 +54,7 @@ class MainModel with _$MainModel {
     @Default(0) int humidity,
   }) = _MainModel;
 
-  factory MainModel.fromJson(Map<String, dynamic> json) =>
-      _$MainModelFromJson(json);
+  factory MainModel.fromJson(Map<String, dynamic> json) => _$MainModelFromJson(json);
 }
 
 @freezed
@@ -68,8 +65,7 @@ class WindModel with _$WindModel {
     @Default(0) int deg,
   }) = _WindModel;
 
-  factory WindModel.fromJson(Map<String, dynamic> json) =>
-      _$WindModelFromJson(json);
+  factory WindModel.fromJson(Map<String, dynamic> json) => _$WindModelFromJson(json);
 }
 
 @freezed
@@ -79,6 +75,5 @@ class SysModel with _$SysModel {
     @Default(0) int sunset,
   }) = _SysModel;
 
-  factory SysModel.fromJson(Map<String, dynamic> json) =>
-      _$SysModelFromJson(json);
+  factory SysModel.fromJson(Map<String, dynamic> json) => _$SysModelFromJson(json);
 }

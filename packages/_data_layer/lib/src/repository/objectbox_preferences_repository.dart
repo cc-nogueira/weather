@@ -5,8 +5,7 @@ import '../mapper/preference_mapper.dart';
 import '../model/preference_model.dart';
 import 'objectbox_repository.dart';
 
-class ObjectboxPreferencesRepository
-    extends ObjectboxRepository<Preference, PreferenceModel>
+class ObjectboxPreferencesRepository extends ObjectboxRepository<Preference, PreferenceModel>
     implements PreferencesRepository {
   ObjectboxPreferencesRepository({required Box<PreferenceModel> box})
       : super(box: box, mapper: const PreferenceMapper());

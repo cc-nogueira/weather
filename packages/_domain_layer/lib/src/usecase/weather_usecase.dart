@@ -10,8 +10,7 @@ class WeatherUsecase {
 
   final WeatherService service;
 
-  Future<List<City>> searchCitiesLike(City city) =>
-      service.searchCitiesLike(city);
+  Future<List<City>> searchCitiesLike(City city) => service.searchCitiesLike(city);
 
   Future<Location> getCityLocation(City city) => service.getCityLocation(city);
 

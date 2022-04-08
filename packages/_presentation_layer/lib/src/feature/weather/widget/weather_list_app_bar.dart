@@ -13,22 +13,18 @@ class WeatherListAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) => AppBar(
-          title: Row(
-            textBaseline: TextBaseline.alphabetic,
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            children: const [
-              Text('Weather'),
-              SizedBox(width: 25),
-              WeatherOrderDropdown(),
-            ],
-          ),
-          actions: [
-            //const DarkLightModeSwitch(showIconPosition: ShowIconPosition.after),
-            _preferencesButton
-          ]);
+      title: Row(
+        textBaseline: TextBaseline.alphabetic,
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        children: const [
+          Text('Weather'),
+          SizedBox(width: 25),
+          WeatherOrderDropdown(),
+        ],
+      ),
+      actions: [_preferencesButton]);
 
   Widget get _preferencesButton => Padding(
       padding: const EdgeInsets.only(right: 8.0),
-      child: IconButton(
-          onPressed: onSettingsPressed, icon: const Icon(Icons.settings)));
+      child: IconButton(onPressed: onSettingsPressed, icon: const Icon(Icons.settings)));
 }

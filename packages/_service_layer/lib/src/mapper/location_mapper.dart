@@ -5,8 +5,6 @@ import '../model/city_location_model.dart';
 class LocationMapper {
   const LocationMapper();
 
-  Location mapEntity(CityLocationModel model) => Location(
-        latitude: model.lat,
-        longitude: model.lon,
-      );
+  Location mapEntity(CityLocationModel model) =>
+      Location(latitude: model.lat, longitude: model.lon);
 }

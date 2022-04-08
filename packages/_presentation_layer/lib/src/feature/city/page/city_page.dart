@@ -47,8 +47,9 @@ class CityPage extends ConsumerWidget {
   Widget _searchButton(BuildContext context, Reader read) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: OutlinedButton(
-            onPressed: () => _onSearchPressed(context, read),
-            child: const Text('Search')),
+          onPressed: () => _onSearchPressed(context, read),
+          child: const Text('Search'),
+        ),
       );
 
   void _onCountryChanged(BuildContext context, Reader read) {

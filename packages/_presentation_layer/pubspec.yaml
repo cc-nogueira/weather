@@ -20,7 +20,11 @@ dependencies:
   flutter_hooks: ^0.18.0
   flutter_slidable: ^1.2.0
   hooks_riverpod: ^1.0.3
-  qty: any
+
+  qty: ^0.6.0
+  #   path: ../../../../../dart/qty
+
+#  qty: any
   weather_icons: ^3.0.0
 
 dev_dependencies:

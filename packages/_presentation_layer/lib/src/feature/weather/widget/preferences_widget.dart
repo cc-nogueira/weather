@@ -19,8 +19,7 @@ class PreferencesWidget extends ConsumerWidget {
     final colors = theme.colorScheme;
     final isDark = colors.brightness == Brightness.dark;
     final textTheme = theme.textTheme;
-    final itemStyle =
-        textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold);
+    final itemStyle = textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold);
     final showPrefs = ref.watch(showPreferencesProvider);
 
     const border = BorderSide();
@@ -29,8 +28,7 @@ class PreferencesWidget extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Container(
               decoration: BoxDecoration(
-                border:
-                    const Border(left: border, right: border, bottom: border),
+                border: const Border(left: border, right: border, bottom: border),
                 color: colors.surfaceVariant.withOpacity(0.95),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -42,9 +40,7 @@ class PreferencesWidget extends ConsumerWidget {
                     children: [
                       Text('Dark/Light Theme', style: itemStyle),
                       DarkLightModeSwitch(
-                        showIconPosition: isDark
-                            ? ShowIconPosition.after
-                            : ShowIconPosition.before,
+                        showIconPosition: isDark ? ShowIconPosition.after : ShowIconPosition.before,
                         keepIconSpaces: true,
                       ),
                     ],

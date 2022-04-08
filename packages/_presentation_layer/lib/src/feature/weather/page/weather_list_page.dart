@@ -15,15 +15,13 @@ class WeatherListPage extends ConsumerWidget {
   const WeatherListPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) =>
-      ref.watch(watchAllCitiesProvider).when(
-            loading: LoadingPage.builder('Weather'),
-            error: MessagePage.errorBuilder,
-            data: (cities) => _scaffold(context, ref, cities),
-          );
+  Widget build(BuildContext context, WidgetRef ref) => ref.watch(watchAllCitiesProvider).when(
+        loading: LoadingPage.builder('Weather'),
+        error: MessagePage.errorBuilder,
+        data: (cities) => _scaffold(context, ref, cities),
+      );
 
-  Widget _scaffold(BuildContext context, WidgetRef ref, List<City> cities) =>
-      Scaffold(
+  Widget _scaffold(BuildContext context, WidgetRef ref, List<City> cities) => Scaffold(
         appBar: WeatherListAppBar(
           onSettingsPressed: () => _toggleShowPreferences(ref.read),
         ),
@@ -44,38 +42,5 @@ class WeatherListPage extends ConsumerWidget {
   void _toggleShowPreferences(Reader read) =>
       read(_showPreferencesProvider.notifier).update((state) => !state);
 
-  /*
-  void _showPreferences(BuildContext context) async {
-    await showGeneralDialog(
-        context: context,
-        pageBuilder: (BuildContext buildContext, Animation<double> animation,
-            Animation<double> secondaryAnimation) {
-          return SafeArea(
-            child: Material(
-                color: Colors.transparent,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [Center(child: Text('Testing'))],
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        },
-        barrierDismissible: true,
-        barrierLabel:
-            'close', // MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        barrierColor: const Color(0x61000000),
-        transitionDuration: const Duration(milliseconds: 800));
-  }
-  */
-
-  void _addCity(BuildContext context) =>
-      Navigator.pushNamed(context, Routes.city);
+  void _addCity(BuildContext context) => Navigator.pushNamed(context, Routes.city);
 }

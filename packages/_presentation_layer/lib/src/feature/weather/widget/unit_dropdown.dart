@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 
-abstract class UnitDropdown extends ConsumerWidget {
+abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidget {
   const UnitDropdown({Key? key}) : super(key: key);
 
-  StateProvider<Unit> unitProvider(Reader read);
-  List<Unit> unitOptions(Reader read);
-  void onChanged(Unit selection, Reader read);
-  String unitName(Unit unit) => unit.name;
+  StateProvider<Unit<T>> unitProvider(Reader read);
+  List<Unit<T>> unitOptions(Reader read);
+  void onChanged(Unit<T> selection, Reader read);
+  String unitLabel(Unit<T> unit) => unit.name;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final options = unitOptions(ref.read);
     final value = ref.watch(unitProvider(ref.read));
     return DropdownButtonHideUnderline(
-      child: DropdownButton<Unit>(
+      child: DropdownButton<Unit<T>>(
         value: value,
         items: _items(value, options),
         selectedItemBuilder: (context) => _selectedItems(context, options),
@@ -25,7 +25,7 @@ abstract class UnitDropdown extends ConsumerWidget {
     );
   }
 
-  List<DropdownMenuItem<Unit>> _items(Unit value, List<Unit> options) {
+  List<DropdownMenuItem<Unit<T>>> _items(Unit value, List<Unit<T>> options) {
     final list = options.map((unit) {
       final child = unit == value
           ? Row(children: [
@@ -39,7 +39,7 @@ abstract class UnitDropdown extends ConsumerWidget {
     return list;
   }
 
-  List<Widget> _selectedItems(BuildContext context, List<Unit> options) {
+  List<Widget> _selectedItems(BuildContext context, List<Unit<T>> options) {
     final list = options
         .map(
           (unit) => Row(
@@ -50,14 +50,14 @@ abstract class UnitDropdown extends ConsumerWidget {
     return list;
   }
 
-  void _onChanged(Unit? selection, Reader read) {
+  void _onChanged(Unit<T>? selection, Reader read) {
     if (selection != null) {
       onChanged(selection, read);
     }
   }
 
-  Widget _unitLabel(Unit unit) {
+  Widget _unitLabel(Unit<T> unit) {
     const style = TextStyle(fontWeight: FontWeight.bold);
-    return Text(unitName(unit), style: style, textAlign: TextAlign.right);
+    return Text(unitLabel(unit), style: style, textAlign: TextAlign.right);
   }
 }

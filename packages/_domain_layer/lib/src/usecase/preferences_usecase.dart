@@ -7,8 +7,7 @@ import '../entity/weather_order.dart';
 import '../repository/preferences_repository.dart';
 
 class PreferencesUsecase {
-  PreferencesUsecase(
-      {required this.read, required PreferencesRepository repository})
+  PreferencesUsecase({required this.read, required PreferencesRepository repository})
       : _repository = repository;
 
   static const themeKey = 'theme';
@@ -18,17 +17,22 @@ class PreferencesUsecase {
 
   static const defaultTheme = ThemeMode.dark;
   static const defaultWeatherOrder = WeatherOrder.byTemp;
-  static get defaultTemperatureUnit => Temperature.C;
-  static get defaultWindSpeedUnit => Speed.kt;
+  static get defaultTemperatureUnit => Temperature().celcius;
+  static get defaultWindSpeedUnit => Speed().knot;
 
-  final temperatureUnits = [Temperature.C, Temperature.F];
-  final windSpeedUnits = [Speed.kt, Speed.m_s, Speed.km_h, Speed.mi_h];
+  final temperatureUnits = [Temperature().celcius, Temperature().fahrenheit];
+  final windSpeedUnits = [
+    Speed().knot,
+    Speed().meterPerSecond,
+    Speed().kilometerPerHour,
+    Speed().milePerHour,
+  ];
 
   final Reader read;
   late final themeProvider = StateProvider((_) => theme);
   late final weatherOrderProvider = StateProvider((_) => weatherOrder);
-  late final temperatureUnitProvider = StateProvider((ref) => temperatureUnit);
-  late final windSpeedUnitProvider = StateProvider((ref) => windSpeedUnit);
+  late final temperatureUnitProvider = StateProvider<Unit<Temperature>>((ref) => temperatureUnit);
+  late final windSpeedUnitProvider = StateProvider<Unit<Speed>>((ref) => windSpeedUnit);
 
   final PreferencesRepository _repository;
 
@@ -57,16 +61,12 @@ class PreferencesUsecase {
     return defaultWeatherOrder;
   }
 
-  set temperatureUnit(Unit unit) {
-    if (unit.kind != Temperature()) {
-      throw ArgumentError('$unit is not a Temperature unit');
-    }
-    _repository
-        .saveByKey(Preference(key: temperatureUnitKey, value: unit.symbol));
+  set temperatureUnit(Unit<Temperature> unit) {
+    _repository.saveByKey(Preference(key: temperatureUnitKey, value: unit.symbol));
     read(temperatureUnitProvider.notifier).state = unit;
   }
 
-  Unit get temperatureUnit {
+  Unit<Temperature> get temperatureUnit {
     final pref = _repository.getByKey(temperatureUnitKey);
     for (final option in temperatureUnits) {
       if (pref?.value == option.symbol) return option;
@@ -75,16 +75,12 @@ class PreferencesUsecase {
     return defaultTemperatureUnit;
   }
 
-  set windSpeedUnit(Unit unit) {
-    if (unit.kind != Speed()) {
-      throw ArgumentError('$unit is not a Speed unit');
-    }
-    _repository
-        .saveByKey(Preference(key: windSpeedUnitKey, value: unit.symbol));
+  set windSpeedUnit(Unit<Speed> unit) {
+    _repository.saveByKey(Preference(key: windSpeedUnitKey, value: unit.symbol));
     read(windSpeedUnitProvider.notifier).state = unit;
   }
 
-  Unit get windSpeedUnit {
+  Unit<Speed> get windSpeedUnit {
     final pref = _repository.getByKey(windSpeedUnitKey);
     for (final option in windSpeedUnits) {
       if (pref?.value == option.symbol) return option;

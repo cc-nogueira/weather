@@ -1,9 +1,10 @@
 import 'dart:math';
 
-import 'package:_domain_layer/domain_layer.dart';
+import 'package:_domain_layer/domain_layer.dart' hide Temperature;
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:qty/qty.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 import 'weather_icon.dart';
@@ -29,8 +30,9 @@ class WeatherWidget extends ConsumerWidget {
     if (location == null) {
       return Container();
     }
-    final isSelected =
-        ref.watch(selectionProvider.select((selected) => selected == city));
+    final isSelected = ref.watch(selectionProvider.select((selected) => selected == city));
+    final temperatureUnit = ref.watch(temperatureUnitProvider);
+    final windSpeedUnit = ref.watch(windSpeedUnitProvider);
 
     final tile = ref.watch(currentWeatherByLocationProvider(location)).when(
           loading: () => _WeatherLoadingWidget(
@@ -52,6 +54,8 @@ class WeatherWidget extends ConsumerWidget {
               city: city,
               isSelected: isSelected,
               weather: data,
+              temperatureUnit: temperatureUnit,
+              windSpeedUnit: windSpeedUnit,
               onRemove: onRemove,
               onTap: () => onTap(ref.read, city),
             );
@@ -85,8 +89,8 @@ class WeatherWidget extends ConsumerWidget {
     }
   }
 
-  void onTap(Reader read, City city) => read(selectionProvider.notifier)
-      .update((state) => city == state ? null : city);
+  void onTap(Reader read, City city) =>
+      read(selectionProvider.notifier).update((state) => city == state ? null : city);
 }
 
 abstract class _WeatherWidgetBase extends StatelessWidget {
@@ -111,9 +115,8 @@ abstract class _WeatherWidgetBase extends StatelessWidget {
   Widget build(BuildContext context) {
     final decoratedTile = weatherDecorated(context, tile(context));
     final contentDetails = isSelected ? details(context) : null;
-    final content = contentDetails == null
-        ? decoratedTile
-        : Column(children: [decoratedTile, contentDetails]);
+    final content =
+        contentDetails == null ? decoratedTile : Column(children: [decoratedTile, contentDetails]);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: GestureDetector(
@@ -127,9 +130,7 @@ abstract class _WeatherWidgetBase extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
-          side: isSelected
-              ? const BorderSide(color: Colors.red)
-              : BorderSide.none,
+          side: isSelected ? const BorderSide(color: Colors.red) : BorderSide.none,
         ),
         child: child,
       );
@@ -166,8 +167,7 @@ abstract class _WeatherWidgetBase extends StatelessWidget {
     );
   }
 
-  Color? textColor(
-      ThemeData theme, ListTileThemeData tileTheme, Color? defaultColor,
+  Color? textColor(ThemeData theme, ListTileThemeData tileTheme, Color? defaultColor,
       [useSelected = true]) {
     if (useSelected && isSelected) {
       return tileTheme.selectedColor ??
@@ -198,13 +198,7 @@ class _WeatherLoadingWidget extends _WeatherWidgetBase {
     required City city,
     required VoidCallback onRemove,
     required VoidCallback onTap,
-  }) : super(
-          key: key,
-          isSelected: isSelected,
-          city: city,
-          onRemove: onRemove,
-          onTap: onTap,
-        );
+  }) : super(key: key, isSelected: isSelected, city: city, onRemove: onRemove, onTap: onTap);
 
   @override
   Widget trailing(BuildContext context) => const SizedBox(
@@ -227,17 +221,10 @@ class _WeatherErrorWidget extends _WeatherWidgetBase {
     required City city,
     required VoidCallback onRemove,
     required VoidCallback onTap,
-  }) : super(
-          key: key,
-          isSelected: isSelected,
-          city: city,
-          onRemove: onRemove,
-          onTap: onTap,
-        );
+  }) : super(key: key, isSelected: isSelected, city: city, onRemove: onRemove, onTap: onTap);
 
   @override
-  Widget trailing(BuildContext context) =>
-      const WeatherIcon(weatherCode: -1, size: 60);
+  Widget trailing(BuildContext context) => const WeatherIcon(weatherCode: -1, size: 60);
 
   @override
   Widget subtitle(BuildContext context) => const Text('No weather information');
@@ -251,15 +238,13 @@ class _WeatherWidget extends _WeatherWidgetBase {
     required VoidCallback onRemove,
     required VoidCallback onTap,
     required this.weather,
-  }) : super(
-          key: key,
-          isSelected: isSelected,
-          city: city,
-          onRemove: onRemove,
-          onTap: onTap,
-        );
+    required this.temperatureUnit,
+    required this.windSpeedUnit,
+  }) : super(key: key, isSelected: isSelected, city: city, onRemove: onRemove, onTap: onTap);
 
   final Weather weather;
+  final Unit<Speed> windSpeedUnit;
+  final Unit<Temperature> temperatureUnit;
 
   @override
   Widget trailing(BuildContext context) {
@@ -268,8 +253,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
     final iconThemeData = IconThemeData(color: iconColor(theme, tileTheme));
     final textTheme = theme.textTheme;
     final tempSt = textTheme.headline4;
-    final timeSt =
-        textTheme.headline6!.copyWith(color: textTheme.headline4?.color);
+    final timeSt = textTheme.headline6!.copyWith(color: textTheme.headline4?.color);
     final hour = weather.geo.localDateTime.hour.toString();
     final min = weather.geo.localDateTime.minute.toString().padLeft(2, '0');
     return Row(
@@ -278,11 +262,17 @@ class _WeatherWidget extends _WeatherWidgetBase {
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text('${weather.temperature.now.round()}', style: tempSt),
+            Text(
+              '${weather.temperature.currentTemperature.convertTo(temperatureUnit).amount.round()}',
+              style: tempSt,
+            ),
             Text('$hour:$min', style: timeSt),
           ],
         ),
-        const Padding(padding: EdgeInsets.only(top: 4.0), child: Text('°C')),
+        Padding(
+          padding: const EdgeInsets.only(top: 4.0),
+          child: Text(temperatureUnit.symbol),
+        ),
         IconTheme.merge(
           data: iconThemeData,
           child: WeatherIcon(weatherCode: weather.code, size: 60, day: _isDay),
@@ -298,23 +288,20 @@ class _WeatherWidget extends _WeatherWidgetBase {
     final tileTheme = ListTileTheme.of(context);
     final defaultColor = theme.textTheme.subtitle1!.color;
     final iconColor = textColor(theme, tileTheme, defaultColor, false);
+    final convertedWindSpeed = weather.wind.windSpeed.convertTo(windSpeedUnit);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${weather.title} (${weather.description})'),
         Row(
           children: [
-            _SmallWindIcon(
-              degree: weather.wind.directionTo,
-              size: 20,
-              color: iconColor,
-            ),
+            _SmallWindIcon(degree: weather.wind.directionTo, size: 20, color: iconColor),
             const SizedBox(width: 4),
             Text(_windDirectionLabel, style: bold),
             const SizedBox(width: 4),
-            Text('${weather.wind.speedInKnots.round()}', style: bold),
+            Text('${convertedWindSpeed.amount.round()}', style: bold),
             const SizedBox(width: 4),
-            const Text('kt'),
+            Text(convertedWindSpeed.unit.symbol),
           ],
         ),
       ],
@@ -329,6 +316,10 @@ class _WeatherWidget extends _WeatherWidgetBase {
 
   @override
   Widget? details(BuildContext context) {
+    final feelTemp = weather.temperature.feelsLikeTemperature.convertTo(temperatureUnit);
+    final minTemp = weather.temperature.minTemperature.convertTo(temperatureUnit);
+    final maxTemp = weather.temperature.maxTemperature.convertTo(temperatureUnit);
+
     final elements = [
       _detailTile(
         context,
@@ -338,17 +329,17 @@ class _WeatherWidget extends _WeatherWidgetBase {
           child: WeatherIcon.thermometer(28),
         ),
         title: 'feels like',
-        value: '${weather.temperature.feelsLike.toStringAsFixed(1)} °C',
+        value: '${feelTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}',
       ),
       _detailTile(
         context,
         title: 'min',
-        value: '${weather.temperature.min.toStringAsFixed(1)} °C',
+        value: '${minTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}',
       ),
       _detailTile(
         context,
         title: 'max',
-        value: '${weather.temperature.max.toStringAsFixed(1)} °C',
+        value: '${maxTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}',
       ),
       _detailTile(
         context,
@@ -358,12 +349,12 @@ class _WeatherWidget extends _WeatherWidgetBase {
           child: Icon(Icons.air),
         ),
         title: 'wind',
-        value: _knots(weather.wind.speedInKnots),
+        value: _windSpeed(weather.wind.windSpeed),
       ),
       _detailTile(
         context,
         title: 'gust',
-        value: _knots(weather.wind.gustInKnots),
+        value: _windSpeed(weather.wind.gustSpeed),
       ),
       _detailTile(
         context,
@@ -377,7 +368,6 @@ class _WeatherWidget extends _WeatherWidgetBase {
     return Container(
       padding: const EdgeInsets.only(top: 4, bottom: 8),
       decoration: BoxDecoration(gradient: _temperatureGradient(context, true)),
-      // color: Theme.of(context).colorScheme.surface,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -395,7 +385,13 @@ class _WeatherWidget extends _WeatherWidgetBase {
     );
   }
 
-  String _knots(double speed) => speed == 0 ? '---' : '${speed.round()} kt';
+  String _windSpeed(Quantity<Speed> speed) {
+    if (speed.amount == 0) {
+      return '---';
+    }
+    final converted = speed.convertTo(windSpeedUnit);
+    return '${converted.amount.round()} ${converted.unit.symbol}';
+  }
 
   Widget _detailTile(
     BuildContext context, {
@@ -419,9 +415,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
             children: [leading, textTile],
           );
     return Container(
-      color: Theme.of(context).brightness == Brightness.light
-          ? Colors.white54
-          : Colors.black26,
+      color: Theme.of(context).brightness == Brightness.light ? Colors.white54 : Colors.black26,
       child: child,
     );
   }
@@ -431,8 +425,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
     bool secondPanel = false,
   ]) {
     final startColor = secondPanel
-        ? Color.lerp(
-            Theme.of(context).colorScheme.surface, _tempearatureColor, 0.1)!
+        ? Color.lerp(Theme.of(context).colorScheme.surface, _tempearatureColor, 0.1)!
         : Theme.of(context).colorScheme.surface;
     return LinearGradient(
       colors: [startColor, _tempearatureColor],
@@ -445,35 +438,15 @@ class _WeatherWidget extends _WeatherWidgetBase {
   Color get _tempearatureColor {
     final temp = weather.temperature.now;
     if (temp < 0) {
-      return Color.lerp(
-        Colors.blue[100],
-        Colors.blue[600]!,
-        _rangePercent(temp, 0, -20),
-      )!;
+      return Color.lerp(Colors.blue[100], Colors.blue[600]!, _rangePercent(temp, 0, -20))!;
     } else if (temp < 10) {
-      return Color.lerp(
-        Colors.blue[100]!,
-        Colors.white,
-        _rangePercent(temp, 0, 10),
-      )!;
+      return Color.lerp(Colors.blue[100]!, Colors.white, _rangePercent(temp, 0, 10))!;
     } else if (temp < 20) {
-      return Color.lerp(
-        Colors.yellow[50],
-        Colors.yellow[300]!,
-        _rangePercent(temp, 10, 20),
-      )!;
+      return Color.lerp(Colors.yellow[50], Colors.yellow[300]!, _rangePercent(temp, 10, 20))!;
     } else if (temp < 30) {
-      return Color.lerp(
-        Colors.yellow[300]!,
-        Colors.orange[900]!,
-        _rangePercent(temp, 20, 30),
-      )!;
+      return Color.lerp(Colors.yellow[300]!, Colors.orange[900]!, _rangePercent(temp, 20, 30))!;
     } else {
-      return Color.lerp(
-        Colors.orange[900]!,
-        Colors.red[900]!,
-        _rangePercent(temp, 30, 40),
-      )!;
+      return Color.lerp(Colors.orange[900]!, Colors.red[900]!, _rangePercent(temp, 30, 40))!;
     }
   }
 
@@ -494,8 +467,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
     final sunset = weather.geo.localSunset;
     if (_minutesBetween(time, sunrise) < 60) return null;
     if (_minutesBetween(time, sunset) < 60) return null;
-    return _minutes(time) > _minutes(sunrise) &&
-        _minutes(time) < _minutes(sunset);
+    return _minutes(time) > _minutes(sunrise) && _minutes(time) < _minutes(sunset);
   }
 
   int _minutesBetween(DateTime a, DateTime b) {
@@ -528,8 +500,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
 }
 
 class _SmallWindIcon extends StatelessWidget {
-  const _SmallWindIcon(
-      {Key? key, required this.degree, required this.size, this.color})
+  const _SmallWindIcon({Key? key, required this.degree, required this.size, this.color})
       : super(key: key);
 
   final int degree;

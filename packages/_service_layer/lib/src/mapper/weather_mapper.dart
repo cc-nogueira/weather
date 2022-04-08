@@ -27,11 +27,7 @@ class WeatherMapper {
         min: main.tempMin,
         max: main.tempMax,
       ),
-      wind: Wind(
-        speed: model.wind.speed,
-        gust: model.wind.gust,
-        directionFrom: model.wind.deg,
-      ),
+      wind: Wind(speed: model.wind.speed, gust: model.wind.gust, directionFrom: model.wind.deg),
     );
   }
 }

@@ -5,8 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CityForm extends ConsumerWidget {
-  const CityForm(this.cityProvider, {Key? key, required this.onCountryChanged})
-      : super(key: key);
+  const CityForm(this.cityProvider, {Key? key, required this.onCountryChanged}) : super(key: key);
 
   final StateProvider<City> cityProvider;
   final VoidCallback onCountryChanged;
@@ -69,8 +68,7 @@ class _CityForm extends HookConsumerWidget {
               onTap: () => showCountryPicker(
                 context: context,
                 searchAutofocus: true,
-                onSelect: (country) =>
-                    _onCountryChanged(country, countryTextController),
+                onSelect: (country) => _onCountryChanged(country, countryTextController),
               ),
               validator: _validateCountry,
               focusNode: countryFocus,
@@ -90,11 +88,9 @@ class _CityForm extends HookConsumerWidget {
     onCountryChanged();
   }
 
-  String? _validateCity(String? text) =>
-      text == null || text.isEmpty ? '* required' : null;
+  String? _validateCity(String? text) => text == null || text.isEmpty ? '* required' : null;
 
-  String? _validateCountry(String? text) =>
-      text == null || text.length != 2 ? '* required' : null;
+  String? _validateCountry(String? text) => text == null || text.length != 2 ? '* required' : null;
 
   Widget _formField(
     BuildContext context,
@@ -114,8 +110,7 @@ class _CityForm extends HookConsumerWidget {
         readOnly: readOnly,
         onTap: onTap,
         decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 12.0),
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12.0),
           border: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.blueAccent),
             borderRadius: BorderRadius.circular(5.0),
@@ -128,11 +123,9 @@ class _CityForm extends HookConsumerWidget {
         onChanged: onChanged,
         validator: validator,
         focusNode: focusNode,
-        onEditingComplete: nextFocus == null
-            ? null
-            : () => _focusNext(context, focusNode, nextFocus),
-        textInputAction:
-            nextFocus == null ? TextInputAction.done : TextInputAction.next,
+        onEditingComplete:
+            nextFocus == null ? null : () => _focusNext(context, focusNode, nextFocus),
+        textInputAction: nextFocus == null ? TextInputAction.done : TextInputAction.next,
         textCapitalization: textCapitalization,
       );
 

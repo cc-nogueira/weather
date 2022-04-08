@@ -5,11 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 typedef CityCallback = void Function(City city);
 
 class CitySearch extends ConsumerWidget {
-  const CitySearch({
-    Key? key,
-    required this.cityProvider,
-    required this.onCitySelected,
-  }) : super(key: key);
+  const CitySearch({Key? key, required this.cityProvider, required this.onCitySelected})
+      : super(key: key);
 
   final StateProvider<City> cityProvider;
   final CityCallback onCitySelected;
@@ -28,21 +25,16 @@ class CitySearch extends ConsumerWidget {
   }
 
   Widget _loading() => const Center(
-        child: SizedBox(
-          height: 100,
-          width: 100,
-          child: CircularProgressIndicator(),
-        ),
+        child: SizedBox(height: 100, width: 100, child: CircularProgressIndicator()),
       );
 
-  Widget _showResults(BuildContext context, List<City> results) =>
-      results.isEmpty
-          ? _noResults(context)
-          : ListView.builder(
-              shrinkWrap: true,
-              itemCount: results.length,
-              itemBuilder: (_, idx) => _itemBuilder(results[idx]),
-            );
+  Widget _showResults(BuildContext context, List<City> results) => results.isEmpty
+      ? _noResults(context)
+      : ListView.builder(
+          shrinkWrap: true,
+          itemCount: results.length,
+          itemBuilder: (_, idx) => _itemBuilder(results[idx]),
+        );
 
   Widget _noResults(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -50,8 +42,7 @@ class CitySearch extends ConsumerWidget {
   }
 
   Widget _itemBuilder(City city) {
-    final subtitle =
-        city.state.isEmpty ? city.country : '${city.state}, ${city.country}';
+    final subtitle = city.state.isEmpty ? city.country : '${city.state}, ${city.country}';
     return ListTile(
       title: Text(city.name),
       subtitle: Text(subtitle),

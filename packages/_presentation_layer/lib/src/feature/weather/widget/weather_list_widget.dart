@@ -7,10 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'weather_widget.dart';
 
 class WeatherListWidget extends ConsumerWidget {
-  WeatherListWidget({
-    Key? key,
-    required this.cities,
-  }) : super(key: key);
+  WeatherListWidget({Key? key, required this.cities}) : super(key: key);
 
   final List<City> cities;
   late final _loadedStatus = List.generate(cities.length, (_) => false);
@@ -32,8 +29,7 @@ class WeatherListWidget extends ConsumerWidget {
         ),
       );
     }
-    return _WeatherList(
-        cityWithWeatherList: widgets, loadedStatus: _loadedStatus);
+    return _WeatherList(cityWithWeatherList: widgets, loadedStatus: _loadedStatus);
   }
 
   void _removeCity(Reader read, City city) {
@@ -99,15 +95,13 @@ class _WeatherList extends ConsumerWidget {
     final list = cityWithWeatherList.toList();
     list.sort((a, b) {
       if (order == WeatherOrder.byName) {
-        return a.city.alphabeticalOrderKey
-            .compareTo(b.city.alphabeticalOrderKey);
+        return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
       }
       if (order == WeatherOrder.byTemp) {
         final aTemp = a.weatherController.state?.temperature;
         final bTemp = b.weatherController.state?.temperature;
         if (aTemp == null && bTemp == null) {
-          return a.city.alphabeticalOrderKey
-              .compareTo(b.city.alphabeticalOrderKey);
+          return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
         }
         if (aTemp == null) return 1;
         if (bTemp == null) return -1;

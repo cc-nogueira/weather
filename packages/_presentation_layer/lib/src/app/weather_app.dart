@@ -21,13 +21,11 @@ class WeatherApp extends ConsumerWidget {
   final Object? error;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) =>
-      error == null ? _app(ref) : _errorApp;
+  Widget build(BuildContext context, WidgetRef ref) => error == null ? _app(ref) : _errorApp;
 
   Widget _app(WidgetRef ref) {
-    final theme = ref.watch(themeModeProvider) == ThemeMode.dark
-        ? ThemeData.dark()
-        : ThemeData.light();
+    final theme =
+        ref.watch(themeModeProvider) == ThemeMode.dark ? ThemeData.dark() : ThemeData.light();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: title,

@@ -13,8 +13,7 @@ class CityMapper extends EntityMapper<City, CityModel> {
         name: model.name,
         state: model.state,
         country: model.country,
-        location:
-            Location(latitude: model.latitude, longitude: model.longitude),
+        location: Location(latitude: model.latitude, longitude: model.longitude),
       );
 
   @override

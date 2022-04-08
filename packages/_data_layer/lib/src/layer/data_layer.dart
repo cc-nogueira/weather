@@ -18,8 +18,7 @@ class DataLayer extends AppLayer {
   PreferencesRepository get preferencesRepository =>
       ObjectboxPreferencesRepository(box: _store.box<PreferenceModel>());
 
-  CitiesRepository get citiesRepository =>
-      ObjectboxCitiesRepository(box: _store.box<CityModel>());
+  CitiesRepository get citiesRepository => ObjectboxCitiesRepository(box: _store.box<CityModel>());
 
   @override
   Future<void> init() async {

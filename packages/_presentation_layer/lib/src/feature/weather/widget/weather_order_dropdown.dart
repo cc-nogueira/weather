@@ -13,8 +13,7 @@ class WeatherOrderDropdown extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
-    final dropBg =
-        colors.brightness == Brightness.light ? colors.primary : colors.surface;
+    final dropBg = colors.brightness == Brightness.light ? colors.primary : colors.surface;
     final value = ref.watch(weatherOrderProvider);
     return DropdownButtonHideUnderline(
       child: DropdownButton<WeatherOrder>(

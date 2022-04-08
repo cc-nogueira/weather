@@ -20,7 +20,6 @@ class Routes {
         return _route((_) => const WeatherListPage());
       case city:
         return _route((_) => CityPage());
-
       default:
         return _route(
           (_) => MessagePage.error('Unknown route "${settings.name}"'),
@@ -37,8 +36,7 @@ class Routes {
     required Widget Function(BuildContext, T) builder,
   }) =>
       MaterialPageRoute(
-        builder: (context) => arg is T
-            ? builder(context, arg)
-            : MessagePage.error('Illegal argument for route'),
+        builder: (context) =>
+            arg is T ? builder(context, arg) : MessagePage.error('Illegal argument for route'),
       );
 }

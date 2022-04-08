@@ -4,8 +4,7 @@ import '../repository/cities_repository.dart';
 import 'entity_stream_usecase.dart';
 
 class CitiesUsecase extends EntityStreamUsecase<City> {
-  const CitiesUsecase({required CitiesRepository repository})
-      : super(repository: repository);
+  const CitiesUsecase({required CitiesRepository repository}) : super(repository: repository);
 
   /// Compare two cities by user defined order.
   @override
@@ -24,8 +23,7 @@ class CitiesUsecase extends EntityStreamUsecase<City> {
       throw const ValidationException('City\'s country should be two letters');
     }
     if (city.location == null) {
-      throw const ValidationException(
-          'City\'s location coordinates are required');
+      throw const ValidationException('City\'s location coordinates are required');
     }
   }
 

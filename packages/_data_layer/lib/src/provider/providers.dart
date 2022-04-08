@@ -9,5 +9,4 @@ final preferencesRepositoryProvider =
     Provider((ref) => ref.watch(dataLayerProvider).preferencesRepository);
 
 /// CitiesRepository interface implementation provider
-final citiesRepositoryProvider =
-    Provider((ref) => ref.watch(dataLayerProvider).citiesRepository);
+final citiesRepositoryProvider = Provider((ref) => ref.watch(dataLayerProvider).citiesRepository);

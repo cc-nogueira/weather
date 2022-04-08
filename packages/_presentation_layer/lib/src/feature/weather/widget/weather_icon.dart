@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class WeatherIcon extends StatelessWidget {
-  const WeatherIcon(
-      {Key? key, required this.weatherCode, required this.size, this.day})
+  const WeatherIcon({Key? key, required this.weatherCode, required this.size, this.day})
       : super(key: key);
 
   static Widget thermometer(double size, [Color? color]) =>
@@ -22,8 +21,7 @@ class WeatherIcon extends StatelessWidget {
     final iconKeys = openWeatherToWeatherIconsMap[weatherCode];
     final IconData icon = (iconKeys == null)
         ? WeatherIcons.na
-        : WeatherIcons.fromString('wi-${iconKeys[index]}',
-            fallback: WeatherIcons.na);
+        : WeatherIcons.fromString('wi-${iconKeys[index]}', fallback: WeatherIcons.na);
     return BoxedIcon(icon, size: size / 1.5);
   }
 
