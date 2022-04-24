@@ -92,7 +92,6 @@ class _SettingsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final itemStyle = theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold);
-    final isDark = theme.colorScheme.brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(color: theme.colorScheme.surfaceVariant.withOpacity(0.95)),
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -103,10 +102,7 @@ class _SettingsPanel extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Dark/Light Theme', style: itemStyle),
-              DarkLightModeSwitch(
-                showIconPosition: isDark ? ShowIconPosition.after : ShowIconPosition.before,
-                keepIconSpaces: true,
-              ),
+              const DarkLightModeSwitch(),
             ],
           ),
           Row(
