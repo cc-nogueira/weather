@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:qty/qty.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../entity/city.dart';
-import '../entity/location.dart';
-import '../entity/weather.dart' hide Temperature;
-import '../entity/weather_order.dart';
+import '../entity/common/location.dart';
+import '../entity/time_zone/time_zone.dart';
+import '../entity/weather/city.dart';
+import '../entity/weather/weather.dart';
+import '../entity/weather/weather_order.dart';
 import '../layer/domain_layer.dart';
 import '../usecase/cities_usecase.dart';
 import '../usecase/preferences_usecase.dart';
+import '../usecase/time_usecase.dart';
 import '../usecase/weather_usecase.dart';
 
 /// Domain Layer provider
@@ -43,6 +45,17 @@ final windSpeedUnitProvider = Provider<Unit<Speed>>((ref) {
   return ref.watch(usecase.windSpeedUnitProvider);
 });
 
+// -- Time Zone:
+
+final timeUsecaseProvider =
+    Provider<TimeUsecase>((ref) => ref.watch(domainLayerProvider).timeUsecase);
+
+final timeZoneProvider = FutureProvider.autoDispose.family<TimeZone, Location>(
+  (ref, location) => ref.watch(
+    timeUsecaseProvider.select((usecase) => usecase.getTimeZone(location)),
+  ),
+);
+
 // -- Weather:
 
 final weatherUsecaseProvider =
@@ -52,9 +65,9 @@ final citiesUsecaseProvider =
     Provider<CitiesUsecase>((ref) => ref.watch(domainLayerProvider).citiesUsecase);
 
 final citiesSearchProvider = FutureProvider.autoDispose.family<List<City>, City>(
-  ((ref, city) => ref.watch(
-        weatherUsecaseProvider.select((usecase) => usecase.searchCitiesLike(city)),
-      )),
+  (ref, city) => ref.watch(
+    weatherUsecaseProvider.select((usecase) => usecase.searchCitiesLike(city)),
+  ),
 );
 
 /// currentWeatherByLocation FutureProvider

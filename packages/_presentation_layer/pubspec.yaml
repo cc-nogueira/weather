@@ -13,16 +13,16 @@ dependencies:
   _domain_layer:
     path: ../_domain_layer
     
-  country_picker: ^2.0.12
+  country_picker: ^2.0.14
   faker: ^2.0.0
   flutter:
     sdk: flutter
-  flutter_hooks: ^0.18.0
+  flutter_hooks: ^0.18.3
   flutter_slidable: ^1.2.0
   hooks_riverpod: ^1.0.3
 
-  qty: ^0.6.0
-  #   path: ../../../../../dart/qty
+  qty: any
+  #  path: ../../../../../dart/qty
 
 #  qty: any
   weather_icons: ^3.0.0

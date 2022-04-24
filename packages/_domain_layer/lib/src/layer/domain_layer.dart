@@ -3,15 +3,18 @@ import 'package:riverpod/riverpod.dart';
 
 import '../repository/cities_repository.dart';
 import '../repository/preferences_repository.dart';
+import '../service/time_zone_service.dart';
 import '../service/weather_service.dart';
 import '../usecase/cities_usecase.dart';
 import '../usecase/preferences_usecase.dart';
+import '../usecase/time_usecase.dart';
 import '../usecase/weather_usecase.dart';
 
 /// Function definition for Domain Layer dependencies
 typedef DomainConfiguration = void Function({
   required PreferencesRepository preferencesRepository,
   required CitiesRepository citiesRepository,
+  required TimeZoneService timeZoneService,
   required WeatherService weatherService,
 });
 
@@ -32,15 +35,18 @@ class DomainLayer extends AppLayer {
   final Reader read;
   late final PreferencesUsecase preferencesUsecase;
   late final CitiesUsecase citiesUsecase;
+  late final TimeUsecase timeUsecase;
   late final WeatherUsecase weatherUsecase;
 
   void configure({
     required PreferencesRepository preferencesRepository,
     required CitiesRepository citiesRepository,
+    required TimeZoneService timeZoneService,
     required WeatherService weatherService,
   }) {
     preferencesUsecase = PreferencesUsecase(read: read, repository: preferencesRepository);
     citiesUsecase = CitiesUsecase(repository: citiesRepository);
+    timeUsecase = TimeUsecase(service: timeZoneService);
     weatherUsecase = WeatherUsecase(service: weatherService);
   }
 }

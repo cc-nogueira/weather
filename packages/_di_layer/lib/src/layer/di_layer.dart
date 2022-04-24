@@ -78,6 +78,7 @@ class DiLayer extends AppLayer {
     domainConfiguration(
       preferencesRepository: _read(preferencesRepositoryProvider),
       citiesRepository: _read(citiesRepositoryProvider),
+      timeZoneService: _read(timeApiServiceProvider),
       weatherService: _read(weatherServiceProvider),
     );
   }
