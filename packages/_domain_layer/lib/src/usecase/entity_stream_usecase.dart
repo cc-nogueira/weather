@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../entity/entity.dart';
+import '../entity/common/entity.dart';
 import '../repository/entity_stream_repository.dart';
 import 'entity_usecase.dart';
 

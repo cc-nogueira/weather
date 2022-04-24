@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'entity.dart';
-import 'location.dart';
+import '../common/entity.dart';
+import '../common/location.dart';
 
 part 'city.freezed.dart';
 

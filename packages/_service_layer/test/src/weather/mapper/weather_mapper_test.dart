@@ -25,20 +25,29 @@ void main() {
       '"cod":200}';
 
   const weather = Weather(
-    code: 500,
-    title: 'Rain',
-    description: 'chuva fraca',
+    dateTimeMillis: 1647524296000,
     geo: Geo(
-      latitude: 35.5,
-      longitude: 139.0,
-      dateTimeMillis: 1647524296000,
+      location: Location(latitude: 35.5, longitude: 139.0),
       timeShiftMillis: 32400000,
       sunriseMillis: 1647463968000,
       sunsetMillis: 1647507137000,
     ),
-    humidity: 98,
-    temperature: Temperature(feelsLike: 4.95, now: 6.33, min: 5.59, max: 6.95),
-    wind: Wind(speed: 1.97, gust: 3.31, directionFrom: 64),
+    conditions: Conditions(
+      code: 500,
+      title: 'Rain',
+      description: 'chuva fraca',
+      pressure: 1017,
+      humidity: 98,
+      clouds: 100,
+      temperatures: Temperatures(
+        feelsLike: Celcius(4.95),
+        temperature: Celcius(6.33),
+        min: Celcius(5.59),
+        max: Celcius(6.95),
+      ),
+      wind: Wind(speed: 1.97, gust: 3.31, directionFrom: 64),
+      rain1h: 0.36,
+    ),
   );
 
   test('should return a empty entity when receiveing empty JSON', () {
@@ -46,7 +55,14 @@ void main() {
 
     final currentWeather = mapper.mapEntity(model);
 
-    expect(currentWeather, const Weather());
+    var emptyWeather = const Weather();
+    final temperatures = emptyWeather.conditions.temperatures.copyWith(
+      min: const Celcius(0.0),
+      max: const Celcius(0.0),
+    );
+    final conditions = emptyWeather.conditions.copyWith(temperatures: temperatures);
+    emptyWeather = emptyWeather.copyWith(conditions: conditions);
+    expect(currentWeather, emptyWeather);
   });
 
   test('shoud map JSON to Entity', () {

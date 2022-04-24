@@ -1,10 +1,12 @@
+import 'dart:async';
 import 'dart:math';
 
-import 'package:_domain_layer/domain_layer.dart' hide Temperature;
+import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
+
 import 'package:weather_icons/weather_icons.dart';
 
 import 'weather_icon.dart';
@@ -251,11 +253,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
     final theme = Theme.of(context);
     final ListTileThemeData tileTheme = ListTileTheme.of(context);
     final iconThemeData = IconThemeData(color: iconColor(theme, tileTheme));
-    final textTheme = theme.textTheme;
-    final tempSt = textTheme.headline4;
-    final timeSt = textTheme.headline6!.copyWith(color: textTheme.headline4?.color);
-    final hour = weather.geo.localDateTime.hour.toString();
-    final min = weather.geo.localDateTime.minute.toString().padLeft(2, '0');
+    final tempSt = theme.textTheme.headline4;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -263,10 +261,10 @@ class _WeatherWidget extends _WeatherWidgetBase {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              '${weather.temperature.currentTemperature.convertTo(temperatureUnit).amount.round()}',
+              '${weather.conditions.temperatures.temperature.quantity.convertTo(temperatureUnit).amount.round()}',
               style: tempSt,
             ),
-            Text('$hour:$min', style: timeSt),
+            TimeWidget(city.location!),
           ],
         ),
         Padding(
@@ -275,7 +273,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
         ),
         IconTheme.merge(
           data: iconThemeData,
-          child: WeatherIcon(weatherCode: weather.code, size: 60, day: _isDay),
+          child: WeatherIcon(weatherCode: weather.conditions.code, size: 60, day: _isDay),
         ),
       ],
     );
@@ -288,14 +286,14 @@ class _WeatherWidget extends _WeatherWidgetBase {
     final tileTheme = ListTileTheme.of(context);
     final defaultColor = theme.textTheme.subtitle1!.color;
     final iconColor = textColor(theme, tileTheme, defaultColor, false);
-    final convertedWindSpeed = weather.wind.windSpeed.convertTo(windSpeedUnit);
+    final convertedWindSpeed = weather.conditions.wind.speedQuantity.convertTo(windSpeedUnit);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${weather.title} (${weather.description})'),
+        Text('${weather.conditions.title} (${weather.conditions.description})'),
         Row(
           children: [
-            _SmallWindIcon(degree: weather.wind.directionTo, size: 20, color: iconColor),
+            _SmallWindIcon(degree: weather.conditions.wind.directionTo, size: 20, color: iconColor),
             const SizedBox(width: 4),
             Text(_windDirectionLabel, style: bold),
             const SizedBox(width: 4),
@@ -316,9 +314,13 @@ class _WeatherWidget extends _WeatherWidgetBase {
 
   @override
   Widget? details(BuildContext context) {
-    final feelTemp = weather.temperature.feelsLikeTemperature.convertTo(temperatureUnit);
-    final minTemp = weather.temperature.minTemperature.convertTo(temperatureUnit);
-    final maxTemp = weather.temperature.maxTemperature.convertTo(temperatureUnit);
+    final feelTemp = weather.conditions.temperatures.feelsLike.quantity.convertTo(temperatureUnit);
+    final minTemp = weather.conditions.temperatures.min?.quantity.convertTo(temperatureUnit);
+    final maxTemp = weather.conditions.temperatures.max?.quantity.convertTo(temperatureUnit);
+    final minString =
+        minTemp == null ? '----' : '${minTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}';
+    final maxString =
+        maxTemp == null ? '----' : '${maxTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}';
 
     final elements = [
       _detailTile(
@@ -331,16 +333,8 @@ class _WeatherWidget extends _WeatherWidgetBase {
         title: 'feels like',
         value: '${feelTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}',
       ),
-      _detailTile(
-        context,
-        title: 'min',
-        value: '${minTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}',
-      ),
-      _detailTile(
-        context,
-        title: 'max',
-        value: '${maxTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}',
-      ),
+      _detailTile(context, title: 'min', value: minString),
+      _detailTile(context, title: 'max', value: maxString),
       _detailTile(
         context,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -349,18 +343,14 @@ class _WeatherWidget extends _WeatherWidgetBase {
           child: Icon(Icons.air),
         ),
         title: 'wind',
-        value: _windSpeed(weather.wind.windSpeed),
+        value: _windSpeed(weather.conditions.wind.speedQuantity),
       ),
+      _detailTile(context, title: 'gust', value: _windSpeed(weather.conditions.wind.gustQuantity)),
       _detailTile(
         context,
-        title: 'gust',
-        value: _windSpeed(weather.wind.gustSpeed),
-      ),
-      _detailTile(
-        context,
-        leading: WindIcon(degree: weather.wind.directionTo, size: 20),
+        leading: WindIcon(degree: weather.conditions.wind.directionTo, size: 20),
         title: _windDirectionLabel + '  ',
-        value: '${weather.wind.directionFrom} °',
+        value: '${weather.conditions.wind.directionFrom} °',
       ),
     ];
     final gridWidth = MediaQuery.of(context).size.width - 40;
@@ -385,8 +375,8 @@ class _WeatherWidget extends _WeatherWidgetBase {
     );
   }
 
-  String _windSpeed(Quantity<Speed> speed) {
-    if (speed.amount == 0) {
+  String _windSpeed(Quantity<Speed>? speed) {
+    if (speed == null) {
       return '---';
     }
     final converted = speed.convertTo(windSpeedUnit);
@@ -436,7 +426,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
   }
 
   Color get _tempearatureColor {
-    final temp = weather.temperature.now;
+    final temp = weather.conditions.temperatures.temperature.value;
     if (temp < 0) {
       return Color.lerp(Colors.blue[100], Colors.blue[600]!, _rangePercent(temp, 0, -20))!;
     } else if (temp < 10) {
@@ -462,7 +452,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
   }
 
   bool? get _isDay {
-    final time = weather.geo.localDateTime;
+    final time = weather.localDateTime;
     final sunrise = weather.geo.localSunrise;
     final sunset = weather.geo.localSunset;
     if (_minutesBetween(time, sunrise) < 60) return null;
@@ -478,7 +468,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
   int _minutes(DateTime dt) => dt.hour * 60 + dt.minute;
 
   String get _windDirectionLabel {
-    final dir = weather.wind.directionFrom;
+    final dir = weather.conditions.wind.directionFrom;
     if (dir < 11.25) return 'N';
     if (dir < 33.75) return 'NNE';
     if (dir < 46.25) return 'NE';
@@ -531,4 +521,92 @@ class _SmallWindIcon extends StatelessWidget {
           ),
         ),
       );
+}
+
+class TimeWidget extends ConsumerWidget {
+  const TimeWidget(this.location, {Key? key}) : super(key: key);
+
+  final Location location;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final style = textTheme.headline6!.copyWith(color: textTheme.headline4?.color);
+    return ref.watch(timeZoneProvider(location)).when(
+          loading: () => Text('--:--', style: style),
+          error: (_, __) => Text('--:--', style: style),
+          data: (data) => _TimeWidget(timeZone: data, style: style, name: location.toString()),
+        );
+  }
+}
+
+class _TimeWidget extends StatefulWidget {
+  const _TimeWidget({
+    Key? key,
+    required this.name,
+    required this.timeZone,
+    required this.style,
+  }) : super(key: key);
+
+  final String name;
+  final TimeZone timeZone;
+  final TextStyle style;
+
+  @override
+  State<_TimeWidget> createState() => _TimeState();
+}
+
+class _TimeState extends State<_TimeWidget> {
+  _TimeState();
+
+  Timer? _timer;
+  Duration offset = Duration.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    _scheduleRepaints();
+  }
+
+  @override
+  void didUpdateWidget(_TimeWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _scheduleRepaints();
+  }
+
+  void _scheduleRepaints() {
+    offset = widget.timeZone.currentUtcOffsetDuration;
+    _timer?.cancel();
+    _scheduleFirstRepaint();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now().toUtc();
+    final localTime = now.add(offset);
+    final hr = localTime.hour.toString();
+    final min = localTime.minute.toString().padLeft(2, '0');
+    return Text('$hr:$min', style: widget.style);
+  }
+
+  void _scheduleFirstRepaint() {
+    Future.delayed(Duration(seconds: 60 - DateTime.now().second), () {
+      if (mounted) {
+        setState(() {
+          _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+            if (mounted) {
+              setState(() {});
+            }
+          });
+        });
+      }
+    });
+  }
 }

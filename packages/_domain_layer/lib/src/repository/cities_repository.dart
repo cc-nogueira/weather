@@ -1,4 +1,4 @@
-import '../entity/city.dart';
+import '../entity/weather/city.dart';
 import 'entity_stream_repository.dart';
 
 /// Cities Repository interface.

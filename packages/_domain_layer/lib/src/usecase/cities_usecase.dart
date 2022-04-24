@@ -1,4 +1,4 @@
-import '../entity/city.dart';
+import '../entity/weather/city.dart';
 import '../exception/validation_exception.dart';
 import '../repository/cities_repository.dart';
 import 'entity_stream_usecase.dart';

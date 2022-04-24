@@ -1,4 +1,4 @@
-import '../entity/entity.dart';
+import '../entity/common/entity.dart';
 
 /// Interface for an entity repository basic API.
 ///

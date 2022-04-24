@@ -1,2 +1,4 @@
-export 'src/mapper/weather_mapper.dart';
-export 'src/model/current_weather_model.dart';
+export 'src/time/mapper/time_zone_mapper.dart';
+export 'src/time/model/time_zone_model.dart';
+export 'src/weather/mapper/weather_mapper.dart';
+export 'src/weather/model/current_weather_model.dart';

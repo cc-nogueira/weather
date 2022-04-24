@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:qty/qty.dart';
 import 'package:riverpod/riverpod.dart';
 
-import '../entity/preference.dart';
-import '../entity/weather_order.dart';
+import '../entity/common/preference.dart';
+import '../entity/weather/weather_order.dart';
 import '../repository/preferences_repository.dart';
 
 class PreferencesUsecase {

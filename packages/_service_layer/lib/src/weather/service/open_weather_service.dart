@@ -2,9 +2,11 @@ import 'package:_domain_layer/domain_layer.dart';
 
 import '../mapper/city_mapper.dart';
 import '../mapper/location_mapper.dart';
+import '../mapper/one_call_mapper.dart';
 import '../mapper/weather_mapper.dart';
 import '../model/city_location_model.dart';
 import '../model/current_weather_model.dart';
+import '../model/one_call_model.dart';
 import 'open_weather_client.dart';
 
 /// Wheather service provided by OpenWeather.
@@ -17,7 +19,8 @@ class OpenWeatherService implements WeatherService {
   }) : client = OpenWeatherClient(appId: appId, language: language);
 
   final OpenWeatherClient client;
-  final _mapper = const WeatherMapper();
+  final _weatherMapper = const WeatherMapper();
+  final _oneCallMapper = const OneCallMapper();
   final _cityMapper = const CityMapper();
   final _locationMapper = const LocationMapper();
 
@@ -70,6 +73,18 @@ class OpenWeatherService implements WeatherService {
       throw ArgumentError('Did not find weather info for location.');
     }
     final model = CurrentWeatherModel.fromJson(jsonMap);
-    return _mapper.mapEntity(model);
+    return _weatherMapper.mapEntity(model);
+  }
+
+  /// Fetch oneCall information from OpenWeather client.
+  ///
+  /// Returns a Future for this location OneCall.
+  ///
+  /// Throws ArgumentError if can't find weather info for this location.
+  @override
+  Future<OneCall> getOneCallByLocation(Location location) async {
+    final jsonMap = await client.getOneCallJson(location);
+    final model = OneCallModel.fromJson(jsonMap);
+    return _oneCallMapper.mapEntity(model);
   }
 }

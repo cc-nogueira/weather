@@ -2,6 +2,8 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'weather_model.dart';
+
 part 'current_weather_model.freezed.dart';
 part 'current_weather_model.g.dart';
 
@@ -12,6 +14,9 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
     @Default([]) List<WeatherModel> weather,
     @Default(MainModel()) MainModel main,
     @Default(WindModel()) WindModel wind,
+    @Default(CloudsModel()) CloudsModel clouds,
+    @Default(RainModel()) RainModel? rain,
+    @Default(SnowModel()) SnowModel? snow,
     @Default(0) int dt,
     @Default(SysModel()) SysModel sys,
     @Default(0) int timezone,
@@ -34,17 +39,6 @@ class CoordModel with _$CoordModel {
 }
 
 @freezed
-class WeatherModel with _$WeatherModel {
-  const factory WeatherModel({
-    @Default(0) int id,
-    @Default('') String main,
-    @Default('') String description,
-  }) = _WeatherModel;
-
-  factory WeatherModel.fromJson(Map<String, dynamic> json) => _$WeatherModelFromJson(json);
-}
-
-@freezed
 class MainModel with _$MainModel {
   const factory MainModel({
     @Default(0) double temp,
@@ -52,6 +46,7 @@ class MainModel with _$MainModel {
     @Default(0) @JsonKey(name: 'temp_min') double tempMin,
     @Default(0) @JsonKey(name: 'temp_max') double tempMax,
     @Default(0) int humidity,
+    @Default(0) int pressure,
   }) = _MainModel;
 
   factory MainModel.fromJson(Map<String, dynamic> json) => _$MainModelFromJson(json);
@@ -66,6 +61,33 @@ class WindModel with _$WindModel {
   }) = _WindModel;
 
   factory WindModel.fromJson(Map<String, dynamic> json) => _$WindModelFromJson(json);
+}
+
+@freezed
+class CloudsModel with _$CloudsModel {
+  const factory CloudsModel({
+    @Default(0) int all,
+  }) = _CloudsModel;
+
+  factory CloudsModel.fromJson(Map<String, dynamic> json) => _$CloudsModelFromJson(json);
+}
+
+@freezed
+class RainModel with _$RainModel {
+  const factory RainModel({
+    @Default(0) @JsonKey(name: '1h') double h1,
+  }) = _RainModel;
+
+  factory RainModel.fromJson(Map<String, dynamic> json) => _$RainModelFromJson(json);
+}
+
+@freezed
+class SnowModel with _$SnowModel {
+  const factory SnowModel({
+    @Default(0) @JsonKey(name: '1h') double h1,
+  }) = _SnowModel;
+
+  factory SnowModel.fromJson(Map<String, dynamic> json) => _$SnowModelFromJson(json);
 }
 
 @freezed

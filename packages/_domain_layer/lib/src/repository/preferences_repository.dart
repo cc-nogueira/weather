@@ -1,4 +1,4 @@
-import '../entity/preference.dart';
+import '../entity/common/preference.dart';
 import 'entity_repository.dart';
 
 abstract class PreferencesRepository implements EntityRepository<Preference> {

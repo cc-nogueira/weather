@@ -1,6 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
-import '../entity/entity.dart';
+import '../entity/common/entity.dart';
 import 'entity_repository.dart';
 
 /// Generic interface of a EntityRepository with StateNotifier API for List<Entity>.

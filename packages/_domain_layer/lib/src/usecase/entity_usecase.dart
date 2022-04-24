@@ -1,4 +1,4 @@
-import '../entity/entity.dart';
+import '../entity/common/entity.dart';
 import '../exception/entity_not_found_exception.dart';
 import '../repository/entity_repository.dart';
 
