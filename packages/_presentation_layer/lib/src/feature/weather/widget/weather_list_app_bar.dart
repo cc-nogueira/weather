@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'preferences_button.dart';
 import 'weather_order_dropdown.dart';
 
 class WeatherListAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const WeatherListAppBar({Key? key, required this.onSettingsPressed})
+  const WeatherListAppBar({Key? key})
       : preferredSize = const Size.fromHeight(kToolbarHeight),
         super(key: key);
 
   @override
   final Size preferredSize;
-  final VoidCallback onSettingsPressed;
 
   @override
   Widget build(BuildContext context) => AppBar(
@@ -22,9 +22,5 @@ class WeatherListAppBar extends StatelessWidget implements PreferredSizeWidget {
           WeatherOrderDropdown(),
         ],
       ),
-      actions: [_preferencesButton]);
-
-  Widget get _preferencesButton => Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: IconButton(onPressed: onSettingsPressed, icon: const Icon(Icons.settings)));
+      actions: const [PreferencesButton()]);
 }

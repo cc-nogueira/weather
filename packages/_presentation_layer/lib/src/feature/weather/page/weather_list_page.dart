@@ -9,8 +9,6 @@ import '../widget/preferences_widget.dart';
 import '../widget/weather_list_app_bar.dart';
 import '../widget/weather_list_widget.dart';
 
-final _showPreferencesProvider = StateProvider((_) => false);
-
 class WeatherListPage extends ConsumerWidget {
   const WeatherListPage({Key? key}) : super(key: key);
 
@@ -22,9 +20,7 @@ class WeatherListPage extends ConsumerWidget {
       );
 
   Widget _scaffold(BuildContext context, WidgetRef ref, List<City> cities) => Scaffold(
-        appBar: WeatherListAppBar(
-          onSettingsPressed: () => _toggleShowPreferences(ref.read),
-        ),
+        appBar: const WeatherListAppBar(),
         body: _bodyStack(context, cities),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _addCity(context),
@@ -35,12 +31,9 @@ class WeatherListPage extends ConsumerWidget {
   Widget _bodyStack(BuildContext context, List<City> cities) {
     return Stack(children: [
       WeatherListWidget(cities: cities),
-      PreferencesWidget(showPreferencesProvider: _showPreferencesProvider),
+      const PreferencesWidget(),
     ]);
   }
-
-  void _toggleShowPreferences(Reader read) =>
-      read(_showPreferencesProvider.notifier).update((state) => !state);
 
   void _addCity(BuildContext context) => Navigator.pushNamed(context, Routes.city);
 }
