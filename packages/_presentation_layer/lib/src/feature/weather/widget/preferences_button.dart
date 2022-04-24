@@ -6,12 +6,14 @@ import '../../../provider/presentation_providers.dart';
 
 class PreferencesButton extends HookConsumerWidget {
   const PreferencesButton({Key? key}) : super(key: key);
-  final duration = const Duration(seconds: 1);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final duration = ref.watch(preferencesPanelAnimationDurationProvider);
     final controller = useAnimationController(duration: duration);
-    final show = ref.watch(showPreferencesProvider);
+    final animation = ref.watch(preferencesPanelAnimationProvider(controller));
+
+    final show = ref.watch(showPreferencesPanelProvider);
     if (show) {
       controller.forward();
     } else {
@@ -20,29 +22,31 @@ class PreferencesButton extends HookConsumerWidget {
     return Padding(
         padding: const EdgeInsets.only(right: 8.0),
         child: _RotatingIconButton(
-          controller: controller,
+          animation: animation,
           icon: const Icon(Icons.settings),
           onPressed: () => _toggleShowPreferences(ref.read),
         ));
   }
 
   void _toggleShowPreferences(Reader read) =>
-      read(showPreferencesProvider.notifier).update((state) => !state);
+      read(showPreferencesPanelProvider.notifier).update((state) => !state);
 }
 
 class _RotatingIconButton extends AnimatedWidget {
-  _RotatingIconButton({
-    required AnimationController controller,
+  const _RotatingIconButton({
+    required Animation<double> animation,
     required this.icon,
     required this.onPressed,
-  }) : super(listenable: Tween<double>(begin: 0.0, end: 1.0).animate(controller));
+  }) : super(listenable: animation);
 
   final VoidCallback onPressed;
   final Icon icon;
 
+  Animation<double> get animation => listenable as Animation<double>;
+
   @override
   Widget build(BuildContext context) => RotationTransition(
-        turns: listenable as Animation<double>,
+        turns: animation,
         child: IconButton(onPressed: onPressed, icon: icon),
       );
 }

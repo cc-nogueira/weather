@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,27 +12,27 @@ import 'wind_speed_unit_dropdown.dart';
 class PreferencesWidget extends HookConsumerWidget {
   const PreferencesWidget({Key? key}) : super(key: key);
 
-  final duration = const Duration(seconds: 1);
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final show = ref.watch(showPreferencesProvider);
+    final duration = ref.watch(preferencesPanelAnimationDurationProvider);
     final controller = useAnimationController(duration: duration);
+    final animation = ref.watch(preferencesPanelAnimationProvider(controller));
+
+    final show = ref.watch(showPreferencesPanelProvider);
     if (show) {
       controller.forward();
     } else {
       controller.reverse();
     }
     return _SlidingSettingsPanel(
-        controller: controller,
-        onTap: () => ref.read(showPreferencesProvider.notifier).state = false);
+        animation: animation,
+        onTap: () => ref.read(showPreferencesPanelProvider.notifier).state = false);
   }
 }
 
 class _SlidingSettingsPanel extends AnimatedWidget {
-  const _SlidingSettingsPanel(
-      {Key? key, required AnimationController controller, required this.onTap})
-      : super(key: key, listenable: controller);
+  const _SlidingSettingsPanel({Key? key, required Animation<double> animation, required this.onTap})
+      : super(key: key, listenable: animation);
 
   final VoidCallback onTap;
 
@@ -41,8 +43,7 @@ class _SlidingSettingsPanel extends AnimatedWidget {
     if (animation.isDismissed) {
       return Container();
     }
-    return panelContainer(
-      context,
+    return _panelBackdrop(
       SizeTransition(
         sizeFactor: animation,
         axis: Axis.vertical,
@@ -52,29 +53,32 @@ class _SlidingSettingsPanel extends AnimatedWidget {
     );
   }
 
-  Widget panelContainer(BuildContext context, Widget panel) {
-    final theme = Theme.of(context);
-    final color = Colors.black.withOpacity(0.7);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(color: color),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: panel,
-                    ),
+  Widget _panelBackdrop(Widget child) {
+    const border = BorderSide(width: 1.5);
+    return Positioned.fill(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: onTap,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                        decoration: const BoxDecoration(
+                          border: Border(left: border, right: border, bottom: border),
+                        ),
+                        child: child),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -89,12 +93,8 @@ class _SettingsPanel extends StatelessWidget {
     final theme = Theme.of(context);
     final itemStyle = theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold);
     final isDark = theme.colorScheme.brightness == Brightness.dark;
-    const border = BorderSide();
     return Container(
-      decoration: BoxDecoration(
-        border: const Border(left: border, right: border, bottom: border),
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.95),
-      ),
+      decoration: BoxDecoration(color: theme.colorScheme.surfaceVariant.withOpacity(0.95)),
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
