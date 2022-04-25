@@ -279,7 +279,6 @@ class _WeatherWidget extends _WeatherWidgetBase {
               style: tempSt,
             ),
             TimeWidget(city.location!),
-            Text('${weather.localDateTime.hour}:${weather.localDateTime.minute}'),
           ],
         ),
         Padding(
