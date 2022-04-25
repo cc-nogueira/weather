@@ -36,7 +36,7 @@ class CurrentModel with _$CurrentModel {
     @Default(0) @JsonKey(name: 'wind_deg') int windDegree,
     @Default(null) Rain1hModel? rain,
     @Default(null) Snow1hModel? snow,
-    @Default(WeatherModel()) WeatherModel weather,
+    @Default([]) List<WeatherModel> weather,
     @Default([]) List<HourlyModel> hourly,
     @Default([]) List<DailyModel> daily,
   }) = _CurrentModel;

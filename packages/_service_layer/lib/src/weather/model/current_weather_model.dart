@@ -15,8 +15,8 @@ class CurrentWeatherModel with _$CurrentWeatherModel {
     @Default(MainModel()) MainModel main,
     @Default(WindModel()) WindModel wind,
     @Default(CloudsModel()) CloudsModel clouds,
-    @Default(RainModel()) RainModel? rain,
-    @Default(SnowModel()) SnowModel? snow,
+    @Default(null) RainModel? rain,
+    @Default(null) SnowModel? snow,
     @Default(0) int dt,
     @Default(SysModel()) SysModel sys,
     @Default(0) int timezone,
@@ -56,7 +56,7 @@ class MainModel with _$MainModel {
 class WindModel with _$WindModel {
   const factory WindModel({
     @Default(0) double speed,
-    @Default(0) double gust,
+    @Default(null) double? gust,
     @Default(0) int deg,
   }) = _WindModel;
 

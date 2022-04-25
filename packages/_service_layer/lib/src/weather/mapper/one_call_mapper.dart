@@ -7,11 +7,12 @@ class OneCallMapper {
 
   OneCall mapEntity(OneCallModel model) {
     final currentModel = model.current;
+    final currentWeather = currentModel.weather.first;
 
     final conditions = Conditions(
-      code: currentModel.weather.id,
-      title: currentModel.weather.main,
-      description: currentModel.weather.description,
+      code: currentWeather.id,
+      title: currentWeather.main,
+      description: currentWeather.description,
       humidity: currentModel.humidity,
       pressure: currentModel.pressure,
       clouds: currentModel.clouds,
