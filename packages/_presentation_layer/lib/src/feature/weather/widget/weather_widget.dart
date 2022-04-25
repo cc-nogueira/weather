@@ -35,14 +35,25 @@ class WeatherWidget extends ConsumerWidget {
     final isSelected = ref.watch(selectionProvider.select((selected) => selected == city));
     final temperatureUnit = ref.watch(temperatureUnitProvider);
     final windSpeedUnit = ref.watch(windSpeedUnitProvider);
+    final cache = _cachedWeathers[location];
 
     final tile = ref.watch(currentWeatherByLocationProvider(location)).when(
-          loading: () => _WeatherLoadingWidget(
-            city: city,
-            isSelected: isSelected,
-            onRemove: onRemove,
-            onTap: () => onTap(ref.read, city),
-          ),
+          loading: () => cache == null
+              ? _WeatherLoadingWidget(
+                  city: city,
+                  isSelected: isSelected,
+                  onRemove: onRemove,
+                  onTap: () => onTap(ref.read, city),
+                )
+              : _WeatherLoadingWithCachedDataWidget(
+                  city: city,
+                  isSelected: isSelected,
+                  weather: cache,
+                  temperatureUnit: temperatureUnit,
+                  windSpeedUnit: windSpeedUnit,
+                  onRemove: onRemove,
+                  onTap: () => onTap(ref.read, city),
+                ),
           error: (_, __) => _WeatherErrorWidget(
             city: city,
             isSelected: isSelected,
@@ -50,6 +61,7 @@ class WeatherWidget extends ConsumerWidget {
             onTap: () => onTap(ref.read, city),
           ),
           data: (data) {
+            _cachedWeathers[location] = data;
             weatherController.state = data;
             onLoaded();
             return _WeatherWidget(
@@ -94,6 +106,8 @@ class WeatherWidget extends ConsumerWidget {
   void onTap(Reader read, City city) =>
       read(selectionProvider.notifier).update((state) => city == state ? null : city);
 }
+
+final _cachedWeathers = <Location, Weather>{};
 
 abstract class _WeatherWidgetBase extends StatelessWidget {
   const _WeatherWidgetBase({
@@ -265,6 +279,7 @@ class _WeatherWidget extends _WeatherWidgetBase {
               style: tempSt,
             ),
             TimeWidget(city.location!),
+            Text('${weather.localDateTime.hour}:${weather.localDateTime.minute}'),
           ],
         ),
         Padding(
@@ -273,11 +288,13 @@ class _WeatherWidget extends _WeatherWidgetBase {
         ),
         IconTheme.merge(
           data: iconThemeData,
-          child: WeatherIcon(weatherCode: weather.conditions.code, size: 60, day: _isDay),
+          child: weatherIcon(),
         ),
       ],
     );
   }
+
+  Widget weatherIcon() => WeatherIcon(weatherCode: weather.conditions.code, size: 60, day: _isDay);
 
   @override
   Widget subtitle(BuildContext context) {
@@ -489,6 +506,31 @@ class _WeatherWidget extends _WeatherWidgetBase {
   }
 }
 
+class _WeatherLoadingWithCachedDataWidget extends _WeatherWidget {
+  const _WeatherLoadingWithCachedDataWidget({
+    required bool isSelected,
+    required City city,
+    required VoidCallback onRemove,
+    required VoidCallback onTap,
+    required Weather weather,
+    required Unit<Temperature> temperatureUnit,
+    required Unit<Speed> windSpeedUnit,
+  }) : super(
+            isSelected: isSelected,
+            city: city,
+            onRemove: onRemove,
+            onTap: onTap,
+            weather: weather,
+            temperatureUnit: temperatureUnit,
+            windSpeedUnit: windSpeedUnit);
+
+  @override
+  Widget weatherIcon() => const Padding(
+        padding: EdgeInsets.all(12),
+        child: CircularProgressIndicator(color: Colors.grey),
+      );
+}
+
 class _SmallWindIcon extends StatelessWidget {
   const _SmallWindIcon({Key? key, required this.degree, required this.size, this.color})
       : super(key: key);
@@ -523,6 +565,8 @@ class _SmallWindIcon extends StatelessWidget {
       );
 }
 
+final _previousTimeZones = <Location, TimeZone>{};
+
 class TimeWidget extends ConsumerWidget {
   const TimeWidget(this.location, {Key? key}) : super(key: key);
 
@@ -533,23 +577,51 @@ class TimeWidget extends ConsumerWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final style = textTheme.headline6!.copyWith(color: textTheme.headline4?.color);
+
     return ref.watch(timeZoneProvider(location)).when(
-          loading: () => Text('--:--', style: style),
+          loading: () => _LoadingTimeWidget(location: location, read: ref.read, style: style),
           error: (_, __) => Text('--:--', style: style),
-          data: (data) => _TimeWidget(timeZone: data, style: style, name: location.toString()),
+          data: (data) {
+            _previousTimeZones[location] = data;
+            return _TimeWidget(timeZone: data, style: style);
+          },
         );
+  }
+}
+
+class _LoadingTimeWidget extends StatelessWidget {
+  const _LoadingTimeWidget({
+    Key? key,
+    required this.read,
+    required this.location,
+    required this.style,
+  }) : super(key: key);
+
+  final Reader read;
+  final Location location;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    final timeZone = _previousTimeZones[location];
+    if (timeZone == null) {
+      return Text('--:--', style: style);
+    }
+    final now = DateTime.now().toUtc();
+    final localTime = now.add(timeZone.currentUtcOffsetDuration);
+    final hr = localTime.hour.toString();
+    final min = localTime.minute.toString().padLeft(2, '0');
+    return Text('$hr:$min', style: style);
   }
 }
 
 class _TimeWidget extends StatefulWidget {
   const _TimeWidget({
     Key? key,
-    required this.name,
     required this.timeZone,
     required this.style,
   }) : super(key: key);
 
-  final String name;
   final TimeZone timeZone;
   final TextStyle style;
 

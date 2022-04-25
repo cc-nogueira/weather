@@ -50,14 +50,18 @@ class _WeatherList extends ConsumerWidget {
   final List<WeatherWidget> cityWithWeatherList;
   final List<bool> loadedStatus;
   final _timerController = StateController<Timer>(Timer(Duration.zero, () {}));
-  final _refreshInterval = const Duration(minutes: 10);
+  final _refreshInterval = const Duration(minutes: 30);
   late final _loadedProvider = StateProvider((_) => _isFullyLoaded);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final order = ref.watch(weatherOrderProvider);
     if (order == WeatherOrder.byTemp) {
-      if (!_isFullyLoaded) {
+      if (_isFullyLoaded) {
+        if (!_timerController.state.isActive) {
+          _setPeriodicRefresh(ref);
+        }
+      } else {
         ref.watch(_loadedProvider);
         _scheduleRebuild(ref.read);
       }
@@ -71,13 +75,17 @@ class _WeatherList extends ConsumerWidget {
     );
   }
 
-  Future<void> _refresh(WidgetRef ref) async {
+  Future<void> _refresh(WidgetRef ref) {
     _timerController.state.cancel();
     for (var each in cityWithWeatherList) {
       each.refresh(ref);
     }
-    _timerController.state = Timer(_refreshInterval, () => _refresh(ref));
+    _setPeriodicRefresh(ref);
+    return Future.value();
   }
+
+  void _setPeriodicRefresh(WidgetRef ref) =>
+      _timerController.state = Timer(_refreshInterval, () => _refresh(ref));
 
   bool get _isFullyLoaded => loadedStatus.every((value) => value);
 
