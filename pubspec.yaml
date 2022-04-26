@@ -15,7 +15,7 @@ dependencies:
     
   flutter:
     sdk: flutter
-  flutter_riverpod: any
+  flutter_riverpod: ^2.0.0-dev.5
 
 dev_dependencies:
   flutter_lints: ^1.0.0
