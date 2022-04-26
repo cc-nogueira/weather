@@ -6,7 +6,7 @@ export 'src/entity/weather/celcius.dart';
 export 'src/entity/weather/city.dart';
 export 'src/entity/weather/conditions.dart';
 export 'src/entity/weather/geo.dart';
-export 'src/entity/weather/one_call.dart';
+export 'src/entity/weather/one_call_weather.dart';
 export 'src/entity/weather/temperatures.dart';
 export 'src/entity/weather/weather.dart';
 export 'src/entity/weather/weather_order.dart';

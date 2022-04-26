@@ -4,20 +4,23 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'weather_model.dart';
 
-part 'one_call_model.freezed.dart';
-part 'one_call_model.g.dart';
+part 'one_call_weather_model.freezed.dart';
+part 'one_call_weather_model.g.dart';
 
 @freezed
-class OneCallModel with _$OneCallModel {
-  const factory OneCallModel({
+class OneCallWeatherModel with _$OneCallWeatherModel {
+  const factory OneCallWeatherModel({
     @Default(0) double lat,
     @Default(0) double lon,
     @Default('') String timezone,
     @Default(0) @JsonKey(name: 'timezone_offset') int timezoneOffset,
     @Default(CurrentModel()) CurrentModel current,
-  }) = _OneCallModel;
+    @Default([]) List<HourlyModel> hourly,
+    @Default([]) List<DailyModel> daily,
+  }) = _OneCallWeatherModel;
 
-  factory OneCallModel.fromJson(Map<String, dynamic> json) => _$OneCallModelFromJson(json);
+  factory OneCallWeatherModel.fromJson(Map<String, dynamic> json) =>
+      _$OneCallWeatherModelFromJson(json);
 }
 
 @freezed
@@ -37,8 +40,6 @@ class CurrentModel with _$CurrentModel {
     @Default(null) Rain1hModel? rain,
     @Default(null) Snow1hModel? snow,
     @Default([]) List<WeatherModel> weather,
-    @Default([]) List<HourlyModel> hourly,
-    @Default([]) List<DailyModel> daily,
   }) = _CurrentModel;
 
   factory CurrentModel.fromJson(Map<String, dynamic> json) => _$CurrentModelFromJson(json);

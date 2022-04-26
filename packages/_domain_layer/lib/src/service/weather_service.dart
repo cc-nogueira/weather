@@ -2,7 +2,7 @@ import 'dart:async';
 
 import '../entity/common/location.dart';
 import '../entity/weather/city.dart';
-import '../entity/weather/one_call.dart';
+import '../entity/weather/one_call_weather.dart';
 import '../entity/weather/weather.dart';
 
 /// Weather Service interface.
@@ -29,5 +29,5 @@ abstract class WeatherService {
   /// Fetch OneCall weather information from a remote service.
   ///
   /// Returns a Future as it expects an async call to a remote service.
-  Future<OneCall> getOneCallByLocation(Location location);
+  Future<OneCallWeather> getOneCallByLocation(Location location);
 }

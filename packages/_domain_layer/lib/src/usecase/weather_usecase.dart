@@ -1,6 +1,6 @@
 import '../entity/common/location.dart';
 import '../entity/weather/city.dart';
-import '../entity/weather/one_call.dart';
+import '../entity/weather/one_call_weather.dart';
 import '../entity/weather/weather.dart';
 import '../service/weather_service.dart';
 
@@ -18,5 +18,6 @@ class WeatherUsecase {
   Future<Weather> getCurrentWeatherByLocation(Location location) =>
       service.getCurrentWeatherByLocation(location);
 
-  Future<OneCall> getOneCallByLocation(Location location) => service.getOneCallByLocation(location);
+  Future<OneCallWeather> getOneCallByLocation(Location location) =>
+      service.getOneCallByLocation(location);
 }

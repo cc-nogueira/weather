@@ -1,13 +1,14 @@
 import 'package:_domain_layer/domain_layer.dart';
 
-import '../model/one_call_model.dart';
+import '../model/one_call_weather_model.dart';
 
 class OneCallMapper {
   const OneCallMapper();
 
-  OneCall mapEntity(OneCallModel model) {
+  OneCallWeather mapEntity(OneCallWeatherModel model) {
     final currentModel = model.current;
     final currentWeather = currentModel.weather.first;
+    final today = model.daily.isEmpty ? null : model.daily.first;
 
     final conditions = Conditions(
       code: currentWeather.id,
@@ -19,6 +20,8 @@ class OneCallMapper {
       temperatures: Temperatures(
         temperature: Celcius(currentModel.temp),
         feelsLike: Celcius(currentModel.feelsLike),
+        min: today == null ? null : Celcius(today.temp.min),
+        max: today == null ? null : Celcius(today.temp.max),
       ),
       wind: Wind(
         speed: currentModel.windSpeed,
@@ -43,10 +46,10 @@ class OneCallMapper {
       conditions: conditions,
     );
 
-    return OneCall(
+    return OneCallWeather(
       currentWeather: weather,
-      hourly: _mapHourly(currentModel.hourly, geo),
-      daily: _mapDaily(currentModel.daily, geo),
+      daily: _mapDaily(model.daily, geo),
+      hourly: _mapHourly(model.hourly, geo),
     );
   }
 
