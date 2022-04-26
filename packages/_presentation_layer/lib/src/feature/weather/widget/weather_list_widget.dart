@@ -106,8 +106,8 @@ class _WeatherList extends ConsumerWidget {
         return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
       }
       if (order == WeatherOrder.byTemp) {
-        final aTemp = a.weatherController.state?.conditions.temperatures;
-        final bTemp = b.weatherController.state?.conditions.temperatures;
+        final aTemp = a.weatherController.state?.currentWeather.conditions.temperatures;
+        final bTemp = b.weatherController.state?.currentWeather.conditions.temperatures;
         if (aTemp == null && bTemp == null) {
           return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
         }

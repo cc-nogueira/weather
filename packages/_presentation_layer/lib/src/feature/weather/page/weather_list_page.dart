@@ -16,10 +16,10 @@ class WeatherListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => ref.watch(watchAllCitiesProvider).when(
         loading: LoadingPage.builder('Weather'),
         error: MessagePage.errorBuilder,
-        data: (cities) => _scaffold(context, ref, cities),
+        data: (cities) => _scaffold(context, cities),
       );
 
-  Widget _scaffold(BuildContext context, WidgetRef ref, List<City> cities) => Scaffold(
+  Widget _scaffold(BuildContext context, List<City> cities) => Scaffold(
         appBar: const WeatherListAppBar(),
         body: _bodyStack(context, cities),
         floatingActionButton: FloatingActionButton(

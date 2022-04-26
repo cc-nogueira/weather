@@ -7,7 +7,6 @@ class TimeUsecase {
 
   final TimeZoneService service;
 
-  Future<TimeZone> getTimeZone(Location location) async {
-    return await service.getCurrentTimeZoneByLocation(location);
-  }
+  Future<TimeZone> getTimeZone(Location location) async =>
+      await service.getCurrentTimeZoneByLocation(location);
 }

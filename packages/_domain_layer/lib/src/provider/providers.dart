@@ -5,6 +5,7 @@ import 'package:riverpod/riverpod.dart';
 import '../entity/common/location.dart';
 import '../entity/time_zone/time_zone.dart';
 import '../entity/weather/city.dart';
+import '../entity/weather/one_call_weather.dart';
 import '../entity/weather/weather.dart';
 import '../entity/weather/weather_order.dart';
 import '../layer/domain_layer.dart';
@@ -45,6 +46,20 @@ final windSpeedUnitProvider = Provider<Unit<Speed>>((ref) {
   return ref.watch(usecase.windSpeedUnitProvider);
 });
 
+// -- Cities:
+
+final citiesUsecaseProvider =
+    Provider<CitiesUsecase>((ref) => ref.watch(domainLayerProvider).citiesUsecase);
+
+final citiesSearchProvider = FutureProvider.autoDispose.family<List<City>, City>(
+  (ref, city) => ref.watch(
+    weatherUsecaseProvider.select((usecase) => usecase.searchCitiesLike(city)),
+  ),
+);
+
+/// watchAllCities StreamProvider
+final watchAllCitiesProvider = StreamProvider((ref) => ref.watch(citiesUsecaseProvider).watchAll());
+
 // -- Time Zone:
 
 final timeUsecaseProvider =
@@ -61,18 +76,10 @@ final timeZoneProvider = FutureProvider.autoDispose.family<TimeZone, Location>(
 final weatherUsecaseProvider =
     Provider<WeatherUsecase>((ref) => ref.watch(domainLayerProvider).weatherUsecase);
 
-final citiesUsecaseProvider =
-    Provider<CitiesUsecase>((ref) => ref.watch(domainLayerProvider).citiesUsecase);
-
-final citiesSearchProvider = FutureProvider.autoDispose.family<List<City>, City>(
-  (ref, city) => ref.watch(
-    weatherUsecaseProvider.select((usecase) => usecase.searchCitiesLike(city)),
-  ),
-);
-
 /// currentWeatherByLocation FutureProvider
 final currentWeatherByLocationProvider = FutureProvider.autoDispose.family<Weather, Location>(
     (ref, location) => ref.watch(weatherUsecaseProvider).getCurrentWeatherByLocation(location));
 
-/// watchAllCities StreamProvider
-final watchAllCitiesProvider = StreamProvider((ref) => ref.watch(citiesUsecaseProvider).watchAll());
+final oneCallWeatherByLocationProvider = FutureProvider.autoDispose
+    .family<OneCallWeather, Location>(
+        (ref, location) => ref.watch(weatherUsecaseProvider).getOneCallByLocation(location));
