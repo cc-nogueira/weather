@@ -47,7 +47,7 @@ class OneCallMapper {
     );
 
     return OneCallWeather(
-      currentWeather: weather,
+      weather: weather,
       daily: _mapDaily(model.daily, geo),
       hourly: _mapHourly(model.hourly, geo),
     );

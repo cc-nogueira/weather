@@ -5,7 +5,7 @@ import '../model/current_weather_model.dart';
 class WeatherMapper {
   const WeatherMapper();
 
-  Weather mapEntity(CurrentWeatherModel model) {
+  CurrentWeather mapEntity(CurrentWeatherModel model) {
     final weatherModel = model.weather.first;
     final main = model.main;
     final conditions = Conditions(
@@ -26,7 +26,7 @@ class WeatherMapper {
       snow1h: model.snow?.h1,
     );
 
-    return Weather(
+    final weather = Weather(
       dateTimeMillis: model.dt * 1000,
       geo: Geo(
         location: Location(latitude: model.coord.lat, longitude: model.coord.lon),
@@ -36,5 +36,7 @@ class WeatherMapper {
       ),
       conditions: conditions,
     );
+
+    return CurrentWeather(weather: weather);
   }
 }

@@ -50,7 +50,7 @@ class _WeatherList extends ConsumerWidget {
   final List<WeatherWidget> cityWithWeatherList;
   final List<bool> loadedStatus;
   final _timerController = StateController<Timer>(Timer(Duration.zero, () {}));
-  final _refreshInterval = const Duration(minutes: 30);
+  final _refreshInterval = const Duration(minutes: 60);
   late final _loadedProvider = StateProvider((_) => _isFullyLoaded);
 
   @override
@@ -106,8 +106,8 @@ class _WeatherList extends ConsumerWidget {
         return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
       }
       if (order == WeatherOrder.byTemp) {
-        final aTemp = a.weatherController.state?.currentWeather.conditions.temperatures;
-        final bTemp = b.weatherController.state?.currentWeather.conditions.temperatures;
+        final aTemp = a.weatherController.state?.weather.conditions.temperatures;
+        final bTemp = b.weatherController.state?.weather.conditions.temperatures;
         if (aTemp == null && bTemp == null) {
           return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
         }

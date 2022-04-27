@@ -14,6 +14,10 @@ mixin Localtime {
       DateTime.fromMillisecondsSinceEpoch(dateTimeMillis + geo.timeShiftMillis, isUtc: true);
 }
 
+abstract class WeatherContainer {
+  Weather get weather;
+}
+
 @freezed
 class Weather with _$Weather, Localtime {
   const Weather._();

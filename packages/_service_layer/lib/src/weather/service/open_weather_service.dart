@@ -67,7 +67,7 @@ class OpenWeatherService implements WeatherService {
   ///
   /// Throws ArgumentError if can't find weather info for this location.
   @override
-  Future<Weather> getCurrentWeatherByLocation(Location location) async {
+  Future<CurrentWeather> getCurrentWeatherByLocation(Location location) async {
     final jsonMap = await client.getCurrentWeatherJson(location);
     if (jsonMap['cod'] != 200) {
       throw ArgumentError('Did not find weather info for location.');

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import '../entity/common/location.dart';
 import '../entity/weather/city.dart';
+import '../entity/weather/current_weather.dart';
 import '../entity/weather/one_call_weather.dart';
-import '../entity/weather/weather.dart';
 
 /// Weather Service interface.
 ///
@@ -24,7 +24,7 @@ abstract class WeatherService {
   /// Fetch current weather from a remote service.
   ///
   /// Returns a Future as it expects an async call to a rmeove service.
-  Future<Weather> getCurrentWeatherByLocation(Location location);
+  Future<CurrentWeather> getCurrentWeatherByLocation(Location location);
 
   /// Fetch OneCall weather information from a remote service.
   ///

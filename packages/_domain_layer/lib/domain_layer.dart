@@ -5,6 +5,7 @@ export 'src/entity/time_zone/time_zone.dart';
 export 'src/entity/weather/celcius.dart';
 export 'src/entity/weather/city.dart';
 export 'src/entity/weather/conditions.dart';
+export 'src/entity/weather/current_weather.dart';
 export 'src/entity/weather/geo.dart';
 export 'src/entity/weather/one_call_weather.dart';
 export 'src/entity/weather/temperatures.dart';
