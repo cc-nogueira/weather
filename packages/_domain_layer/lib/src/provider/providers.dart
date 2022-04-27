@@ -5,6 +5,7 @@ import 'package:riverpod/riverpod.dart';
 import '../entity/common/location.dart';
 import '../entity/time_zone/time_zone.dart';
 import '../entity/weather/city.dart';
+import '../entity/weather/current_weather.dart';
 import '../entity/weather/one_call_weather.dart';
 import '../entity/weather/weather.dart';
 import '../entity/weather/weather_order.dart';
@@ -77,9 +78,20 @@ final weatherUsecaseProvider =
     Provider<WeatherUsecase>((ref) => ref.watch(domainLayerProvider).weatherUsecase);
 
 /// currentWeatherByLocation FutureProvider
-final currentWeatherByLocationProvider = FutureProvider.autoDispose.family<Weather, Location>(
-    (ref, location) => ref.watch(weatherUsecaseProvider).getCurrentWeatherByLocation(location));
+final currentWeatherByLocationProvider =
+    FutureProvider.family<CurrentWeather, Location>((ref, location) {
+  return ref.watch(weatherUsecaseProvider).getCurrentWeatherByLocation(location);
+});
 
-final oneCallWeatherByLocationProvider = FutureProvider.autoDispose
-    .family<OneCallWeather, Location>(
-        (ref, location) => ref.watch(weatherUsecaseProvider).getOneCallByLocation(location));
+final oneCallWeatherByLocationProvider =
+    FutureProvider.family<OneCallWeather, Location>((ref, location) {
+  return ref.watch(weatherUsecaseProvider).getOneCallByLocation(location);
+});
+
+final weatherCacheProvider = StateProvider.family<WeatherContainer?, Location>((_, __) => null);
+
+final weatherContainerByLocationProvider =
+    FutureProvider.family<WeatherContainer, Location>((ref, location) {
+  final cache = ref.watch(weatherCacheProvider(location).notifier);
+  return cache.state ?? ref.watch(currentWeatherByLocationProvider(location).future);
+});

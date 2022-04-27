@@ -23,7 +23,7 @@ class WeatherWidget extends ConsumerWidget {
   final City city;
   final VoidCallback onRemove;
   final VoidCallback onLoaded;
-  final StateController<OneCallWeather?> weatherController = StateController(null);
+  final StateController<WeatherContainer?> weatherController = StateController(null);
   final StateProvider<City?> selectionProvider;
 
   @override
@@ -35,24 +35,33 @@ class WeatherWidget extends ConsumerWidget {
     final isSelected = ref.watch(selectionProvider.select((selected) => selected == city));
     final temperatureUnit = ref.watch(temperatureUnitProvider);
     final windSpeedUnit = ref.watch(windSpeedUnitProvider);
-    final cache = weatherController.state;
+    final cacheController = ref.read(weatherCacheProvider(location).notifier);
+    final Weather? weatherCache = cacheController.state?.weather;
 
-    final tile = ref.watch(oneCallWeatherByLocationProvider(location)).when(
-          loading: () => cache == null
+    late final FutureProvider<WeatherContainer> weatherProvider;
+    if (isSelected) {
+      weatherProvider = oneCallWeatherByLocationProvider(location);
+      ref.invalidate(weatherContainerByLocationProvider(location));
+    } else {
+      weatherProvider = weatherContainerByLocationProvider(location);
+    }
+
+    final tile = ref.watch(weatherProvider).when(
+          loading: () => weatherCache == null
               ? _WeatherLoadingWidget(
                   city: city,
                   isSelected: isSelected,
                   onRemove: onRemove,
                   onTap: () => onTap(ref.read, city),
                 )
-              : _WeatherLoadingWithCachedDataWidget(
-                  city: city,
+              : _WeatherWidget(
                   isSelected: isSelected,
-                  weather: cache.currentWeather,
-                  temperatureUnit: temperatureUnit,
-                  windSpeedUnit: windSpeedUnit,
+                  city: city,
                   onRemove: onRemove,
                   onTap: () => onTap(ref.read, city),
+                  weather: weatherCache,
+                  temperatureUnit: temperatureUnit,
+                  windSpeedUnit: windSpeedUnit,
                 ),
           error: (_, __) => _WeatherErrorWidget(
             city: city,
@@ -62,11 +71,12 @@ class WeatherWidget extends ConsumerWidget {
           ),
           data: (data) {
             weatherController.state = data;
+            cacheController.state = data;
             onLoaded();
             return _WeatherWidget(
               city: city,
               isSelected: isSelected,
-              weather: data.currentWeather,
+              weather: data.weather,
               temperatureUnit: temperatureUnit,
               windSpeedUnit: windSpeedUnit,
               onRemove: onRemove,
@@ -98,7 +108,10 @@ class WeatherWidget extends ConsumerWidget {
   void refresh(WidgetRef ref) {
     final location = city.location;
     if (location != null) {
+      ref.read(weatherCacheProvider(location).notifier).state = null;
+      ref.invalidate(currentWeatherByLocationProvider(location));
       ref.invalidate(oneCallWeatherByLocationProvider(location));
+      ref.invalidate(weatherContainerByLocationProvider(location));
       ref.invalidate(timeZoneProvider(location));
     }
   }
@@ -501,31 +514,6 @@ class _WeatherWidget extends _WeatherWidgetBase {
     if (dir < 348.75) return 'NNW';
     return 'N';
   }
-}
-
-class _WeatherLoadingWithCachedDataWidget extends _WeatherWidget {
-  const _WeatherLoadingWithCachedDataWidget({
-    required bool isSelected,
-    required City city,
-    required VoidCallback onRemove,
-    required VoidCallback onTap,
-    required Weather weather,
-    required Unit<Temperature> temperatureUnit,
-    required Unit<Speed> windSpeedUnit,
-  }) : super(
-            isSelected: isSelected,
-            city: city,
-            onRemove: onRemove,
-            onTap: onTap,
-            weather: weather,
-            temperatureUnit: temperatureUnit,
-            windSpeedUnit: windSpeedUnit);
-
-  @override
-  Widget weatherIcon() => const Padding(
-        padding: EdgeInsets.all(12),
-        child: CircularProgressIndicator(color: Colors.grey),
-      );
 }
 
 class _SmallWindIcon extends StatelessWidget {
