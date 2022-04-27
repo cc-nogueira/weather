@@ -88,10 +88,10 @@ final oneCallWeatherByLocationProvider =
   return ref.watch(weatherUsecaseProvider).getOneCallByLocation(location);
 });
 
-final weatherCacheProvider = StateProvider.family<WeatherContainer?, Location>((_, __) => null);
+final weatherCacheProvider = Provider((_) => <Location, WeatherContainer>{});
 
 final weatherContainerByLocationProvider =
     FutureProvider.family<WeatherContainer, Location>((ref, location) {
-  final cache = ref.watch(weatherCacheProvider(location).notifier);
-  return cache.state ?? ref.watch(currentWeatherByLocationProvider(location).future);
+  final cache = ref.watch(weatherCacheProvider);
+  return cache[location] ?? ref.watch(currentWeatherByLocationProvider(location).future);
 });

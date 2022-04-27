@@ -70,7 +70,7 @@ class _WeatherList extends ConsumerWidget {
       onRefresh: () => _refresh(ref),
       child: ListView(
         padding: const EdgeInsets.only(bottom: 48, top: 8),
-        children: _sort(order),
+        children: _sort(ref.read, order),
       ),
     );
   }
@@ -99,15 +99,16 @@ class _WeatherList extends ConsumerWidget {
     });
   }
 
-  List<Widget> _sort(WeatherOrder order) {
+  List<Widget> _sort(Reader read, WeatherOrder order) {
     final list = cityWithWeatherList.toList();
+    final cache = read(weatherCacheProvider);
     list.sort((a, b) {
       if (order == WeatherOrder.byName) {
         return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
       }
       if (order == WeatherOrder.byTemp) {
-        final aTemp = a.weatherController.state?.weather.conditions.temperatures;
-        final bTemp = b.weatherController.state?.weather.conditions.temperatures;
+        final aTemp = cache[a.city.location!]?.weather.conditions.temperatures;
+        final bTemp = cache[b.city.location!]?.weather.conditions.temperatures;
         if (aTemp == null && bTemp == null) {
           return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
         }

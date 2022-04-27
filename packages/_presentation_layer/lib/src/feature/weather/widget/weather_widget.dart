@@ -12,7 +12,7 @@ import 'time_widget.dart';
 import 'weather_icon.dart';
 
 class WeatherWidget extends ConsumerWidget {
-  WeatherWidget({
+  const WeatherWidget({
     Key? key,
     required this.city,
     required this.onRemove,
@@ -23,7 +23,6 @@ class WeatherWidget extends ConsumerWidget {
   final City city;
   final VoidCallback onRemove;
   final VoidCallback onLoaded;
-  final StateController<WeatherContainer?> weatherController = StateController(null);
   final StateProvider<City?> selectionProvider;
 
   @override
@@ -35,8 +34,8 @@ class WeatherWidget extends ConsumerWidget {
     final isSelected = ref.watch(selectionProvider.select((selected) => selected == city));
     final temperatureUnit = ref.watch(temperatureUnitProvider);
     final windSpeedUnit = ref.watch(windSpeedUnitProvider);
-    final cacheController = ref.read(weatherCacheProvider(location).notifier);
-    final Weather? weatherCache = cacheController.state?.weather;
+    final cache = ref.read(weatherCacheProvider);
+    final weatherCache = cache[location]?.weather;
 
     late final FutureProvider<WeatherContainer> weatherProvider;
     if (isSelected) {
@@ -70,8 +69,7 @@ class WeatherWidget extends ConsumerWidget {
             onTap: () => onTap(ref.read, city),
           ),
           data: (data) {
-            weatherController.state = data;
-            cacheController.state = data;
+            cache[location] = data;
             onLoaded();
             return _WeatherWidget(
               city: city,
@@ -108,7 +106,7 @@ class WeatherWidget extends ConsumerWidget {
   void refresh(WidgetRef ref) {
     final location = city.location;
     if (location != null) {
-      ref.read(weatherCacheProvider(location).notifier).state = null;
+      ref.read(weatherCacheProvider).remove(location);
       ref.invalidate(currentWeatherByLocationProvider(location));
       ref.invalidate(oneCallWeatherByLocationProvider(location));
       ref.invalidate(weatherContainerByLocationProvider(location));
@@ -345,9 +343,9 @@ class _WeatherWidget extends _WeatherWidgetBase {
     final minTemp = weather.conditions.temperatures.min?.quantity.convertTo(temperatureUnit);
     final maxTemp = weather.conditions.temperatures.max?.quantity.convertTo(temperatureUnit);
     final minString =
-        minTemp == null ? '----' : '${minTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}';
+        minTemp == null ? '---' : '${minTemp.amount.round()} ${temperatureUnit.symbol}';
     final maxString =
-        maxTemp == null ? '----' : '${maxTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}';
+        maxTemp == null ? '---' : '${maxTemp.amount.round()} ${temperatureUnit.symbol}';
 
     final elements = [
       _detailTile(
