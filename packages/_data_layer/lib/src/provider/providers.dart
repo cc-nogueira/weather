@@ -5,8 +5,9 @@ import '../layer/data_layer.dart';
 /// Data Layer provider
 final dataLayerProvider = Provider((_) => DataLayer());
 
+/// PreferencesRepositoy implementation provider
 final preferencesRepositoryProvider =
     Provider((ref) => ref.watch(dataLayerProvider).preferencesRepository);
 
-/// CitiesRepository interface implementation provider
+/// CitiesRepository implementation provider
 final citiesRepositoryProvider = Provider((ref) => ref.watch(dataLayerProvider).citiesRepository);

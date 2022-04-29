@@ -17,6 +17,7 @@ dependencies:
   json_annotation: ^4.4.0
   qty: ^0.9.1
   #  path: ../../../../../dart/qty
+  quiver: ^3.0.1+1
   riverpod: ^2.0.0-dev.5
 
 dev_dependencies:

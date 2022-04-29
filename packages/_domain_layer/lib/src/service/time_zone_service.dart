@@ -3,9 +3,9 @@ import 'dart:async';
 import '../entity/common/location.dart';
 import '../entity/time_zone/time_zone.dart';
 
-/// Time API service provided by TimeAPI.io.
+/// TimeZone API service provided by TimeAPI.io.
 ///
-/// Access Time API by Location.
+/// Access TimeAPI by Location.
 abstract class TimeZoneService {
   /// Fetch Time Zone information from TimeAPI client.
   ///

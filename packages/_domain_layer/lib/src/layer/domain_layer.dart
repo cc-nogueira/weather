@@ -7,7 +7,7 @@ import '../service/time_zone_service.dart';
 import '../service/weather_service.dart';
 import '../usecase/cities_usecase.dart';
 import '../usecase/preferences_usecase.dart';
-import '../usecase/time_usecase.dart';
+import '../usecase/time_zone_usecase.dart';
 import '../usecase/weather_usecase.dart';
 
 /// Function definition for Domain Layer dependencies
@@ -35,7 +35,7 @@ class DomainLayer extends AppLayer {
   final Reader read;
   late final PreferencesUsecase preferencesUsecase;
   late final CitiesUsecase citiesUsecase;
-  late final TimeUsecase timeUsecase;
+  late final TimeZoneUsecase timeUsecase;
   late final WeatherUsecase weatherUsecase;
 
   void configure({
@@ -46,7 +46,7 @@ class DomainLayer extends AppLayer {
   }) {
     preferencesUsecase = PreferencesUsecase(read: read, repository: preferencesRepository);
     citiesUsecase = CitiesUsecase(repository: citiesRepository);
-    timeUsecase = TimeUsecase(service: timeZoneService);
+    timeUsecase = TimeZoneUsecase(service: timeZoneService);
     weatherUsecase = WeatherUsecase(service: weatherService);
   }
 }

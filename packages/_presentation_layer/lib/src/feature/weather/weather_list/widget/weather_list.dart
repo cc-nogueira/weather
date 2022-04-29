@@ -47,20 +47,19 @@ class _SortedWeatherList extends ConsumerWidget {
 
   List<WeatherTile> _sortTiles(Reader read, WeatherOrder order) {
     final list = tiles.toList();
-    final cache = read(weatherCacheProvider);
     list.sort((a, b) {
       if (order == WeatherOrder.byName) {
         return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
       }
       if (order == WeatherOrder.byTemp) {
-        final aTemp = cache[a.city.location!]?.weather.conditions.temperatures;
-        final bTemp = cache[b.city.location!]?.weather.conditions.temperatures;
+        final aTemp = read(a.temperatureNotifierProvider);
+        final bTemp = read(b.temperatureNotifierProvider);
         if (aTemp == null && bTemp == null) {
           return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
         }
         if (aTemp == null) return 1;
         if (bTemp == null) return -1;
-        return bTemp.temperature.value.compareTo(aTemp.temperature.value);
+        return bTemp.value.compareTo(aTemp.value);
       }
       return a.city.order.compareTo(b.city.order);
     });
@@ -69,17 +68,12 @@ class _SortedWeatherList extends ConsumerWidget {
 }
 
 class _WeatherList extends ConsumerWidget {
-  _WeatherList({Key? key, required this.tiles}) : super(key: key);
+  const _WeatherList({Key? key, required this.tiles}) : super(key: key);
 
   final List<WeatherTile> tiles;
-  final _timerController = StateController<Timer>(Timer(Duration.zero, () {}));
-  final _refreshInterval = const Duration(minutes: 60);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (!_timerController.state.isActive) {
-      _setPeriodicRefresh(ref);
-    }
     return RefreshIndicator(
       onRefresh: () => _refresh(ref),
       child: ListView(
@@ -90,14 +84,7 @@ class _WeatherList extends ConsumerWidget {
   }
 
   Future<void> _refresh(WidgetRef ref) {
-    _timerController.state.cancel();
-    for (var each in tiles) {
-      each.refresh(ref);
-    }
-    _setPeriodicRefresh(ref);
+    ref.invalidate(currentWeatherMetronomeProvider);
     return Future.value();
   }
-
-  void _setPeriodicRefresh(WidgetRef ref) =>
-      _timerController.state = Timer(_refreshInterval, () => _refresh(ref));
 }

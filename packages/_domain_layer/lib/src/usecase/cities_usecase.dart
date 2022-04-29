@@ -3,6 +3,13 @@ import '../exception/validation_exception.dart';
 import '../repository/cities_repository.dart';
 import 'entity_stream_usecase.dart';
 
+/// CitiesUsecase is a typical EntityStreamUsecase.
+///
+/// It implements the CRUDE Stream API to save, read and watch City entities.
+/// This implementation is very simple, just overriding the requred methods of [EntityUsecase]:
+///   - compare
+///   - validate
+///   - adjust
 class CitiesUsecase extends EntityStreamUsecase<City> {
   const CitiesUsecase({required CitiesRepository repository}) : super(repository: repository);
 
@@ -13,7 +20,7 @@ class CitiesUsecase extends EntityStreamUsecase<City> {
   /// Validate city's content.
   ///
   /// Throws a validation exception if city's name is empty or city's country is
-  /// not a two letter string.
+  /// not a two letter string or city's location is null.
   @override
   void validate(City city) {
     if (city.name.trim().isEmpty) {
@@ -31,6 +38,7 @@ class CitiesUsecase extends EntityStreamUsecase<City> {
   ///
   /// Trim contacts name, state and country if necessary.
   /// Sets country to uppercase.
+  /// Set default city order to the number of cities in storage.
   @override
   City adjust(City city) {
     var adjusted = city;

@@ -41,31 +41,19 @@ class WeatherTile extends ConsumerWidget {
     }
     final temperatureUnit = ref.watch(temperatureUnitProvider);
     final windSpeedUnit = ref.watch(windSpeedUnitProvider);
-    final cache = ref.read(weatherCacheProvider);
-    final weatherCache = cache[location]?.weather;
 
-    final tile = ref.watch(weatherContainerByLocationProvider(location)).when(
-          loading: () => weatherCache == null
-              ? _WeatherLoadingWidget(
-                  city: city,
-                  onRemove: onRemove,
-                  onTap: () => {},
-                )
-              : _WeatherWidget(
-                  city: city,
-                  onRemove: onRemove,
-                  onTap: () => _onTap(context, weatherCache),
-                  weather: weatherCache,
-                  temperatureUnit: temperatureUnit,
-                  windSpeedUnit: windSpeedUnit,
-                ),
+    final tile = ref.watch(currentWeatherByLocationProvider(location)).when(
+          loading: () => _WeatherLoadingWidget(
+            city: city,
+            onRemove: onRemove,
+            onTap: () => {},
+          ),
           error: (_, __) => _WeatherErrorWidget(
             city: city,
             onRemove: onRemove,
             onTap: () {},
           ),
           data: (data) {
-            cache[location] = data;
             _updateTemperature(ref.read, data.weather);
             return _WeatherWidget(
               city: city,
@@ -91,17 +79,6 @@ class WeatherTile extends ConsumerWidget {
         child: tile,
       ),
     );
-  }
-
-  void refresh(WidgetRef ref) {
-    final location = city.location;
-    if (location != null) {
-      ref.read(weatherCacheProvider).remove(location);
-      ref.invalidate(currentWeatherByLocationProvider(location));
-      ref.invalidate(oneCallWeatherByLocationProvider(location));
-      ref.invalidate(weatherContainerByLocationProvider(location));
-      ref.invalidate(timeZoneProvider(location));
-    }
   }
 
   SlidableAction get _slideTrashAction => SlidableAction(

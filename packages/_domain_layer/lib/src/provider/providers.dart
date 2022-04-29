@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qty/qty.dart';
+import 'package:quiver/async.dart';
+import 'package:quiver/time.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../entity/common/location.dart';
@@ -7,12 +9,11 @@ import '../entity/time_zone/time_zone.dart';
 import '../entity/weather/city.dart';
 import '../entity/weather/current_weather.dart';
 import '../entity/weather/one_call_weather.dart';
-import '../entity/weather/weather.dart';
 import '../entity/weather/weather_order.dart';
 import '../layer/domain_layer.dart';
 import '../usecase/cities_usecase.dart';
 import '../usecase/preferences_usecase.dart';
-import '../usecase/time_usecase.dart';
+import '../usecase/time_zone_usecase.dart';
 import '../usecase/weather_usecase.dart';
 
 /// Domain Layer provider
@@ -58,18 +59,20 @@ final citiesSearchProvider = FutureProvider.autoDispose.family<List<City>, City>
   ),
 );
 
-/// watchAllCities StreamProvider
 final watchAllCitiesProvider = StreamProvider((ref) => ref.watch(citiesUsecaseProvider).watchAll());
 
 // -- Time Zone:
 
 final timeUsecaseProvider =
-    Provider<TimeUsecase>((ref) => ref.watch(domainLayerProvider).timeUsecase);
+    Provider<TimeZoneUsecase>((ref) => ref.watch(domainLayerProvider).timeUsecase);
 
 final timeZoneProvider = FutureProvider.autoDispose.family<TimeZone, Location>(
-  (ref, location) => ref.watch(
-    timeUsecaseProvider.select((usecase) => usecase.getTimeZone(location)),
-  ),
+  (ref, location) {
+    ref.watch(currentWeatherMetronomeProvider);
+    return ref.watch(
+      timeUsecaseProvider.select((usecase) => usecase.getTimeZone(location)),
+    );
+  },
 );
 
 // -- Weather:
@@ -77,21 +80,48 @@ final timeZoneProvider = FutureProvider.autoDispose.family<TimeZone, Location>(
 final weatherUsecaseProvider =
     Provider<WeatherUsecase>((ref) => ref.watch(domainLayerProvider).weatherUsecase);
 
-/// currentWeatherByLocation FutureProvider
 final currentWeatherByLocationProvider =
-    FutureProvider.family<CurrentWeather, Location>((ref, location) {
+    FutureProvider.autoDispose.family<CurrentWeather, Location>((ref, location) {
+  ref.watch(currentWeatherMetronomeProvider);
   return ref.watch(weatherUsecaseProvider).getCurrentWeatherByLocation(location);
 });
 
 final oneCallWeatherByLocationProvider =
-    FutureProvider.family<OneCallWeather, Location>((ref, location) {
-  return ref.watch(weatherUsecaseProvider).getOneCallByLocation(location);
+    FutureProvider.autoDispose.family<OneCallWeather, Location>((ref, location) async {
+  //ref.watch(oneCallWeatherMetronomeProvider);
+  final cache = ref.watch(oneCallWeatherCacheProvider);
+  var weather = cache[location];
+  if (weather != null) {
+    print('Constructed oneCallProvider for $location from cache');
+    return weather;
+  }
+  weather = await ref.watch(weatherUsecaseProvider).getOneCallByLocation(location);
+  print('Constructed oneCallProvider for $location from service');
+
+  return cache[location] = weather;
 });
 
-final weatherCacheProvider = Provider((_) => <Location, WeatherContainer>{});
+final oneCallWeatherCacheProvider = Provider<Map<Location, OneCallWeather>>((ref) {
+  ref.watch(oneCallWeatherMetronomeProvider);
+  return <Location, OneCallWeather>{};
+});
 
-final weatherContainerByLocationProvider =
-    FutureProvider.family<WeatherContainer, Location>((ref, location) {
-  final cache = ref.watch(weatherCacheProvider);
-  return cache[location] ?? ref.watch(currentWeatherByLocationProvider(location).future);
+// -- Metronome:
+
+final minuteMetronomeProvider = Provider<DateTime>((ref) {
+  Metronome.epoch(aMinute).listen((dt) {
+    print('minuteMetronome with $dt');
+    ref.state = dt;
+  });
+  return DateTime.now();
+});
+
+final currentWeatherMetronomeProvider = Provider<DateTime>((ref) {
+  Metronome.periodic(WeatherUsecase.currentWeatherRefreshInterval).listen((dt) => ref.state = dt);
+  return DateTime.now();
+});
+
+final oneCallWeatherMetronomeProvider = Provider<DateTime>((ref) {
+  Metronome.periodic(WeatherUsecase.oneCallWeatherRefreshInterval).listen((dt) => ref.state = dt);
+  return DateTime.now();
 });

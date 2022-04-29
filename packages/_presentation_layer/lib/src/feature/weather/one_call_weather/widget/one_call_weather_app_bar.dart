@@ -8,19 +8,25 @@ import '../../widget/time_widget.dart';
 import '../../widget/weather_widget_mixin.dart';
 
 class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  const OneCallWeatherAppBar({Key? key, required this.city, required this.weather})
+  const OneCallWeatherAppBar({Key? key, required this.city, required this.initialWeather})
       : super(key: key);
 
   @override
   final Size preferredSize = const Size.fromHeight(120);
 
   final City city;
-  final Weather weather;
+  final Weather initialWeather;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final temperatureUnit = ref.watch(temperatureUnitProvider);
-    return _WeatherAppBar(city: city, weather: weather, temperatureUnit: temperatureUnit);
+    final currentWeather = ref.watch(currentWeatherByLocationProvider(city.location!));
+    return currentWeather.maybeWhen(
+      data: (data) =>
+          _WeatherAppBar(city: city, weather: data.weather, temperatureUnit: temperatureUnit),
+      orElse: () =>
+          _WeatherAppBar(city: city, weather: initialWeather, temperatureUnit: temperatureUnit),
+    );
   }
 }
 

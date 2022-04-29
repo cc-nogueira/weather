@@ -16,23 +16,22 @@ class OneCallWeatherPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Weather weatherUpdated = weather;
-    final body = ref.watch(oneCallWeatherByLocationProvider(city.location!)).when(
-          loading: () => const LoadingWidget(),
-          error: MessagePage.errorBuilder,
-          data: (data) {
-            weatherUpdated = data.weather;
-            return OneCallWeatherWidget(oneCallWeather: data);
-          },
-        );
-    return _scaffold(context, weatherUpdated, body);
+    final oneCall = ref.watch(oneCallWeatherByLocationProvider(city.location!));
+    final body = oneCall.when(
+      loading: () => const LoadingWidget(),
+      error: MessagePage.errorBuilder,
+      data: (data) {
+        return OneCallWeatherWidget(oneCallWeather: data);
+      },
+    );
+    return _scaffold(context, body);
   }
 
-  Widget _scaffold(BuildContext context, Weather weatherUpdated, Widget child) {
+  Widget _scaffold(BuildContext context, Widget child) {
     final colors = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: colors.surface,
-      appBar: OneCallWeatherAppBar(city: city, weather: weatherUpdated),
+      appBar: OneCallWeatherAppBar(city: city, initialWeather: weather),
       body: Stack(
         fit: StackFit.expand,
         children: [

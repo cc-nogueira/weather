@@ -31,5 +31,5 @@ export 'src/service/weather_service.dart';
 
 export 'src/usecase/cities_usecase.dart';
 export 'src/usecase/preferences_usecase.dart';
-export 'src/usecase/time_usecase.dart';
+export 'src/usecase/time_zone_usecase.dart';
 export 'src/usecase/weather_usecase.dart';
