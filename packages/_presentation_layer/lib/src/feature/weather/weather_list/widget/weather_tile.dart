@@ -10,17 +10,28 @@ import '../../widget/time_widget.dart';
 import '../../widget/weather_icon.dart';
 import '../../widget/weather_widget_mixin.dart';
 
+class TemperatureNotifier extends StateNotifier<Celcius?> {
+  TemperatureNotifier() : super(null);
+
+  void onWeatherData(Weather weather) {
+    state = weather.conditions.temperatures.temperature;
+  }
+
+  @override
+  bool updateShouldNotify(Celcius? old, Celcius? current) => old?.value != current?.value;
+}
+
 class WeatherTile extends ConsumerWidget {
-  const WeatherTile({
+  WeatherTile({
     Key? key,
     required this.city,
     required this.onRemove,
-    required this.onLoaded,
   }) : super(key: key);
 
   final City city;
   final VoidCallback onRemove;
-  final VoidCallback onLoaded;
+  final temperatureNotifierProvider =
+      StateNotifierProvider<TemperatureNotifier, Celcius?>((_) => TemperatureNotifier());
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,7 +54,7 @@ class WeatherTile extends ConsumerWidget {
               : _WeatherWidget(
                   city: city,
                   onRemove: onRemove,
-                  onTap: () => onTap(context, weatherCache),
+                  onTap: () => _onTap(context, weatherCache),
                   weather: weatherCache,
                   temperatureUnit: temperatureUnit,
                   windSpeedUnit: windSpeedUnit,
@@ -55,37 +66,32 @@ class WeatherTile extends ConsumerWidget {
           ),
           data: (data) {
             cache[location] = data;
-            onLoaded();
+            _updateTemperature(ref.read, data.weather);
             return _WeatherWidget(
               city: city,
               weather: data.weather,
               temperatureUnit: temperatureUnit,
               windSpeedUnit: windSpeedUnit,
               onRemove: onRemove,
-              onTap: () => onTap(context, data.weather),
+              onTap: () => _onTap(context, data.weather),
             );
           },
         );
 
-    return Slidable(
-      key: ObjectKey(city),
-      endActionPane: ActionPane(
-        motion: const BehindMotion(),
-        extentRatio: 0.25,
-        children: [_slideTrashAction],
-        dismissible: DismissiblePane(onDismissed: onRemove),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Slidable(
+        key: ObjectKey(city),
+        endActionPane: ActionPane(
+          motion: const BehindMotion(),
+          extentRatio: 0.25,
+          children: [_slideTrashAction],
+          dismissible: DismissiblePane(onDismissed: onRemove),
+        ),
+        child: tile,
       ),
-      child: tile,
     );
   }
-
-  SlidableAction get _slideTrashAction => SlidableAction(
-        onPressed: (_) => onRemove(),
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
-        icon: Icons.delete,
-        label: 'Excluir',
-      );
 
   void refresh(WidgetRef ref) {
     final location = city.location;
@@ -98,7 +104,21 @@ class WeatherTile extends ConsumerWidget {
     }
   }
 
-  void onTap(BuildContext context, Weather weather) {
+  SlidableAction get _slideTrashAction => SlidableAction(
+        onPressed: (_) => onRemove(),
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
+        icon: Icons.delete,
+        label: 'Excluir',
+      );
+
+  void _updateTemperature(Reader read, Weather weather) {
+    Future.delayed(const Duration(milliseconds: 10), () {
+      read(temperatureNotifierProvider.notifier).onWeatherData(weather);
+    });
+  }
+
+  void _onTap(BuildContext context, Weather weather) {
     Navigator.pushNamed(context, Routes.weather, arguments: Tuple2(city, weather));
   }
 }
