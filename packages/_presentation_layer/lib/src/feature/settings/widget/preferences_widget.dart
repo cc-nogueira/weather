@@ -10,7 +10,9 @@ import 'temperature_unit_dropdown.dart';
 import 'wind_speed_unit_dropdown.dart';
 
 class PreferencesWidget extends HookConsumerWidget {
-  const PreferencesWidget({Key? key}) : super(key: key);
+  const PreferencesWidget({Key? key, this.top = 0.0}) : super(key: key);
+
+  final double top;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,16 +27,19 @@ class PreferencesWidget extends HookConsumerWidget {
       controller.reverse();
     }
     return _SlidingSettingsPanel(
+        top: top,
         animation: animation,
         onTap: () => ref.read(showPreferencesPanelProvider.notifier).state = false);
   }
 }
 
 class _SlidingSettingsPanel extends AnimatedWidget {
-  const _SlidingSettingsPanel({Key? key, required Animation<double> animation, required this.onTap})
+  const _SlidingSettingsPanel(
+      {Key? key, required Animation<double> animation, required this.onTap, required this.top})
       : super(key: key, listenable: animation);
 
   final VoidCallback onTap;
+  final double top;
 
   Animation<double> get animation => super.listenable as Animation<double>;
 
@@ -56,6 +61,7 @@ class _SlidingSettingsPanel extends AnimatedWidget {
   Widget _panelBackdrop(Widget child) {
     const border = BorderSide(width: 1.5);
     return Positioned.fill(
+      top: top,
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
         child: GestureDetector(
@@ -71,7 +77,7 @@ class _SlidingSettingsPanel extends AnimatedWidget {
                     onTap: () {},
                     child: Container(
                         decoration: const BoxDecoration(
-                          border: Border(left: border, right: border, bottom: border),
+                          border: Border(top: border, left: border, right: border, bottom: border),
                         ),
                         child: child),
                   ),

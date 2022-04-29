@@ -5,16 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class TimeWidget extends ConsumerWidget {
-  TimeWidget(this.location, {Key? key}) : super(key: key);
+  TimeWidget(this.location, {Key? key, this.color, this.fontSize}) : super(key: key);
 
   final Location location;
+  final Color? color;
+  final double? fontSize;
   final StateController<TimeZone?> timeZoneController = StateController(null);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final style = textTheme.headline6!.copyWith(color: textTheme.headline4?.color);
+    final style = textTheme.headline6!.copyWith(
+      color: color ?? textTheme.headline4?.color,
+      fontSize: fontSize,
+    );
 
     return ref.watch(timeZoneProvider(location)).when(
           loading: () => _LoadingTimeWidget(

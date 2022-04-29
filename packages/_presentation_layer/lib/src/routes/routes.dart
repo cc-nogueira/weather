@@ -1,8 +1,11 @@
+import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
+import 'package:tuple/tuple.dart';
 
 import '../common/page/message_page.dart';
 import '../feature/city/page/city_page.dart';
-import '../feature/weather/page/weather_list_page.dart';
+import '../feature/weather/one_call_weather/page/one_call_weather_page.dart';
+import '../feature/weather/weather_list/page/weather_list_page.dart';
 
 /// Routes management class.
 ///
@@ -12,12 +15,16 @@ class Routes {
   const Routes();
 
   static const home = '/';
+  static const weather = '/weather';
   static const city = '/city';
 
   Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
         return _route((_) => const WeatherListPage());
+      case weather:
+        return _routeWithArg<Tuple2<City, Weather>>(settings.arguments,
+            (context, args) => OneCallWeatherPage(city: args.item1, weather: args.item2));
       case city:
         return _route((_) => CityPage());
       default:
@@ -31,10 +38,7 @@ class Routes {
       MaterialPageRoute(builder: builder);
 
   // ignore: unused_element
-  Route _routeWithArg<T>({
-    required Object? arg,
-    required Widget Function(BuildContext, T) builder,
-  }) =>
+  Route _routeWithArg<T>(Object? arg, Widget Function(BuildContext, T) builder) =>
       MaterialPageRoute(
         builder: (context) =>
             arg is T ? builder(context, arg) : MessagePage.error('Illegal argument for route'),

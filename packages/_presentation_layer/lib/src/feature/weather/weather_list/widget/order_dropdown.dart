@@ -2,8 +2,8 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class WeatherOrderDropdown extends ConsumerWidget {
-  const WeatherOrderDropdown({Key? key}) : super(key: key);
+class OrderDropdown extends ConsumerWidget {
+  const OrderDropdown({Key? key}) : super(key: key);
 
   final orderOptions = const [
     MapEntry('by name', WeatherOrder.byName),
