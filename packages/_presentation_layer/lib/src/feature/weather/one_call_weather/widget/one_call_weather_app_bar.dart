@@ -1,10 +1,13 @@
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:qty/qty.dart';
 
 import '../../../settings/widget/preferences_button.dart';
+import '../../widget/gradient_box.dart';
+import '../../widget/temperature_widget.dart';
 import '../../widget/time_widget.dart';
+import '../../widget/weather_conditions_widget.dart';
+import '../../widget/weather_title_widget.dart';
 import '../../widget/weather_widget_mixin.dart';
 
 class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget {
@@ -19,13 +22,10 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final temperatureUnit = ref.watch(temperatureUnitProvider);
-    final currentWeather = ref.watch(currentWeatherByLocationProvider(city.location!));
+    final currentWeather = ref.watch(currentWeatherByLocationAutoRefreshProvider(city.location!));
     return currentWeather.maybeWhen(
-      data: (data) =>
-          _WeatherAppBar(city: city, weather: data.weather, temperatureUnit: temperatureUnit),
-      orElse: () =>
-          _WeatherAppBar(city: city, weather: initialWeather, temperatureUnit: temperatureUnit),
+      data: (data) => _WeatherAppBar(city: city, weather: data.weather),
+      orElse: () => _WeatherAppBar(city: city, weather: initialWeather),
     );
   }
 }
@@ -35,31 +35,44 @@ class _WeatherAppBar extends StatelessWidget with WeatherWidgetMixin {
     Key? key,
     required this.city,
     required this.weather,
-    required this.temperatureUnit,
   }) : super(key: key);
 
   final City city;
   final Weather weather;
-  final Unit<Temperature> temperatureUnit;
 
   @override
   Widget build(BuildContext context) => AppBar(
-        title: Text(city.name),
+        title: WeatherTitleWidget(city: city, style: _titleStyle(context)),
         actions: const [PreferencesButton()],
         flexibleSpace: FlexibleSpaceBar(background: _background(context)),
       );
 
+  TextStyle _titleStyle(BuildContext context) {
+    final theme = Theme.of(context);
+    return theme.appBarTheme.titleTextStyle ??
+        theme.textTheme.headline6!.copyWith(color: _foreColor(context));
+  }
+
+  Color _foreColor(BuildContext context) {
+    final theme = Theme.of(context);
+    return theme.appBarTheme.foregroundColor ??
+        (theme.brightness == Brightness.light
+            ? theme.colorScheme.onPrimary
+            : theme.colorScheme.onSurface);
+  }
+
   Widget _background(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(gradient: _gradient(context)),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 72.0),
-        child: _TimeAndWeatherBar(
-          city: city,
-          weather: weather,
-          temperatureUnit: temperatureUnit,
+    return Stack(
+      children: [
+        GradientBox(city: city, gradient: _gradient(context)),
+        Padding(
+          padding: const EdgeInsets.only(top: 72.0),
+          child: _TimeAndWeatherBar(
+            city: city,
+            weather: weather,
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -76,19 +89,17 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherWidgetMixin {
     Key? key,
     required this.city,
     required this.weather,
-    required this.temperatureUnit,
   }) : super(key: key);
 
   final City city;
   final Weather weather;
-  final Unit<Temperature> temperatureUnit;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final leading = Padding(
       padding: const EdgeInsets.only(left: 16.0),
-      child: TimeWidget(city.location!, color: colors.onPrimary, fontSize: 32.0),
+      child: TimeWidget(city, color: colors.onPrimary, fontSize: 32.0),
     );
     final trailing = Padding(
       padding: const EdgeInsets.only(right: 16.0),
@@ -105,26 +116,13 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherWidgetMixin {
   }
 
   Widget trailing1(BuildContext context) {
-    final tempStyle = Theme.of(context).textTheme.headline4;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${weather.conditions.temperatures.temperature.quantity.convertTo(temperatureUnit).amount.round()}',
-              style: tempStyle,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Text(temperatureUnit.symbol),
-            ),
-          ],
-        ),
+        TemperatureWidget(city: city, weather: weather),
         Padding(
           padding: const EdgeInsets.only(right: 4.0),
-          child: Text('${weather.conditions.title} (${weather.conditions.description})'),
+          child: WeatherConditionsWidget(city: city, weather: weather),
         ),
       ],
     );
@@ -138,7 +136,7 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherWidgetMixin {
       data: iconThemeData,
       child: SizedBox(
         height: 60.0,
-        child: weatherIcon(weather),
+        child: weatherIcon(city, weather),
       ),
     );
   }

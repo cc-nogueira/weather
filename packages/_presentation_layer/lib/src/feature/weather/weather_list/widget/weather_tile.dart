@@ -6,8 +6,12 @@ import 'package:qty/qty.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../../routes/routes.dart';
+import '../../widget/gradient_box.dart';
+import '../../widget/temperature_widget.dart';
 import '../../widget/time_widget.dart';
+import '../../widget/weather_conditions_widget.dart';
 import '../../widget/weather_icon.dart';
+import '../../widget/weather_title_widget.dart';
 import '../../widget/weather_widget_mixin.dart';
 
 class TemperatureNotifier extends StateNotifier<Celcius?> {
@@ -42,20 +46,20 @@ class WeatherTile extends ConsumerWidget {
     final temperatureUnit = ref.watch(temperatureUnitProvider);
     final windSpeedUnit = ref.watch(windSpeedUnitProvider);
 
-    final tile = ref.watch(currentWeatherByLocationProvider(location)).when(
-          loading: () => _WeatherLoadingWidget(
+    final tile = ref.watch(currentWeatherByLocationAutoRefreshProvider(location)).when(
+          loading: () => _WeatherLoadingTile(
             city: city,
             onRemove: onRemove,
             onTap: () => {},
           ),
-          error: (_, __) => _WeatherErrorWidget(
+          error: (_, __) => _WeatherErrorTile(
             city: city,
             onRemove: onRemove,
             onTap: () {},
           ),
           data: (data) {
             _updateTemperature(ref.read, data.weather);
-            return _WeatherWidget(
+            return _WeatherTile(
               city: city,
               weather: data.weather,
               temperatureUnit: temperatureUnit,
@@ -100,8 +104,8 @@ class WeatherTile extends ConsumerWidget {
   }
 }
 
-abstract class _WeatherWidgetBase extends StatelessWidget {
-  const _WeatherWidgetBase({
+abstract class _WeatherTileBase extends StatelessWidget {
+  const _WeatherTileBase({
     Key? key,
     required this.city,
     required this.onRemove,
@@ -152,11 +156,9 @@ abstract class _WeatherWidgetBase extends StatelessWidget {
     final textTheme = theme.textTheme;
     final listTileTheme = ListTileTheme.of(context);
     final defaultColor = textTheme.subtitle1!.color;
-    return Text(
-      city.name,
-      style: textTheme.headline5!.copyWith(
-        color: textColor(theme, listTileTheme, defaultColor),
-      ),
+    return WeatherTitleWidget(
+      city: city,
+      style: textTheme.headline5!.copyWith(color: textColor(theme, listTileTheme, defaultColor)),
     );
   }
 
@@ -176,8 +178,8 @@ abstract class _WeatherWidgetBase extends StatelessWidget {
   }
 }
 
-class _WeatherLoadingWidget extends _WeatherWidgetBase {
-  const _WeatherLoadingWidget({
+class _WeatherLoadingTile extends _WeatherTileBase {
+  const _WeatherLoadingTile({
     Key? key,
     required City city,
     required VoidCallback onRemove,
@@ -198,8 +200,8 @@ class _WeatherLoadingWidget extends _WeatherWidgetBase {
   Widget subtitle(BuildContext context) => const Text('Loading...');
 }
 
-class _WeatherErrorWidget extends _WeatherWidgetBase {
-  const _WeatherErrorWidget({
+class _WeatherErrorTile extends _WeatherTileBase {
+  const _WeatherErrorTile({
     Key? key,
     required City city,
     required VoidCallback onRemove,
@@ -207,14 +209,14 @@ class _WeatherErrorWidget extends _WeatherWidgetBase {
   }) : super(key: key, city: city, onRemove: onRemove, onTap: onTap);
 
   @override
-  Widget trailing(BuildContext context) => const WeatherIcon(weatherCode: -1, size: 60);
+  Widget trailing(BuildContext context) => WeatherIcon(city: city, weatherCode: -1, size: 60);
 
   @override
   Widget subtitle(BuildContext context) => const Text('No weather information');
 }
 
-class _WeatherWidget extends _WeatherWidgetBase with WeatherWidgetMixin {
-  const _WeatherWidget({
+class _WeatherTile extends _WeatherTileBase with WeatherWidgetMixin {
+  const _WeatherTile({
     Key? key,
     required City city,
     required VoidCallback onRemove,
@@ -233,27 +235,19 @@ class _WeatherWidget extends _WeatherWidgetBase with WeatherWidgetMixin {
     final theme = Theme.of(context);
     final ListTileThemeData tileTheme = ListTileTheme.of(context);
     final iconThemeData = IconThemeData(color: iconColor(theme, tileTheme));
-    final tempSt = theme.textTheme.headline4;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              '${weather.conditions.temperatures.temperature.quantity.convertTo(temperatureUnit).amount.round()}',
-              style: tempSt,
-            ),
-            TimeWidget(city.location!),
+            TemperatureWidget(city: city, weather: weather),
+            TimeWidget(city),
           ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 4.0),
-          child: Text(temperatureUnit.symbol),
         ),
         IconTheme.merge(
           data: iconThemeData,
-          child: weatherIcon(weather),
+          child: weatherIcon(city, weather),
         ),
       ],
     );
@@ -270,7 +264,7 @@ class _WeatherWidget extends _WeatherWidgetBase with WeatherWidgetMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${weather.conditions.title} (${weather.conditions.description})'),
+        WeatherConditionsWidget(city: city, weather: weather),
         Row(
           children: [
             windIcon(weather.conditions.wind, size: 20, color: iconColor),
@@ -287,15 +281,18 @@ class _WeatherWidget extends _WeatherWidgetBase with WeatherWidgetMixin {
   }
 
   @override
-  Widget weatherDecorated(BuildContext context, Widget child) => DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: temperatureGradient(
-            startColor: Theme.of(context).colorScheme.surface,
-            celcius: weather.conditions.temperatures.temperature,
-            begin: const Alignment(0.3, -2.8),
-            end: Alignment.bottomRight,
+  Widget weatherDecorated(BuildContext context, Widget child) => Stack(
+        children: [
+          GradientBox(
+            city: city,
+            gradient: temperatureGradient(
+              startColor: Theme.of(context).colorScheme.surface,
+              celcius: weather.conditions.temperatures.temperature,
+              begin: const Alignment(0.3, -2.8),
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
-        child: child,
+          child,
+        ],
       );
 }

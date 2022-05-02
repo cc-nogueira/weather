@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
 import '../common/page/message_page.dart';
+import '../common/widget/page_transitions.dart';
 import '../feature/city/page/city_page.dart';
 import '../feature/weather/one_call_weather/page/one_call_weather_page.dart';
 import '../feature/weather/weather_list/page/weather_list_page.dart';
@@ -23,8 +24,14 @@ class Routes {
       case home:
         return _route((_) => const WeatherListPage());
       case weather:
-        return _routeWithArg<Tuple2<City, Weather>>(settings.arguments,
-            (context, args) => OneCallWeatherPage(city: args.item1, weather: args.item2));
+        return PageRouteBuilderWithFadeTransition(
+          settings: settings,
+          pageBuilder: (context, _, __) => _argumentBuilder<Tuple2<City, Weather>>(
+              context,
+              settings.arguments,
+              (context, args) => OneCallWeatherPage(city: args.item1, weather: args.item2)),
+        );
+
       case city:
         return _route((_) => CityPage());
       default:
@@ -40,7 +47,10 @@ class Routes {
   // ignore: unused_element
   Route _routeWithArg<T>(Object? arg, Widget Function(BuildContext, T) builder) =>
       MaterialPageRoute(
-        builder: (context) =>
-            arg is T ? builder(context, arg) : MessagePage.error('Illegal argument for route'),
+        builder: (context) => _argumentBuilder<T>(context, arg, builder),
       );
+
+  Widget _argumentBuilder<T>(
+          BuildContext context, Object? arg, Widget Function(BuildContext, T) builder) =>
+      arg is T ? builder(context, arg) : MessagePage.error('Illegal argument for route');
 }

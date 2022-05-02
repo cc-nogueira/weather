@@ -2,10 +2,12 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class TimeWidget extends ConsumerWidget {
-  const TimeWidget(this.location, {Key? key, this.color, this.fontSize}) : super(key: key);
+import '../../../common/widget/hero_flight_shuttle_builder.dart';
 
-  final Location location;
+class TimeWidget extends ConsumerWidget {
+  const TimeWidget(this.city, {Key? key, this.color, this.fontSize}) : super(key: key);
+
+  final City city;
   final Color? color;
   final double? fontSize;
 
@@ -18,10 +20,10 @@ class TimeWidget extends ConsumerWidget {
       fontSize: fontSize,
     );
 
-    return ref.watch(timeZoneProvider(location)).when(
+    return ref.watch(timeZoneProvider(city.location!)).when(
           loading: () => Text('--:--', style: style),
           error: (_, __) => Text('--:--', style: style),
-          data: (data) => _TimeWidget(timeZone: data, style: style),
+          data: (data) => _TimeWidget(city: city, timeZone: data, style: style),
         );
   }
 }
@@ -29,10 +31,12 @@ class TimeWidget extends ConsumerWidget {
 class _TimeWidget extends ConsumerWidget {
   const _TimeWidget({
     Key? key,
+    required this.city,
     required this.timeZone,
     required this.style,
   }) : super(key: key);
 
+  final City city;
   final TimeZone timeZone;
   final TextStyle style;
 
@@ -42,6 +46,10 @@ class _TimeWidget extends ConsumerWidget {
     final localTime = now.add(timeZone.currentUtcOffsetDuration);
     final hr = localTime.hour.toString();
     final min = localTime.minute.toString().padLeft(2, '0');
-    return Text('$hr:$min', style: style);
+    return Hero(
+      tag: '${city.id}_time',
+      flightShuttleBuilder: heroTextFlightShuttleBuilder,
+      child: Text('$hr:$min', style: style),
+    );
   }
 }

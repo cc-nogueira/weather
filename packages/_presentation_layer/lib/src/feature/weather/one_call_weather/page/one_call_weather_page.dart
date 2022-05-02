@@ -15,30 +15,30 @@ class OneCallWeatherPage extends ConsumerWidget {
   final Weather weather;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final oneCall = ref.watch(oneCallWeatherByLocationProvider(city.location!));
-    final body = oneCall.when(
-      loading: () => const LoadingWidget(),
-      error: MessagePage.errorBuilder,
-      data: (data) {
-        return OneCallWeatherWidget(oneCallWeather: data);
-      },
-    );
-    return _scaffold(context, body);
-  }
+  Widget build(BuildContext context, WidgetRef ref) =>
+      ref.watch(oneCallWeatherByLocationAutoEvictProvider(city.location!)).when(
+            loading: () => _loadingScaffold(context),
+            error: MessagePage.errorBuilder,
+            data: (data) => _dataScaffold(context, data),
+          );
 
-  Widget _scaffold(BuildContext context, Widget child) {
-    final colors = Theme.of(context).colorScheme;
-    return Scaffold(
-      backgroundColor: colors.surface,
-      appBar: OneCallWeatherAppBar(city: city, initialWeather: weather),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          child,
-          const PreferencesWidget(),
-        ],
-      ),
+  Widget _loadingScaffold(BuildContext context) => _scaffold(context, const LoadingWidget());
+
+  Widget _dataScaffold(BuildContext context, OneCallWeather data) =>
+      _scaffold(context, _bodyStack(data));
+
+  Widget _scaffold(BuildContext context, Widget body) => Scaffold(
+        appBar: OneCallWeatherAppBar(city: city, initialWeather: weather),
+        body: body,
+      );
+
+  Stack _bodyStack(OneCallWeather data) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        OneCallWeatherWidget(city: city, oneCallWeather: data),
+        const PreferencesWidget(),
+      ],
     );
   }
 }

@@ -30,8 +30,8 @@ mixin WeatherWidgetMixin {
         end: Alignment.centerRight);
   }
 
-  Widget weatherIcon(Weather weather) =>
-      WeatherIcon(weatherCode: weather.conditions.code, size: 60, day: _isDay(weather));
+  Widget weatherIcon(City city, Weather weather) =>
+      WeatherIcon(city: city, weatherCode: weather.conditions.code, size: 60, day: _isDay(weather));
 
   Widget windIcon(Wind wind, {required Color? color, required double size}) =>
       _windIcon(degree: wind.directionTo, size: size, color: color);

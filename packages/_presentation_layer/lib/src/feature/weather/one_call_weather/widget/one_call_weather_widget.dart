@@ -10,9 +10,11 @@ import '../../widget/weather_widget_mixin.dart';
 class OneCallWeatherWidget extends ConsumerWidget {
   const OneCallWeatherWidget({
     Key? key,
+    required this.city,
     required this.oneCallWeather,
   }) : super(key: key);
 
+  final City city;
   final OneCallWeather oneCallWeather;
 
   @override
@@ -20,6 +22,7 @@ class OneCallWeatherWidget extends ConsumerWidget {
     final temperatureUnit = ref.watch(temperatureUnitProvider);
     final windSpeedUnit = ref.watch(windSpeedUnitProvider);
     return _OneCallWeatherWidget(
+      city: city,
       oneCallWeather: oneCallWeather,
       temperatureUnit: temperatureUnit,
       windSpeedUnit: windSpeedUnit,
@@ -27,20 +30,25 @@ class OneCallWeatherWidget extends ConsumerWidget {
   }
 }
 
-class _OneCallWeatherWidget extends StatelessWidget {
+class _OneCallWeatherWidget extends ConsumerWidget {
   const _OneCallWeatherWidget({
     Key? key,
+    required this.city,
     required this.oneCallWeather,
     required this.temperatureUnit,
     required this.windSpeedUnit,
   }) : super(key: key);
 
+  final City city;
   final OneCallWeather oneCallWeather;
   final Unit<Temperature> temperatureUnit;
   final Unit<Speed> windSpeedUnit;
 
   @override
-  Widget build(BuildContext context) => ListView(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return RefreshIndicator(
+      onRefresh: () => _refresh(ref),
+      child: ListView(
         children: [
           _CurrentWeatherDetails(
             weather: oneCallWeather.weather,
@@ -81,7 +89,15 @@ class _OneCallWeatherWidget extends StatelessWidget {
             ),
           ),
         ],
-      );
+      ),
+    );
+  }
+
+  Future<void> _refresh(WidgetRef ref) {
+    ref.invalidate(oneCallWeatherTupleByLocationProvider(city.location!));
+    ref.invalidate(oneCallWeatherByLocationAutoEvictProvider(city.location!));
+    return Future.value();
+  }
 }
 
 class _CurrentWeatherDetails extends StatelessWidget with WeatherWidgetMixin {
