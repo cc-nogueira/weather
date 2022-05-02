@@ -3,6 +3,7 @@ import 'package:qty/qty.dart';
 import 'package:quiver/async.dart';
 import 'package:quiver/time.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:tuple/tuple.dart';
 
 import '../entity/common/location.dart';
 import '../entity/time_zone/time_zone.dart';
@@ -80,48 +81,37 @@ final timeZoneProvider = FutureProvider.autoDispose.family<TimeZone, Location>(
 final weatherUsecaseProvider =
     Provider<WeatherUsecase>((ref) => ref.watch(domainLayerProvider).weatherUsecase);
 
-final currentWeatherByLocationProvider =
+final currentWeatherByLocationAutoRefreshProvider =
     FutureProvider.autoDispose.family<CurrentWeather, Location>((ref, location) {
   ref.watch(currentWeatherMetronomeProvider);
   return ref.watch(weatherUsecaseProvider).getCurrentWeatherByLocation(location);
 });
 
-final oneCallWeatherByLocationProvider =
-    FutureProvider.autoDispose.family<OneCallWeather, Location>((ref, location) async {
-  //ref.watch(oneCallWeatherMetronomeProvider);
-  final cache = ref.watch(oneCallWeatherCacheProvider);
-  var weather = cache[location];
-  if (weather != null) {
-    print('Constructed oneCallProvider for $location from cache');
-    return weather;
-  }
-  weather = await ref.watch(weatherUsecaseProvider).getOneCallByLocation(location);
-  print('Constructed oneCallProvider for $location from service');
-
-  return cache[location] = weather;
+final oneCallWeatherTupleByLocationProvider =
+    FutureProvider.family<Tuple2<OneCallWeather, DateTime>, Location>((ref, location) async {
+  final weather = await ref.watch(weatherUsecaseProvider).getOneCallByLocation(location);
+  return Tuple2(weather, DateTime.now());
 });
 
-final oneCallWeatherCacheProvider = Provider<Map<Location, OneCallWeather>>((ref) {
-  ref.watch(oneCallWeatherMetronomeProvider);
-  return <Location, OneCallWeather>{};
+final oneCallWeatherByLocationAutoEvictProvider =
+    FutureProvider.autoDispose.family<OneCallWeather, Location>((ref, location) async {
+  final tuple = await ref.read(oneCallWeatherTupleByLocationProvider(location).future);
+  if (DateTime.now().difference(tuple.item2) < WeatherUsecase.oneCallWeatherRefreshInterval) {
+    return tuple.item1;
+  }
+  ref.invalidate(oneCallWeatherTupleByLocationProvider(location));
+  final refreshedTuple = await ref.read(oneCallWeatherTupleByLocationProvider(location).future);
+  return refreshedTuple.item1;
 });
 
 // -- Metronome:
 
 final minuteMetronomeProvider = Provider<DateTime>((ref) {
-  Metronome.epoch(aMinute).listen((dt) {
-    print('minuteMetronome with $dt');
-    ref.state = dt;
-  });
+  Metronome.epoch(aMinute).listen((dt) => ref.state = dt);
   return DateTime.now();
 });
 
 final currentWeatherMetronomeProvider = Provider<DateTime>((ref) {
   Metronome.periodic(WeatherUsecase.currentWeatherRefreshInterval).listen((dt) => ref.state = dt);
-  return DateTime.now();
-});
-
-final oneCallWeatherMetronomeProvider = Provider<DateTime>((ref) {
-  Metronome.periodic(WeatherUsecase.oneCallWeatherRefreshInterval).listen((dt) => ref.state = dt);
   return DateTime.now();
 });

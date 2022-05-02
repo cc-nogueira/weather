@@ -21,14 +21,14 @@ class WeatherListPage extends ConsumerWidget {
 
   Widget _scaffold(BuildContext context, Reader read, List<City> cities) => Scaffold(
         appBar: WeatherListAppBar(),
-        body: _bodyStack(context, read, cities),
+        body: _bodyStack(read, cities),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _addCity(context),
           child: const Icon(Icons.add),
         ),
       );
 
-  Widget _bodyStack(BuildContext context, Reader read, List<City> cities) {
+  Stack _bodyStack(Reader read, List<City> cities) {
     return Stack(children: [
       WeatherList(read: read, cities: cities),
       const PreferencesWidget(),

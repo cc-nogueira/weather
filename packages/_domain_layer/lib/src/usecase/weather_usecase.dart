@@ -14,7 +14,7 @@ class WeatherUsecase {
 
   static const defaultLanguage = 'en';
   static const currentWeatherRefreshInterval = Duration(minutes: 60);
-  static const oneCallWeatherRefreshInterval = Duration(hours: 4);
+  static const oneCallWeatherRefreshInterval = Duration(hours: 2);
 
   final WeatherService service;
 
