@@ -20,12 +20,19 @@ class WeatherIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final index = day == null ? 0 : (day! ? 1 : 2);
+    final IconThemeData iconTheme = IconTheme.of(context);
     final iconKeys = openWeatherToWeatherIconsMap[weatherCode];
-    final IconData icon = (iconKeys == null)
+    final index = day == null ? 0 : (day! ? 1 : 2);
+    final icon = (iconKeys == null)
         ? WeatherIcons.na
         : WeatherIcons.fromString('wi-${iconKeys[index]}', fallback: WeatherIcons.na);
-    return Hero(tag: '${city.id}_weatherIcon', child: BoxedIcon(icon, size: size / 1.5));
+    return Hero(
+        tag: '${city.id}_weatherIcon',
+        child: BoxedIcon(
+          icon,
+          size: size / 1.5,
+          color: iconTheme.color,
+        ));
   }
 
   static const Map<int, List<String>> openWeatherToWeatherIconsMap = {

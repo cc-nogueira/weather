@@ -42,6 +42,7 @@ class _WeatherAppBar extends StatelessWidget with WeatherWidgetMixin {
 
   @override
   Widget build(BuildContext context) => AppBar(
+        foregroundColor: _foreColor(context),
         title: WeatherTitleWidget(city: city, style: _titleStyle(context)),
         actions: const [PreferencesButton()],
         flexibleSpace: FlexibleSpaceBar(background: _background(context)),
@@ -55,10 +56,11 @@ class _WeatherAppBar extends StatelessWidget with WeatherWidgetMixin {
 
   Color _foreColor(BuildContext context) {
     final theme = Theme.of(context);
-    return theme.appBarTheme.foregroundColor ??
-        (theme.brightness == Brightness.light
-            ? theme.colorScheme.onPrimary
-            : theme.colorScheme.onSurface);
+    final color = theme.appBarTheme.foregroundColor ?? theme.colorScheme.onSurface;
+    if (theme.brightness == Brightness.dark || color.opacity != 1.0) {
+      return color;
+    }
+    return color.withOpacity(0.7);
   }
 
   Widget _background(BuildContext context) {
@@ -96,10 +98,9 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherWidgetMixin {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
     final leading = Padding(
       padding: const EdgeInsets.only(left: 16.0),
-      child: TimeWidget(city, color: colors.onPrimary, fontSize: 32.0),
+      child: TimeWidget(city, fontSize: 32.0),
     );
     final trailing = Padding(
       padding: const EdgeInsets.only(right: 16.0),

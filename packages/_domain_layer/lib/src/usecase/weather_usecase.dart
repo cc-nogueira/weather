@@ -25,14 +25,10 @@ class WeatherUsecase {
   Future<Location> getCityLocation(City city) => service.getCityLocation(city);
 
   /// Get the CurrentWeather for a location
-  Future<CurrentWeather> getCurrentWeatherByLocation(Location location) {
-    print('fetching current weather for $location');
-    return service.getCurrentWeatherByLocation(location);
-  }
+  Future<CurrentWeather> getCurrentWeatherByLocation(Location location) =>
+      service.getCurrentWeatherByLocation(location);
 
   /// Get the OneCallWeather for a location
-  Future<OneCallWeather> getOneCallByLocation(Location location) {
-    print('fetching oneCall weather for $location');
-    return service.getOneCallByLocation(location);
-  }
+  Future<OneCallWeather> getOneCallByLocation(Location location) =>
+      service.getOneCallByLocation(location);
 }

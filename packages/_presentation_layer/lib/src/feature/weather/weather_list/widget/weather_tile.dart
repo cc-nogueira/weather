@@ -155,10 +155,16 @@ abstract class _WeatherTileBase extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final listTileTheme = ListTileTheme.of(context);
-    final defaultColor = textTheme.subtitle1!.color;
+    var defaultColor = theme.colorScheme.onSurface;
+    if (theme.brightness == Brightness.light && defaultColor.opacity == 1.0) {
+      defaultColor = defaultColor.withOpacity(0.8);
+    }
     return WeatherTitleWidget(
       city: city,
-      style: textTheme.headline5!.copyWith(color: textColor(theme, listTileTheme, defaultColor)),
+      style: textTheme.headline5!.copyWith(
+        fontWeight: FontWeight.w500,
+        color: textColor(theme, listTileTheme, defaultColor),
+      ),
     );
   }
 

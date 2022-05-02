@@ -16,7 +16,7 @@ class TimeWidget extends ConsumerWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final style = textTheme.headline6!.copyWith(
-      color: color ?? textTheme.headline4?.color,
+      color: color ?? textTheme.headline4!.color,
       fontSize: fontSize,
     );
 
