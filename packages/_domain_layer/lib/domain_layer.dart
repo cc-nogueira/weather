@@ -29,6 +29,7 @@ export 'src/repository/preferences_repository.dart';
 export 'src/service/time_zone_service.dart';
 export 'src/service/weather_service.dart';
 
+export 'src/usecase/app_lifecycle_usecase.dart';
 export 'src/usecase/cities_usecase.dart';
 export 'src/usecase/preferences_usecase.dart';
 export 'src/usecase/time_zone_usecase.dart';

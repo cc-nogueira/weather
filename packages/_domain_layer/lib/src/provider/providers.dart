@@ -12,6 +12,7 @@ import '../entity/weather/current_weather.dart';
 import '../entity/weather/one_call_weather.dart';
 import '../entity/weather/weather_order.dart';
 import '../layer/domain_layer.dart';
+import '../usecase/app_lifecycle_usecase.dart';
 import '../usecase/cities_usecase.dart';
 import '../usecase/preferences_usecase.dart';
 import '../usecase/time_zone_usecase.dart';
@@ -23,6 +24,11 @@ final domainLayerProvider = Provider((ref) => DomainLayer(read: ref.read));
 /// Function provider for dependency configuration (implementation injection)
 final domainConfigurationProvider =
     Provider<DomainConfiguration>((ref) => ref.watch(domainLayerProvider).configure);
+
+// -- AppLifecycle:
+
+final appLifecycleUsecaseProvider =
+    Provider<AppLifecycleUsecase>((ref) => AppLifecycleUsecase(ref: ref));
 
 // -- Preferences:
 
@@ -107,11 +113,14 @@ final oneCallWeatherByLocationAutoEvictProvider =
 // -- Metronome:
 
 final minuteMetronomeProvider = Provider<DateTime>((ref) {
-  Metronome.epoch(aMinute).listen((dt) => ref.state = dt);
+  final subscription = Metronome.epoch(aMinute).listen((dt) => ref.state = dt);
+  ref.onDispose(() => subscription.cancel());
   return DateTime.now();
 });
 
 final currentWeatherMetronomeProvider = Provider<DateTime>((ref) {
-  Metronome.periodic(WeatherUsecase.currentWeatherRefreshInterval).listen((dt) => ref.state = dt);
+  final subscription = Metronome.periodic(WeatherUsecase.currentWeatherRefreshInterval)
+      .listen((dt) => ref.state = dt);
+  ref.onDispose(() => subscription.cancel());
   return DateTime.now();
 });

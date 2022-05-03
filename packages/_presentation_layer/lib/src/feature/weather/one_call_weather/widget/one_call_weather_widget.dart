@@ -21,11 +21,14 @@ class OneCallWeatherWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final temperatureUnit = ref.watch(temperatureUnitProvider);
     final windSpeedUnit = ref.watch(windSpeedUnitProvider);
-    return _OneCallWeatherWidget(
-      city: city,
-      oneCallWeather: oneCallWeather,
-      temperatureUnit: temperatureUnit,
-      windSpeedUnit: windSpeedUnit,
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: _OneCallWeatherWidget(
+        city: city,
+        oneCallWeather: oneCallWeather,
+        temperatureUnit: temperatureUnit,
+        windSpeedUnit: windSpeedUnit,
+      ),
     );
   }
 }
