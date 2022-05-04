@@ -40,6 +40,11 @@ final themeModeProvider = Provider<ThemeMode>((ref) {
   return ref.watch(usecase.themeProvider);
 });
 
+final combineRainAndTemperatureProvider = Provider<bool>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase.combineRainAndTemperatureProvider);
+});
+
 final weatherOrderProvider = Provider<WeatherOrder>((ref) {
   final usecase = ref.watch(preferencesUsecaseProvider);
   return ref.watch(usecase.weatherOrderProvider);

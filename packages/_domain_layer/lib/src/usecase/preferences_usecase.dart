@@ -27,11 +27,13 @@ class PreferencesUsecase {
       : _repository = repository;
 
   static const _themeKey = 'theme';
+  static const _combineRainAndTemperatureKey = 'combineRainAndTemperature';
   static const _weatherOrderKey = 'weatherOrder';
   static const _temperatureUnitKey = 'temperatureUnit';
   static const _windSpeedUnitKey = 'windSpeedUnit';
 
   static const _initialTheme = ThemeMode.dark;
+  static const _initialCombineRainAndTemperature = false;
   static const _initialWeatherOrder = WeatherOrder.byTemp;
   static get _initialTemperatureUnit => Temperature().celcius;
   static get _initialWindSpeedUnit => Speed().knot;
@@ -48,6 +50,7 @@ class PreferencesUsecase {
 
   final Reader read;
   late final themeProvider = StateProvider((_) => theme);
+  late final combineRainAndTemperatureProvider = StateProvider((_) => false);
   late final weatherOrderProvider = StateProvider((_) => weatherOrder);
   late final temperatureUnitProvider = StateProvider<Unit<Temperature>>((ref) => temperatureUnit);
   late final windSpeedUnitProvider = StateProvider<Unit<Speed>>((ref) => windSpeedUnit);
@@ -66,6 +69,20 @@ class PreferencesUsecase {
     if (pref?.value == ThemeMode.light.name) return ThemeMode.light;
     if (pref?.value == ThemeMode.dark.name) return ThemeMode.dark;
     return _initialTheme;
+  }
+
+  /// Save the combineRainAndTemperature preference and updates this usecase [combineRainAndTemperatureProvider].
+  set combineRainAndTemperature(bool option) {
+    _repository.saveByKey(Preference(key: _combineRainAndTemperatureKey, value: option.toString()));
+    read(combineRainAndTemperatureProvider.notifier).state = option;
+  }
+
+  /// Read the combineRainAndTemperature option from storage using a default initial value
+  bool get combineRainAndTemperature {
+    final pref = _repository.getByKey(_combineRainAndTemperatureKey);
+    if (pref?.value == "true") return true;
+    if (pref?.value == "false") return false;
+    return _initialCombineRainAndTemperature;
   }
 
   /// Save the weather order preference and update this usecase [weatherOrderProvider].
