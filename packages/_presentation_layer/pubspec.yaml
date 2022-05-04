@@ -21,9 +21,11 @@ dependencies:
   flutter_slidable: ^1.2.0
   hooks_riverpod: ^2.0.0-dev.5
 
+  intl: ^0.17.0
   qty: any
   #  path: ../../../../../dart/qty
 
+  syncfusion_flutter_charts: ^20.1.52
   tuple: ^2.0.0
   weather_icons: ^3.0.0
 
@@ -34,3 +36,7 @@ dev_dependencies:
     
 flutter:
   uses-material-design: true
+  
+  assets:
+    - assets/image/open_weather_logo.png
+    - assets/image/syncfusion_logo_150dpi.png

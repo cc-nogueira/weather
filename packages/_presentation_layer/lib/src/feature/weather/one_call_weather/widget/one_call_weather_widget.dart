@@ -4,8 +4,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:weather_icons/weather_icons.dart';
 
+import '../../widget/powered_by_widget.dart';
 import '../../widget/weather_icon.dart';
 import '../../widget/weather_widget_mixin.dart';
+import 'rain_and_temperature_chart.dart';
+import 'rain_chart.dart';
+import 'temperature_chart.dart';
 
 class OneCallWeatherWidget extends ConsumerWidget {
   const OneCallWeatherWidget({
@@ -49,58 +53,32 @@ class _OneCallWeatherWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return RefreshIndicator(
-      onRefresh: () => _refresh(ref),
-      child: ListView(
-        children: [
-          _CurrentWeatherDetails(
-            weather: oneCallWeather.weather,
-            temperatureUnit: temperatureUnit,
-            windSpeedUnit: windSpeedUnit,
-          ),
-          Card(
-            child: Column(
-              children: [
-                const ListTile(
-                  title: Text('Temperature'),
-                  subtitle: Text('graph'),
-                ),
-                Container(decoration: const BoxDecoration(color: Colors.black), height: 140),
-              ],
-            ),
-          ),
-          Card(
-            child: Column(
-              children: [
-                const ListTile(
-                  title: Text('Wind'),
-                  subtitle: Text('graph'),
-                ),
-                Container(decoration: const BoxDecoration(color: Colors.black), height: 140),
-              ],
-            ),
-          ),
-          Card(
-            child: Column(
-              children: [
-                const ListTile(
-                  title: Text('Forecast'),
-                  subtitle: Text('graph'),
-                ),
-                Container(decoration: const BoxDecoration(color: Colors.black), height: 140),
-              ],
-            ),
-          ),
-        ],
-      ),
+    final combineRainAndTemp = ref.watch(combineRainAndTemperatureProvider);
+    // return RefreshIndicator(
+    //   onRefresh: () => _refresh(ref),
+    //   child:
+    return ListView(
+      children: [
+        _CurrentWeatherDetails(
+          weather: oneCallWeather.weather,
+          temperatureUnit: temperatureUnit,
+          windSpeedUnit: windSpeedUnit,
+        ),
+        if (!combineRainAndTemp) TemperatureChart(weather: oneCallWeather),
+        if (!combineRainAndTemp) RainChart(weather: oneCallWeather),
+        if (combineRainAndTemp) RainAndTemperatureChart(weather: oneCallWeather),
+        Container(height: 40, color: Colors.black87),
+        const PoweredByWidget(),
+        Container(height: 20, color: Colors.black87),
+      ],
     );
   }
 
-  Future<void> _refresh(WidgetRef ref) {
-    ref.invalidate(oneCallWeatherTupleByLocationProvider(city.location!));
-    ref.invalidate(oneCallWeatherByLocationAutoEvictProvider(city.location!));
-    return Future.value();
-  }
+  // Future<void> _refresh(WidgetRef ref) {
+  //   ref.invalidate(oneCallWeatherTupleByLocationProvider(city.location!));
+  //   ref.invalidate(oneCallWeatherByLocationAutoEvictProvider(city.location!));
+  //   return Future.value();
+  // }
 }
 
 class _CurrentWeatherDetails extends StatelessWidget with WeatherWidgetMixin {
@@ -156,20 +134,28 @@ class _CurrentWeatherDetails extends StatelessWidget with WeatherWidgetMixin {
         value: '${weather.conditions.wind.directionFrom} °',
       ),
     ];
-    final gridWidth = MediaQuery.of(context).size.width - 20;
+    final gridWidth = MediaQuery.of(context).size.width;
     const desiredHeight = 140;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
       children: [
-        SizedBox(
-          width: gridWidth,
-          child: GridView.count(
-            childAspectRatio: gridWidth / desiredHeight,
-            shrinkWrap: true,
-            children: elements,
-            crossAxisCount: 3,
-            primary: false,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: gridWidth,
+              child: GridView.count(
+                childAspectRatio: gridWidth / desiredHeight,
+                shrinkWrap: true,
+                children: elements,
+                crossAxisCount: 3,
+                primary: false,
+              ),
+            ),
+          ],
+        ),
+        Container(
+          height: 12.0,
+          color: Theme.of(context).brightness == Brightness.light ? Colors.white54 : Colors.black26,
         ),
       ],
     );

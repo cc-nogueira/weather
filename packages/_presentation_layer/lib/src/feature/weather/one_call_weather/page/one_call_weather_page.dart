@@ -28,6 +28,7 @@ class OneCallWeatherPage extends ConsumerWidget {
       _scaffold(context, _bodyStack(data));
 
   Widget _scaffold(BuildContext context, Widget body) => Scaffold(
+        backgroundColor: Colors.grey[900],
         appBar: OneCallWeatherAppBar(city: city, initialWeather: weather),
         body: body,
       );
@@ -37,7 +38,7 @@ class OneCallWeatherPage extends ConsumerWidget {
       fit: StackFit.expand,
       children: [
         OneCallWeatherWidget(city: city, oneCallWeather: data),
-        const PreferencesWidget(),
+        const PreferencesWidget(showChartOptions: true),
       ],
     );
   }
