@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../settings/widget/preferences_button.dart';
 import '../../widget/gradient_box.dart';
+import '../../widget/temperature_mixin.dart';
 import '../../widget/temperature_widget.dart';
 import '../../widget/time_widget.dart';
 import '../../widget/weather_conditions_widget.dart';
@@ -30,7 +31,7 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
   }
 }
 
-class _WeatherAppBar extends StatelessWidget with WeatherWidgetMixin {
+class _WeatherAppBar extends StatelessWidget with TemperatureMixin {
   _WeatherAppBar({
     Key? key,
     required this.city,

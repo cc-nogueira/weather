@@ -7,6 +7,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../../../routes/routes.dart';
 import '../../widget/gradient_box.dart';
+import '../../widget/temperature_mixin.dart';
 import '../../widget/temperature_widget.dart';
 import '../../widget/time_widget.dart';
 import '../../widget/weather_conditions_widget.dart';
@@ -221,7 +222,7 @@ class _WeatherErrorTile extends _WeatherTileBase {
   Widget subtitle(BuildContext context) => const Text('No weather information');
 }
 
-class _WeatherTile extends _WeatherTileBase with WeatherWidgetMixin {
+class _WeatherTile extends _WeatherTileBase with WeatherWidgetMixin, TemperatureMixin {
   const _WeatherTile({
     Key? key,
     required City city,
