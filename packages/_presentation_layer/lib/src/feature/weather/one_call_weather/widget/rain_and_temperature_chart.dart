@@ -37,7 +37,7 @@ class RainAndTemperatureChart extends ConsumerWidget {
   }
 }
 
-class _RainAndTemperatureChart extends HourlyWeatherChart with RainMixin, TemperatureMixin {
+class _RainAndTemperatureChart extends HourlyChart with RainMixin, TemperatureMixin {
   const _RainAndTemperatureChart({
     Key? key,
     required OneCallWeather weather,

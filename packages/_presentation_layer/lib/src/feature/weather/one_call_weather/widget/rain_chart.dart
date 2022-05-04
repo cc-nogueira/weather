@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../widget/rain_mixin.dart';
 import 'hourly_weather_chart.dart';
 
-class RainChart extends HourlyWeatherChart with RainMixin {
+class RainChart extends HourlyChart with RainMixin {
   const RainChart({
     Key? key,
     required OneCallWeather weather,

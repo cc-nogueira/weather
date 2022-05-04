@@ -65,8 +65,8 @@ abstract class _ChartWidget extends StatelessWidget {
       );
 }
 
-abstract class HourlyWeatherChart extends _ChartWidget {
-  const HourlyWeatherChart({
+abstract class HourlyChart extends _ChartWidget {
+  const HourlyChart({
     Key? key,
     required this.weather,
     double? height,

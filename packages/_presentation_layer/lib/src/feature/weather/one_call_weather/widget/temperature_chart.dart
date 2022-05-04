@@ -36,7 +36,7 @@ class TemperatureChart extends ConsumerWidget {
   }
 }
 
-class _TemperatureChart extends HourlyWeatherChart with TemperatureMixin {
+class _TemperatureChart extends HourlyChart with TemperatureMixin {
   const _TemperatureChart({
     Key? key,
     required OneCallWeather weather,
