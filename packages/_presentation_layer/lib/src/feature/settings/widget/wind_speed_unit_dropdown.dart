@@ -6,7 +6,9 @@ import 'package:qty/qty.dart';
 import 'unit_dropdown.dart';
 
 class WindSpeedUnitDropdown extends UnitDropdown<Speed> {
-  const WindSpeedUnitDropdown({Key? key}) : super(key: key);
+  const WindSpeedUnitDropdown({Key? key, this.changeCallback}) : super(key: key);
+
+  final VoidCallback? changeCallback;
 
   @override
   StateProvider<Unit<Speed>> unitProvider(Reader read) =>
@@ -16,8 +18,10 @@ class WindSpeedUnitDropdown extends UnitDropdown<Speed> {
   List<Unit<Speed>> unitOptions(Reader read) => read(preferencesUsecaseProvider).windSpeedUnits;
 
   @override
-  void onChanged(Unit<Speed> selection, Reader read) =>
-      read(preferencesUsecaseProvider).windSpeedUnit = selection;
+  void onChanged(Unit<Speed> selection, Reader read) {
+    read(preferencesUsecaseProvider).windSpeedUnit = selection;
+    changeCallback?.call();
+  }
 
   @override
   String unitLabel(Unit<Speed> unit) => unit.symbol == 'kt' ? 'knots' : unit.symbol;

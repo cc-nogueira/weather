@@ -6,7 +6,9 @@ import 'package:qty/qty.dart';
 import 'unit_dropdown.dart';
 
 class TemperatureUnitDropdown extends UnitDropdown<Temperature> {
-  const TemperatureUnitDropdown({Key? key}) : super(key: key);
+  const TemperatureUnitDropdown({Key? key, this.changeCallback}) : super(key: key);
+
+  final VoidCallback? changeCallback;
 
   @override
   StateProvider<Unit<Temperature>> unitProvider(Reader read) =>
@@ -17,8 +19,10 @@ class TemperatureUnitDropdown extends UnitDropdown<Temperature> {
       read(preferencesUsecaseProvider).temperatureUnits;
 
   @override
-  void onChanged(Unit<Temperature> selection, Reader read) =>
-      read(preferencesUsecaseProvider).temperatureUnit = selection;
+  void onChanged(Unit<Temperature> selection, Reader read) {
+    read(preferencesUsecaseProvider).temperatureUnit = selection;
+    changeCallback?.call();
+  }
 
   @override
   String unitLabel(Unit<Temperature> unit) {
