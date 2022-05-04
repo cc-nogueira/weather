@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../widget/rain_mixin.dart';
 import '../../widget/temperature_mixin.dart';
-import 'hourly_weather_chart.dart';
+import 'hourly_chart.dart';
 
 class RainAndTemperatureChart extends ConsumerWidget {
   const RainAndTemperatureChart({

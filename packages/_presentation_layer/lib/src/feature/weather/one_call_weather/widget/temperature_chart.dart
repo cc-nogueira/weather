@@ -5,7 +5,7 @@ import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../widget/temperature_mixin.dart';
-import 'hourly_weather_chart.dart';
+import 'hourly_chart.dart';
 
 class TemperatureChart extends ConsumerWidget {
   const TemperatureChart({
