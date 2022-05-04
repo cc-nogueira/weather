@@ -11,7 +11,7 @@ mixin Localtime {
 
   DateTime get utcDateTime => DateTime.fromMillisecondsSinceEpoch(dateTimeMillis, isUtc: true);
   DateTime get localDateTime =>
-      DateTime.fromMillisecondsSinceEpoch(dateTimeMillis + geo.timeShiftMillis, isUtc: true);
+      DateTime.fromMillisecondsSinceEpoch(dateTimeMillis + geo.timeShiftMillis, isUtc: false);
 }
 
 abstract class WeatherContainer {
