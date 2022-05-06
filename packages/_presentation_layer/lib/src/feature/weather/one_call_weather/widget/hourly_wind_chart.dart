@@ -71,8 +71,9 @@ class _HourlyWindChart extends HourlyChart with WindMixin, WeatherWidgetMixin {
 
   @override
   List<XyDataSeries> series(List<HourlyWeather> data) {
-    const windValue = 2.0;
-    final colorGrad = _windColorGradient(data);
+    final windRange = _windRange(data);
+    final colorGrad = _windColorGradient(data, windRange);
+    final windValue = min(2.0, windRange.item2 / 5.0);
 
     return [
       SplineAreaSeries<HourlyWeather, DateTime>(
@@ -110,11 +111,7 @@ class _HourlyWindChart extends HourlyChart with WindMixin, WeatherWidgetMixin {
           isVisible: true,
           builder: (dynamic item, dynamic point, dynamic series, int pointIndex, int seriesIndex) {
             final hourly = item as HourlyWeather;
-            return SizedBox(
-              height: 29,
-              child: windIcon(hourly.conditions.wind, size: 26, color: Colors.amber[400]),
-              // size: 26, color: windColor(hourly.conditions.wind)),
-            );
+            return hourlyWindIcon(hourly.conditions.wind, 20);
           },
           alignment: ChartAlignment.center,
           labelAlignment: ChartDataLabelAlignment.middle,
@@ -149,13 +146,12 @@ class _HourlyWindChart extends HourlyChart with WindMixin, WeatherWidgetMixin {
     return wind.speedQuantity.convertTo(unit);
   }
 
-  LinearGradient _windColorGradient(List<HourlyWeather> data) {
-    final windRange = _windRange(data);
+  LinearGradient _windColorGradient(List<HourlyWeather> data, Tuple2<double, double> windRange) {
     final topWind = min(
       15.0,
       Quantity(amount: windRange.item2, unit: unit).convertTo(Speed().meterPerSecond).amount,
     );
-    final colors = [windColor(const Wind(speed: 0.0))];
+    final colors = [Colors.transparent];
     final steps = [0.0];
     if (topWind > 2.5) {
       colors.add(windColor(const Wind(speed: 2.5)));

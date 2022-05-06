@@ -74,7 +74,7 @@ class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, Weather
   List<XyDataSeries> series(List<HourlyWeather> data) {
     final tempRange = _temperatureRange(data);
     final guessInterval = guessYAxisInterval(tempRange.item1, tempRange.item2);
-    final weatherValue = tempRange.item1 + guessInterval / 1.5;
+    final weatherValue = tempRange.item1 + guessInterval * 1.6;
 
     return [
       LineSeries<HourlyWeather, DateTime>(
@@ -92,13 +92,14 @@ class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, Weather
         color: Colors.transparent,
         dataLabelSettings: DataLabelSettings(
           isVisible: true,
+          margin: EdgeInsets.zero,
           builder: (dynamic item, dynamic point, dynamic series, int pointIndex, int seriesIndex) {
             final hourly = item as HourlyWeather;
             return SizedBox(
-              height: 24,
-              width: 24,
+              height: 30,
+              width: 30,
               child: hourlyWeatherIcon(
-                  hourly, 24, temperatureColor(hourly.conditions.temperatures.temperature)),
+                  hourly, 30, temperatureColor(hourly.conditions.temperatures.temperature)),
             );
           },
           labelAlignment: ChartDataLabelAlignment.auto,

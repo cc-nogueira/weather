@@ -17,6 +17,20 @@ mixin WeatherWidgetMixin {
         color: color,
       );
 
+  Widget hourlyWindIcon(Wind wind, double size) => Transform.rotate(
+        angle: wind.directionTo * pi / 180,
+        alignment: Alignment.center,
+        child: SizedBox(
+          width: size,
+          height: size,
+          child: const Image(
+            fit: BoxFit.contain,
+            image:
+                AssetImage('assets/image/wind_direction_white.png', package: '_presentation_layer'),
+          ),
+        ),
+      );
+
   Widget windIcon(Wind wind, {required Color? color, required double size}) =>
       _windIcon(degree: wind.directionTo, size: size, color: color);
 

@@ -194,7 +194,7 @@ abstract class HourlyChart extends _ChartWidget {
     bands.add(PlotBand(
       start: start,
       end: end,
-      color: Colors.lightGreen[800]!,
+      color: Colors.lightGreen[700]!,
       opacity: bands.length.isEven ? 0.0 : 0.1,
     ));
   }
