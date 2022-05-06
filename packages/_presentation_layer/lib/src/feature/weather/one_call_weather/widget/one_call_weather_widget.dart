@@ -6,7 +6,7 @@ import 'package:weather_icons/weather_icons.dart';
 
 import '../../widget/powered_by_widget.dart';
 import '../../widget/weather_icon.dart';
-import '../../widget/weather_widget_mixin.dart';
+import '../../widget/wind_mixin.dart';
 import 'hourly_rain_and_temperature_chart.dart';
 import 'hourly_rain_chart.dart';
 import 'hourly_temperature_chart.dart';
@@ -63,7 +63,7 @@ class OneCallWeatherWidget extends ConsumerWidget {
   // }
 }
 
-class CurrentWeatherDetails extends ConsumerWidget with WeatherWidgetMixin {
+class CurrentWeatherDetails extends ConsumerWidget {
   const CurrentWeatherDetails({Key? key, required this.city, required this.initialWeather})
       : super(key: key);
 
@@ -80,7 +80,7 @@ class CurrentWeatherDetails extends ConsumerWidget with WeatherWidgetMixin {
   }
 }
 
-class _CurrentWeatherDetails extends ConsumerWidget with WeatherWidgetMixin {
+class _CurrentWeatherDetails extends ConsumerWidget with WindMixin {
   const _CurrentWeatherDetails({
     Key? key,
     required this.weather,

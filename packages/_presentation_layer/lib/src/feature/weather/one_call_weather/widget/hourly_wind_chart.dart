@@ -7,7 +7,6 @@ import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../widget/weather_widget_mixin.dart';
 import '../../widget/wind_mixin.dart';
 import 'hourly_chart.dart';
 
@@ -40,7 +39,7 @@ class HourlyWindChart extends ConsumerWidget {
   }
 }
 
-class _HourlyWindChart extends HourlyChart with WindMixin, WeatherWidgetMixin {
+class _HourlyWindChart extends HourlyChart with WindMixin {
   const _HourlyWindChart({
     Key? key,
     required OneCallWeather weather,
@@ -71,7 +70,7 @@ class _HourlyWindChart extends HourlyChart with WindMixin, WeatherWidgetMixin {
 
   @override
   List<XyDataSeries> series(List<HourlyWeather> data) {
-    final windRange = _windRange(data);
+    final windRange = _windRangeInChartUnit(data);
     final colorGrad = _windColorGradient(data, windRange);
     final windValue = min(2.0, windRange.item2 / 5.0);
 
@@ -83,25 +82,17 @@ class _HourlyWindChart extends HourlyChart with WindMixin, WeatherWidgetMixin {
         gradient: colorGrad,
         dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
         xValueMapper: (item, idx) => item.localDateTime,
-        yValueMapper: (item, _) => _wind(item).amount,
+        yValueMapper: (item, _) => _windInChartUnit(item).amount,
       ),
       SplineSeries<HourlyWeather, DateTime>(
         name: 'Wind',
         dataSource: data,
-        pointColorMapper: _windColor,
+        pointColorMapper: (HourlyWeather hourly, int index) => windColor(hourly.conditions.wind),
         width: 3.0,
         dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
         xValueMapper: (item, idx) => item.localDateTime,
-        yValueMapper: (item, _) => _wind(item).amount,
+        yValueMapper: (item, _) => _windInChartUnit(item).amount,
       ),
-      // ColumnSeries<HourlyWeather, DateTime>(
-      //   name: 'WindColumns',
-      //   dataSource: data,
-      //   pointColorMapper: _windColor,
-      //   dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
-      //   xValueMapper: (item, idx) => item.localDateTime,
-      //   yValueMapper: (item, _) => 0,
-      // ),
       ScatterSeries<HourlyWeather, DateTime>(
         dataSource: seriesDataForAxisIntervals(data),
         xValueMapper: (item, idx) => item.localDateTime,
@@ -120,9 +111,6 @@ class _HourlyWindChart extends HourlyChart with WindMixin, WeatherWidgetMixin {
     ];
   }
 
-  //@override
-  //double? get primaryYAxisMinimum => 0.0;
-
   @override
   ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => (AxisLabelRenderDetails details) {
         late final double speed;
@@ -139,12 +127,20 @@ class _HourlyWindChart extends HourlyChart with WindMixin, WeatherWidgetMixin {
         );
       };
 
-  Color _windColor(HourlyWeather hourly, int index) => windColor(hourly.conditions.wind);
-
-  Quantity<Speed> _wind(HourlyWeather hourly) {
-    final wind = hourly.conditions.wind;
-    return wind.speedQuantity.convertTo(unit);
+  Tuple2<double, double> _windRangeInChartUnit(List<HourlyWeather> data) {
+    if (data.isEmpty) return const Tuple2(0.0, 0.0);
+    var minT = _windInChartUnit(data[0]).amount;
+    var maxT = minT;
+    for (var i = 1; i < data.length; ++i) {
+      final value = _windInChartUnit(data[i]).amount;
+      minT = min(minT, value);
+      maxT = max(maxT, value);
+    }
+    return Tuple2(minT, maxT);
   }
+
+  Quantity<Speed> _windInChartUnit(HourlyWeather hourly) =>
+      hourly.conditions.wind.speedQuantity.convertTo(unit);
 
   LinearGradient _windColorGradient(List<HourlyWeather> data, Tuple2<double, double> windRange) {
     final topWind = min(
@@ -171,17 +167,5 @@ class _HourlyWindChart extends HourlyChart with WindMixin, WeatherWidgetMixin {
     final stops = steps.map((e) => e / topWind).toList();
     return LinearGradient(
         colors: colors, begin: Alignment.bottomCenter, end: Alignment.topCenter, stops: stops);
-  }
-
-  Tuple2<double, double> _windRange(List<HourlyWeather> data) {
-    if (data.isEmpty) return const Tuple2(0.0, 0.0);
-    var minT = _wind(data[0]).amount;
-    var maxT = minT;
-    for (var i = 1; i < data.length; ++i) {
-      final value = _wind(data[i]).amount;
-      minT = min(minT, value);
-      maxT = max(maxT, value);
-    }
-    return Tuple2(minT, maxT);
   }
 }

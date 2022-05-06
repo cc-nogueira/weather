@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../settings/widget/preferences_button.dart';
-import '../../widget/gradient_box.dart';
+import '../../widget/temperature_gradient_box_hero.dart';
+import '../../widget/temperature_hero.dart';
 import '../../widget/temperature_mixin.dart';
-import '../../widget/temperature_widget.dart';
-import '../../widget/time_widget.dart';
-import '../../widget/weather_conditions_widget.dart';
-import '../../widget/weather_title_widget.dart';
-import '../../widget/weather_widget_mixin.dart';
+import '../../widget/time_hero.dart';
+import '../../widget/weather_conditions_hero.dart';
+import '../../widget/weather_mixin.dart';
+import '../../widget/weather_title_hero.dart';
 
 class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const OneCallWeatherAppBar({Key? key, required this.city, required this.initialWeather})
@@ -44,7 +44,7 @@ class _WeatherAppBar extends StatelessWidget with TemperatureMixin {
   @override
   Widget build(BuildContext context) => AppBar(
         foregroundColor: _foreColor(context),
-        title: WeatherTitleWidget(city: city, style: _titleStyle(context)),
+        title: WeatherTitleHero(city: city, style: _titleStyle(context)),
         actions: const [PreferencesButton()],
         flexibleSpace: FlexibleSpaceBar(background: _background(context)),
       );
@@ -67,7 +67,7 @@ class _WeatherAppBar extends StatelessWidget with TemperatureMixin {
   Widget _background(BuildContext context) {
     return Stack(
       children: [
-        GradientBox(city: city, gradient: _gradient(context)),
+        TemperatureGradientBoxHero(city: city, gradient: _gradient(context)),
         Padding(
           padding: const EdgeInsets.only(top: 72.0),
           child: _TimeAndWeatherBar(
@@ -87,7 +87,7 @@ class _WeatherAppBar extends StatelessWidget with TemperatureMixin {
       );
 }
 
-class _TimeAndWeatherBar extends StatelessWidget with WeatherWidgetMixin {
+class _TimeAndWeatherBar extends StatelessWidget with WeatherMixin {
   const _TimeAndWeatherBar({
     Key? key,
     required this.city,
@@ -101,7 +101,7 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherWidgetMixin {
   Widget build(BuildContext context) {
     final leading = Padding(
       padding: const EdgeInsets.only(left: 16.0),
-      child: TimeWidget(city, fontSize: 32.0),
+      child: TimeHero(city, fontSize: 32.0),
     );
     final trailing = Padding(
       padding: const EdgeInsets.only(right: 16.0),
@@ -121,10 +121,10 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherWidgetMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        TemperatureWidget(city: city, weather: weather),
+        TemperatureHero(city: city, weather: weather),
         Padding(
           padding: const EdgeInsets.only(right: 4.0),
-          child: WeatherConditionsWidget(city: city, weather: weather),
+          child: WeatherConditionsHero(city: city, weather: weather),
         ),
       ],
     );

@@ -8,7 +8,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../widget/temperature_mixin.dart';
-import '../../widget/weather_widget_mixin.dart';
+import '../../widget/weather_mixin.dart';
 import 'hourly_chart.dart';
 
 class HourlyTemperatureChart extends ConsumerWidget {
@@ -41,7 +41,7 @@ class HourlyTemperatureChart extends ConsumerWidget {
   }
 }
 
-class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, WeatherWidgetMixin {
+class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, WeatherMixin {
   const _HourlyTemperatureChart({
     Key? key,
     required OneCallWeather weather,

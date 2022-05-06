@@ -1,8 +1,9 @@
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 
-class GradientBox extends StatelessWidget {
-  const GradientBox({Key? key, required this.city, required this.gradient}) : super(key: key);
+class TemperatureGradientBoxHero extends StatelessWidget {
+  const TemperatureGradientBoxHero({Key? key, required this.city, required this.gradient})
+      : super(key: key);
 
   final City city;
   final Gradient gradient;

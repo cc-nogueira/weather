@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../common/widget/hero_flight_shuttle_builder.dart';
 
-class TimeWidget extends ConsumerWidget {
-  const TimeWidget(this.city, {Key? key, this.color, this.fontSize}) : super(key: key);
+class TimeHero extends ConsumerWidget {
+  const TimeHero(this.city, {Key? key, this.color, this.fontSize}) : super(key: key);
 
   final City city;
   final Color? color;
@@ -23,13 +23,13 @@ class TimeWidget extends ConsumerWidget {
     return ref.watch(timeZoneProvider(city.location!)).when(
           loading: () => Text('--:--', style: style),
           error: (_, __) => Text('--:--', style: style),
-          data: (data) => _TimeWidget(city: city, timeZone: data, style: style),
+          data: (data) => _TimeHero(city: city, timeZone: data, style: style),
         );
   }
 }
 
-class _TimeWidget extends ConsumerWidget {
-  const _TimeWidget({
+class _TimeHero extends ConsumerWidget {
+  const _TimeHero({
     Key? key,
     required this.city,
     required this.timeZone,

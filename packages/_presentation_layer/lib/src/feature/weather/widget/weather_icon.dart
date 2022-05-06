@@ -2,8 +2,8 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:weather_icons/weather_icons.dart';
 
-class HeroWeatherIcon extends StatelessWidget {
-  const HeroWeatherIcon(
+class WeatherIconHero extends StatelessWidget {
+  const WeatherIconHero(
       {Key? key, required this.city, required this.weatherCode, required this.size, this.day})
       : super(key: key);
 

@@ -2,10 +2,10 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../widget/weather_widget_mixin.dart';
+import '../../widget/weather_mixin.dart';
 import 'hourly_chart.dart';
 
-class HourlyWeatherChart extends HourlyChart with WeatherWidgetMixin {
+class HourlyWeatherChart extends HourlyChart with WeatherMixin {
   const HourlyWeatherChart({
     Key? key,
     required OneCallWeather weather,

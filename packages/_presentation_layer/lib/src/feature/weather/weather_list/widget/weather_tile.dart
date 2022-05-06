@@ -6,14 +6,15 @@ import 'package:qty/qty.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../../routes/routes.dart';
-import '../../widget/gradient_box.dart';
+import '../../widget/temperature_gradient_box_hero.dart';
+import '../../widget/temperature_hero.dart';
 import '../../widget/temperature_mixin.dart';
-import '../../widget/temperature_widget.dart';
-import '../../widget/time_widget.dart';
-import '../../widget/weather_conditions_widget.dart';
+import '../../widget/time_hero.dart';
+import '../../widget/weather_conditions_hero.dart';
 import '../../widget/weather_icon.dart';
-import '../../widget/weather_title_widget.dart';
-import '../../widget/weather_widget_mixin.dart';
+import '../../widget/weather_mixin.dart';
+import '../../widget/weather_title_hero.dart';
+import '../../widget/wind_mixin.dart';
 
 class TemperatureNotifier extends StateNotifier<Celcius?> {
   TemperatureNotifier() : super(null);
@@ -160,7 +161,7 @@ abstract class _WeatherTileBase extends StatelessWidget {
     if (theme.brightness == Brightness.light && defaultColor.opacity == 1.0) {
       defaultColor = defaultColor.withOpacity(0.8);
     }
-    return WeatherTitleWidget(
+    return WeatherTitleHero(
       city: city,
       style: textTheme.headline5!.copyWith(
         fontWeight: FontWeight.w500,
@@ -216,13 +217,13 @@ class _WeatherErrorTile extends _WeatherTileBase {
   }) : super(key: key, city: city, onRemove: onRemove, onTap: onTap);
 
   @override
-  Widget trailing(BuildContext context) => HeroWeatherIcon(city: city, weatherCode: -1, size: 60);
+  Widget trailing(BuildContext context) => WeatherIconHero(city: city, weatherCode: -1, size: 60);
 
   @override
   Widget subtitle(BuildContext context) => const Text('No weather information');
 }
 
-class _WeatherTile extends _WeatherTileBase with WeatherWidgetMixin, TemperatureMixin {
+class _WeatherTile extends _WeatherTileBase with WeatherMixin, WindMixin, TemperatureMixin {
   const _WeatherTile({
     Key? key,
     required City city,
@@ -248,8 +249,8 @@ class _WeatherTile extends _WeatherTileBase with WeatherWidgetMixin, Temperature
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            TemperatureWidget(city: city, weather: weather),
-            TimeWidget(city),
+            TemperatureHero(city: city, weather: weather),
+            TimeHero(city),
           ],
         ),
         IconTheme.merge(
@@ -271,7 +272,7 @@ class _WeatherTile extends _WeatherTileBase with WeatherWidgetMixin, Temperature
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        WeatherConditionsWidget(city: city, weather: weather),
+        WeatherConditionsHero(city: city, weather: weather),
         Row(
           children: [
             windIcon(weather.conditions.wind, size: 20, color: iconColor),
@@ -290,7 +291,7 @@ class _WeatherTile extends _WeatherTileBase with WeatherWidgetMixin, Temperature
   @override
   Widget weatherDecorated(BuildContext context, Widget child) => Stack(
         children: [
-          GradientBox(
+          TemperatureGradientBoxHero(
             city: city,
             gradient: temperatureGradient(
               startColor: Theme.of(context).colorScheme.surface,

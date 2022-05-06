@@ -2,8 +2,8 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class TemperatureWidget extends ConsumerWidget {
-  const TemperatureWidget({Key? key, required this.city, required this.weather}) : super(key: key);
+class TemperatureHero extends ConsumerWidget {
+  const TemperatureHero({Key? key, required this.city, required this.weather}) : super(key: key);
 
   final City city;
   final Weather weather;
