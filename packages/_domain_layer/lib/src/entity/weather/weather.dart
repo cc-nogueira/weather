@@ -14,12 +14,16 @@ mixin Localtime {
       DateTime.fromMillisecondsSinceEpoch(dateTimeMillis + geo.timeShiftMillis, isUtc: false);
 }
 
+abstract class ConditionsContainer {
+  Conditions get conditions;
+}
+
 abstract class WeatherContainer {
   Weather get weather;
 }
 
 @freezed
-class Weather with _$Weather, Localtime {
+class Weather with _$Weather, Localtime implements ConditionsContainer {
   const Weather._();
   const factory Weather({
     @Default(0) int dateTimeMillis,
@@ -39,7 +43,7 @@ class DailyWeather with _$DailyWeather, Localtime {
 }
 
 @freezed
-class HourlyWeather with _$HourlyWeather, Localtime {
+class HourlyWeather with _$HourlyWeather, Localtime implements ConditionsContainer {
   const HourlyWeather._();
   const factory HourlyWeather({
     @Default(0) int dateTimeMillis,

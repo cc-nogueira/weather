@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 mixin RainMixin {
-  Color rainColor(double value) {
-    if (value < 2.5) {
-      return Color.lerp(Colors.blue[100], Colors.blue[600]!, _rangePercent(value, 0, 2.5))!;
-    } else if (value < 7.5) {
-      return Color.lerp(Colors.blue[600]!, Colors.blue[900]!, _rangePercent(value, 2.5, 7.5))!;
-    } else if (value < 30) {
-      return Color.lerp(Colors.yellow[300]!, Colors.orange[900]!, _rangePercent(value, 7.5, 30))!;
+  Color rainColor(double mmPerHour) {
+    if (mmPerHour < 2.5) {
+      return Color.lerp(Colors.blue[100], Colors.blue[600]!, _rangePercent(mmPerHour, 0, 2.5))!;
+    } else if (mmPerHour < 7.5) {
+      return Color.lerp(Colors.blue[600]!, Colors.blue[900]!, _rangePercent(mmPerHour, 2.5, 7.5))!;
+    } else if (mmPerHour < 30) {
+      return Color.lerp(
+          Colors.yellow[300]!, Colors.orange[900]!, _rangePercent(mmPerHour, 7.5, 30))!;
     } else {
-      return Color.lerp(Colors.orange[900]!, Colors.red[900]!, _rangePercent(value, 30, 50))!;
+      return Color.lerp(Colors.orange[900]!, Colors.red[900]!, _rangePercent(mmPerHour, 30, 50))!;
     }
   }
 

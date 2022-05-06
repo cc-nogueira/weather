@@ -7,8 +7,15 @@ import 'package:weather_icons/weather_icons.dart';
 import 'weather_icon.dart';
 
 mixin WeatherWidgetMixin {
-  Widget weatherIcon(City city, Weather weather) =>
-      WeatherIcon(city: city, weatherCode: weather.conditions.code, size: 60, day: _isDay(weather));
+  Widget heroWeatherIcon(City city, Weather weather) => HeroWeatherIcon(
+      city: city, weatherCode: weather.conditions.code, size: 60, day: isDayTime(weather));
+
+  Widget hourlyWeatherIcon(HourlyWeather weather, double size, [Color? color]) => WeatherIcon(
+        weatherCode: weather.conditions.code,
+        size: size,
+        day: isDayTime(weather),
+        color: color,
+      );
 
   Widget windIcon(Wind wind, {required Color? color, required double size}) =>
       _windIcon(degree: wind.directionTo, size: size, color: color);
@@ -39,6 +46,7 @@ mixin WeatherWidgetMixin {
         alignment: Alignment.center,
         child: SizedBox(
           width: size,
+          height: size,
           child: Center(
             child: RichText(
               textAlign: TextAlign.center,
@@ -58,7 +66,7 @@ mixin WeatherWidgetMixin {
         ),
       );
 
-  bool? _isDay(Weather weather) {
+  bool? isDayTime(Localtime weather) {
     final time = weather.localDateTime;
     final sunrise = weather.geo.localSunrise;
     final sunset = weather.geo.localSunset;

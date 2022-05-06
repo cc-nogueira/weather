@@ -11,6 +11,7 @@ class AppLifecycleUsecase {
 
   void onPaused() {
     ref.invalidate(minuteMetronomeProvider);
+    ref.invalidate(hourMetronomeProvider);
     ref.invalidate(currentWeatherMetronomeProvider);
   }
 

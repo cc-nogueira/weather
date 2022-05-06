@@ -123,6 +123,12 @@ final minuteMetronomeProvider = Provider<DateTime>((ref) {
   return DateTime.now();
 });
 
+final hourMetronomeProvider = Provider<DateTime>((ref) {
+  final subscription = Metronome.epoch(anHour).listen((dt) => ref.state = dt);
+  ref.onDispose(() => subscription.cancel());
+  return DateTime.now();
+});
+
 final currentWeatherMetronomeProvider = Provider<DateTime>((ref) {
   final subscription = Metronome.periodic(WeatherUsecase.currentWeatherRefreshInterval)
       .listen((dt) => ref.state = dt);

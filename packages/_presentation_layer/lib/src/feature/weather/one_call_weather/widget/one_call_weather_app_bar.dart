@@ -138,7 +138,7 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherWidgetMixin {
       data: iconThemeData,
       child: SizedBox(
         height: 60.0,
-        child: weatherIcon(city, weather),
+        child: heroWeatherIcon(city, weather),
       ),
     );
   }

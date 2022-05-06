@@ -216,7 +216,7 @@ class _WeatherErrorTile extends _WeatherTileBase {
   }) : super(key: key, city: city, onRemove: onRemove, onTap: onTap);
 
   @override
-  Widget trailing(BuildContext context) => WeatherIcon(city: city, weatherCode: -1, size: 60);
+  Widget trailing(BuildContext context) => HeroWeatherIcon(city: city, weatherCode: -1, size: 60);
 
   @override
   Widget subtitle(BuildContext context) => const Text('No weather information');
@@ -254,7 +254,7 @@ class _WeatherTile extends _WeatherTileBase with WeatherWidgetMixin, Temperature
         ),
         IconTheme.merge(
           data: iconThemeData,
-          child: weatherIcon(city, weather),
+          child: heroWeatherIcon(city, weather),
         ),
       ],
     );

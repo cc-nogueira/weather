@@ -21,7 +21,7 @@ class PoweredByOpenWeather extends _PoweredByBase {
           width: width,
           height: height,
           assetName: 'assets/image/open_weather_logo.png',
-          text: 'weather by',
+          text: 'weather forecast',
         );
 }
 
@@ -32,7 +32,7 @@ class PoweredBySyncFusion extends _PoweredByBase {
           width: width,
           height: height,
           assetName: 'assets/image/syncfusion_logo_150dpi.png',
-          text: 'charts by',
+          text: 'charts engine',
         );
 }
 
@@ -44,8 +44,8 @@ class _PoweredByBase extends StatelessWidget {
     double? width,
     double? height,
     Color? textColor,
-  })  : width = width ?? 90.0,
-        height = height ?? 40.0,
+  })  : width = width ?? 96.0,
+        height = height ?? 32.0,
         textColor = textColor ?? Colors.white70,
         super(key: key);
 
@@ -56,28 +56,23 @@ class _PoweredByBase extends StatelessWidget {
   final Color textColor;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-        width: width,
-        height: height,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                fit: BoxFit.contain,
-                image: AssetImage(assetName, package: '_presentation_layer'),
-                alignment: Alignment.bottomLeft),
+  Widget build(BuildContext context) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: width,
+            height: height,
+            child: Image(
+              fit: BoxFit.contain,
+              alignment: Alignment.bottomCenter,
+              image: AssetImage(assetName, package: '_presentation_layer'),
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 0.3 * height,
-                child: FittedBox(
-                    child:
-                        Text(text, textAlign: TextAlign.end, style: TextStyle(color: textColor))),
-              ),
-            ],
+          SizedBox(
+            height: 0.4 * height,
+            child: FittedBox(
+                child: Text(text, textAlign: TextAlign.end, style: TextStyle(color: textColor))),
           ),
-        ),
+        ],
       );
 }

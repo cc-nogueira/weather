@@ -8,8 +8,8 @@ import '../../widget/rain_mixin.dart';
 import '../../widget/temperature_mixin.dart';
 import 'hourly_chart.dart';
 
-class RainAndTemperatureChart extends ConsumerWidget {
-  const RainAndTemperatureChart({
+class HourlyRainAndTemperatureChart extends ConsumerWidget {
+  const HourlyRainAndTemperatureChart({
     Key? key,
     required this.weather,
     this.height,
@@ -26,7 +26,7 @@ class RainAndTemperatureChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return _RainAndTemperatureChart(
+    return _HourlyRainAndTemperatureChart(
       weather: weather,
       unit: ref.watch(temperatureUnitProvider),
       height: height,
@@ -37,8 +37,8 @@ class RainAndTemperatureChart extends ConsumerWidget {
   }
 }
 
-class _RainAndTemperatureChart extends HourlyChart with RainMixin, TemperatureMixin {
-  const _RainAndTemperatureChart({
+class _HourlyRainAndTemperatureChart extends HourlyChart with RainMixin, TemperatureMixin {
+  const _HourlyRainAndTemperatureChart({
     Key? key,
     required OneCallWeather weather,
     required this.unit,

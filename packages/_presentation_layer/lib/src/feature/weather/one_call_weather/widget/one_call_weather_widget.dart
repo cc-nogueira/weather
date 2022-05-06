@@ -7,49 +7,17 @@ import 'package:weather_icons/weather_icons.dart';
 import '../../widget/powered_by_widget.dart';
 import '../../widget/weather_icon.dart';
 import '../../widget/weather_widget_mixin.dart';
-import 'rain_and_temperature_chart.dart';
-import 'rain_chart.dart';
-import 'temperature_chart.dart';
+import 'hourly_rain_and_temperature_chart.dart';
+import 'hourly_rain_chart.dart';
+import 'hourly_temperature_chart.dart';
+import 'hourly_wind_chart.dart';
 
 class OneCallWeatherWidget extends ConsumerWidget {
-  const OneCallWeatherWidget({
-    Key? key,
-    required this.city,
-    required this.oneCallWeather,
-  }) : super(key: key);
+  const OneCallWeatherWidget({Key? key, required this.city, required this.oneCallWeather})
+      : super(key: key);
 
   final City city;
   final OneCallWeather oneCallWeather;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final temperatureUnit = ref.watch(temperatureUnitProvider);
-    final windSpeedUnit = ref.watch(windSpeedUnitProvider);
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: _OneCallWeatherWidget(
-        city: city,
-        oneCallWeather: oneCallWeather,
-        temperatureUnit: temperatureUnit,
-        windSpeedUnit: windSpeedUnit,
-      ),
-    );
-  }
-}
-
-class _OneCallWeatherWidget extends ConsumerWidget {
-  const _OneCallWeatherWidget({
-    Key? key,
-    required this.city,
-    required this.oneCallWeather,
-    required this.temperatureUnit,
-    required this.windSpeedUnit,
-  }) : super(key: key);
-
-  final City city;
-  final OneCallWeather oneCallWeather;
-  final Unit<Temperature> temperatureUnit;
-  final Unit<Speed> windSpeedUnit;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,22 +25,36 @@ class _OneCallWeatherWidget extends ConsumerWidget {
     // return RefreshIndicator(
     //   onRefresh: () => _refresh(ref),
     //   child:
-    return ListView(
-      children: [
-        _CurrentWeatherDetails(
-          weather: oneCallWeather.weather,
-          temperatureUnit: temperatureUnit,
-          windSpeedUnit: windSpeedUnit,
-        ),
-        if (!combineRainAndTemp) TemperatureChart(weather: oneCallWeather),
-        if (!combineRainAndTemp) RainChart(weather: oneCallWeather),
-        if (combineRainAndTemp) RainAndTemperatureChart(weather: oneCallWeather),
-        Container(height: 40, color: Colors.black87),
-        const PoweredByWidget(),
-        Container(height: 20, color: Colors.black87),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: ListView(
+        children: [
+          CurrentWeatherDetails(
+            city: city,
+            initialWeather: oneCallWeather.weather,
+          ),
+          Container(height: 20, color: Colors.black87),
+          //HourlyWeatherChart(weather: oneCallWeather),
+          if (!combineRainAndTemp) HourlyTemperatureChart(weather: oneCallWeather),
+          if (!combineRainAndTemp) HourlyRainChart(weather: oneCallWeather),
+          if (combineRainAndTemp) HourlyRainAndTemperatureChart(weather: oneCallWeather),
+          HourlyWindChart(weather: oneCallWeather),
+          _poweredByWidget,
+        ],
+      ),
     );
   }
+
+  Widget get _poweredByWidget => DecoratedBox(
+        decoration: const BoxDecoration(color: Colors.black87),
+        child: Column(children: const [
+          SizedBox(height: 40),
+          Divider(),
+          SizedBox(height: 20),
+          PoweredByWidget(),
+          SizedBox(height: 20),
+        ]),
+      );
 
   // Future<void> _refresh(WidgetRef ref) {
   //   ref.invalidate(oneCallWeatherTupleByLocationProvider(city.location!));
@@ -81,23 +63,40 @@ class _OneCallWeatherWidget extends ConsumerWidget {
   // }
 }
 
-class _CurrentWeatherDetails extends StatelessWidget with WeatherWidgetMixin {
+class CurrentWeatherDetails extends ConsumerWidget with WeatherWidgetMixin {
+  const CurrentWeatherDetails({Key? key, required this.city, required this.initialWeather})
+      : super(key: key);
+
+  final City city;
+  final Weather initialWeather;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentWeather = ref.watch(currentWeatherByLocationAutoRefreshProvider(city.location!));
+    return currentWeather.maybeWhen(
+      data: (data) => _CurrentWeatherDetails(weather: data.weather),
+      orElse: () => _CurrentWeatherDetails(weather: initialWeather),
+    );
+  }
+}
+
+class _CurrentWeatherDetails extends ConsumerWidget with WeatherWidgetMixin {
   const _CurrentWeatherDetails({
     Key? key,
     required this.weather,
-    required this.windSpeedUnit,
-    required this.temperatureUnit,
   }) : super(key: key);
 
   final Weather weather;
-  final Unit<Speed> windSpeedUnit;
-  final Unit<Temperature> temperatureUnit;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final temperatureUnit = ref.watch(temperatureUnitProvider);
+    final windSpeedUnit = ref.watch(windSpeedUnitProvider);
+
     final feelTemp = weather.conditions.temperatures.feelsLike.quantity.convertTo(temperatureUnit);
     final minTemp = weather.conditions.temperatures.min?.quantity.convertTo(temperatureUnit);
     final maxTemp = weather.conditions.temperatures.max?.quantity.convertTo(temperatureUnit);
+
     final minString =
         minTemp == null ? '---' : '${minTemp.amount.round()} ${temperatureUnit.symbol}';
     final maxString =
@@ -124,9 +123,13 @@ class _CurrentWeatherDetails extends StatelessWidget with WeatherWidgetMixin {
           child: Icon(Icons.air),
         ),
         title: 'wind',
-        value: _windSpeed(weather.conditions.wind.speedQuantity),
+        value: _windSpeed(weather.conditions.wind.speedQuantity, windSpeedUnit),
       ),
-      _detailTile(context, title: 'gust', value: _windSpeed(weather.conditions.wind.gustQuantity)),
+      _detailTile(
+        context,
+        title: 'gust',
+        value: _windSpeed(weather.conditions.wind.gustQuantity, windSpeedUnit),
+      ),
       _detailTile(
         context,
         leading: WindIcon(degree: weather.conditions.wind.directionTo, size: 20),
@@ -188,7 +191,7 @@ class _CurrentWeatherDetails extends StatelessWidget with WeatherWidgetMixin {
     );
   }
 
-  String _windSpeed(Quantity<Speed>? speed) {
+  String _windSpeed(Quantity<Speed>? speed, Unit<Speed> windSpeedUnit) {
     if (speed == null) {
       return '---';
     }
