@@ -3,17 +3,23 @@ import 'dart:math';
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 
-import 'weather_icon.dart';
+import 'weather_icon_hero.dart';
+import 'weather_icons.dart';
 
 mixin WeatherMixin {
   Widget heroWeatherIcon(City city, Weather weather) => WeatherIconHero(
-      city: city, weatherCode: weather.conditions.code, size: 60, day: isDayTime(weather));
+      city: city, weatherCode: weather.conditions.code, size: 60, isDayTime: isDayTime(weather));
 
-  Widget hourlyWeatherIcon(HourlyWeather weather, double size, [Color? color]) => WeatherIcon(
-        weatherCode: weather.conditions.code,
+  Widget hourlyWeatherIcon(
+    HourlyWeather weather, {
+    required double size,
+    required Color color,
+  }) =>
+      WeatherIcons.forOpenWeather(
+        openWeatherCode: weather.conditions.code,
         size: size,
-        day: isDayTime(weather),
         color: color,
+        isDayTime: isDayTime(weather),
       );
 
   bool? isDayTime(Localtime weather) {

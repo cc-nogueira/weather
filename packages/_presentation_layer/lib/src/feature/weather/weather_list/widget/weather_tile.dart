@@ -11,7 +11,7 @@ import '../../widget/temperature_hero.dart';
 import '../../widget/temperature_mixin.dart';
 import '../../widget/time_hero.dart';
 import '../../widget/weather_conditions_hero.dart';
-import '../../widget/weather_icon.dart';
+import '../../widget/weather_icon_hero.dart';
 import '../../widget/weather_mixin.dart';
 import '../../widget/weather_title_hero.dart';
 import '../../widget/wind_mixin.dart';
@@ -145,7 +145,7 @@ abstract class _WeatherTileBase extends StatelessWidget {
       ],
     );
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [info, trailing(context)],
@@ -267,7 +267,7 @@ class _WeatherTile extends _WeatherTileBase with WeatherMixin, WindMixin, Temper
     final theme = Theme.of(context);
     final tileTheme = ListTileTheme.of(context);
     final defaultColor = theme.textTheme.subtitle1!.color;
-    final iconColor = textColor(theme, tileTheme, defaultColor);
+    final iconColor = textColor(theme, tileTheme, defaultColor) ?? Colors.white;
     final convertedWindSpeed = weather.conditions.wind.speedQuantity.convertTo(windSpeedUnit);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,7 +275,7 @@ class _WeatherTile extends _WeatherTileBase with WeatherMixin, WindMixin, Temper
         WeatherConditionsHero(city: city, weather: weather),
         Row(
           children: [
-            windIcon(weather.conditions.wind, size: 20, color: iconColor),
+            windIcon(weather.conditions.wind, size: 24, color: iconColor),
             const SizedBox(width: 4),
             Text(windDirectionLabel(weather.conditions.wind), style: bold),
             const SizedBox(width: 4),

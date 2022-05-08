@@ -2,7 +2,8 @@ import 'dart:math';
 
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
-import 'package:weather_icons/weather_icons.dart';
+
+import 'weather_icons.dart';
 
 mixin WindMixin {
   Color windColor(Wind wind) {
@@ -18,21 +19,24 @@ mixin WindMixin {
     }
   }
 
-  Widget hourlyWindIcon(Wind wind, double size) => Transform.rotate(
+  Widget hourlyWindIcon(Wind wind, double size, [Color? color]) => Transform.rotate(
         angle: wind.directionTo * pi / 180,
         alignment: Alignment.center,
         child: SizedBox(
           width: size,
           height: size,
-          child: const Image(
+          child: Image(
+            color: color,
             fit: BoxFit.contain,
-            image:
-                AssetImage('assets/image/wind_direction_white.png', package: '_presentation_layer'),
+            image: const AssetImage(
+              'assets/image/wind_direction_white.png',
+              package: '_presentation_layer',
+            ),
           ),
         ),
       );
 
-  Widget windIcon(Wind wind, {required Color? color, required double size}) =>
+  Widget windIcon(Wind wind, {required Color color, required double size}) =>
       _windIcon(degree: wind.directionTo, size: size, color: color);
 
   String windDirectionLabel(Wind wind) {
@@ -56,29 +60,11 @@ mixin WindMixin {
     return 'N';
   }
 
-  Widget _windIcon({required int degree, required double size, Color? color}) => Transform.rotate(
+  Widget _windIcon({required int degree, required double size, required Color color}) =>
+      Transform.rotate(
         angle: degree * pi / 180,
         alignment: Alignment.center,
-        child: SizedBox(
-          width: size,
-          height: size,
-          child: Center(
-            child: RichText(
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.ltr,
-              text: TextSpan(
-                text: String.fromCharCode(WeatherIcons.wind.codePoint),
-                style: TextStyle(
-                  inherit: false,
-                  color: color,
-                  fontSize: size,
-                  fontFamily: "WeatherIcons",
-                  package: "weather_icons",
-                ),
-              ),
-            ),
-          ),
-        ),
+        child: WeatherIcons.instance.windDeg(size: size, color: color),
       );
 
   double _rangePercent(double value, double start, double end) {

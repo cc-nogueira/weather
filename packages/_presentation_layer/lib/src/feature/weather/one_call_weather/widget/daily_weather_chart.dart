@@ -2,20 +2,22 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../widget/rain_mixin.dart';
 import '../../widget/weather_mixin.dart';
 import 'hourly_chart.dart';
 
-class HourlyWeatherChart extends HourlyChart with WeatherMixin {
-  const HourlyWeatherChart({
+class DailyWeatherChart extends HourlyChart with RainMixin, WeatherMixin {
+  const DailyWeatherChart({
     Key? key,
     required OneCallWeather weather,
+    double? height,
     EdgeInsets? margin,
     EdgeInsets? padding,
     Color? backgroundColor,
   }) : super(
           key: key,
           weather: weather,
-          height: 120,
+          height: height,
           margin: margin,
           padding: padding,
           backgroundColor: backgroundColor,
@@ -29,10 +31,7 @@ class HourlyWeatherChart extends HourlyChart with WeatherMixin {
   double get primaryXAxisInterval => 1.0;
 
   @override
-  bool get primaryYAxisIsVisible => false;
-
-  @override
-  int? get autoScrollingDelta => 8;
+  int? get autoScrollingDelta => 12;
 
   @override
   List<XyDataSeries> series(List<HourlyWeather> data) {
@@ -40,14 +39,14 @@ class HourlyWeatherChart extends HourlyChart with WeatherMixin {
       ColumnSeries<HourlyWeather, DateTime>(
         dataSource: data,
         xValueMapper: (data, _) => data.localDateTime,
-        yValueMapper: (data, _) => 1.0,
-        spacing: 0.05,
+        yValueMapper: (data, _) => data.conditions.rain1h,
+        spacing: 0.8,
       ),
       ScatterSeries<HourlyWeather, DateTime>(
         dataSource: data,
         xValueMapper: (data, idx) => data.localDateTime,
-        yValueMapper: (data, idx) => 0.5,
-        color: Colors.transparent,
+        yValueMapper: (data, idx) => 0.0,
+        legendIconType: LegendIconType.image,
         dataLabelSettings: DataLabelSettings(
           isVisible: true,
           builder: (dynamic item, dynamic point, dynamic series, int pointIndex, int seriesIndex) {

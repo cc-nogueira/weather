@@ -41,6 +41,7 @@
 			"**/*.iml": true,
 			"**/.metadata": true,
 			"**/.packages": true,
+			"**/assets": true,
 			"**/CHANGELOG.md": true,
 			"**/LICENSE": true,
 			"**/README.md": true,

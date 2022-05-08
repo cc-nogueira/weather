@@ -73,8 +73,8 @@ class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, Weather
   @override
   List<XyDataSeries> series(List<HourlyWeather> data) {
     final tempRange = _temperatureRange(data);
-    final guessInterval = guessYAxisInterval(tempRange.item1, tempRange.item2);
-    final weatherValue = tempRange.item1 + guessInterval * 1.6;
+    // final guessInterval = guessYAxisInterval(tempRange.item1, tempRange.item2);
+    final weatherYValue = tempRange.item1;
 
     return [
       LineSeries<HourlyWeather, DateTime>(
@@ -88,25 +88,32 @@ class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, Weather
       ScatterSeries<HourlyWeather, DateTime>(
         dataSource: seriesDataForAxisIntervals(data),
         xValueMapper: (item, idx) => item.localDateTime,
-        yValueMapper: (item, idx) => weatherValue,
+        yValueMapper: (item, idx) => weatherYValue,
         color: Colors.transparent,
         dataLabelSettings: DataLabelSettings(
           isVisible: true,
-          margin: EdgeInsets.zero,
-          builder: (dynamic item, dynamic point, dynamic series, int pointIndex, int seriesIndex) {
-            final hourly = item as HourlyWeather;
-            return SizedBox(
-              height: 30,
-              width: 30,
-              child: hourlyWeatherIcon(
-                  hourly, 30, temperatureColor(hourly.conditions.temperatures.temperature)),
-            );
-          },
-          labelAlignment: ChartDataLabelAlignment.auto,
+          overflowMode: OverflowMode.hide,
+          labelIntersectAction: LabelIntersectAction.hide,
+          labelAlignment: ChartDataLabelAlignment.middle,
+          builder: (dynamic item, dynamic point, dynamic series, int pointIndex, int seriesIndex) =>
+              _hourlyWeatherIcon(item as HourlyWeather),
         ),
       ),
     ];
   }
+
+  Widget _hourlyWeatherIcon(HourlyWeather hourly) => SizedBox(
+        height: 40,
+        width: 26,
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: hourlyWeatherIcon(
+            hourly,
+            size: 28,
+            color: temperatureColor(hourly.conditions.temperatures.temperature),
+          ),
+        ),
+      );
 
   @override
   ChartRangePadding? get primaryYAxisRangePadding => ChartRangePadding.additional;
