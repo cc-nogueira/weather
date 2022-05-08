@@ -64,7 +64,7 @@ mixin WindMixin {
       Transform.rotate(
         angle: degree * pi / 180,
         alignment: Alignment.center,
-        child: WeatherIcons.instance.windDeg(size: size, color: color),
+        child: WeatherIcons.instance.windDeg(size, color),
       );
 
   double _rangePercent(double value, double start, double end) {

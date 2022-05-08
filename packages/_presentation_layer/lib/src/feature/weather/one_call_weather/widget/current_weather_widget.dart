@@ -51,7 +51,7 @@ class _CurrentWeatherWidget extends ConsumerWidget with WindMixin {
         mainAxisAlignment: MainAxisAlignment.start,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16.0),
-          child: WeatherIcons.instance.thermometer(size: 28, color: Colors.white),
+          child: WeatherIcons.instance.thermometer(28, Colors.white),
         ),
         title: 'feels like',
         value: '${feelTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}',
