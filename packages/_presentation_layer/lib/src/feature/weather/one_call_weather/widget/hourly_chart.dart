@@ -220,7 +220,7 @@ abstract class HourlyChart extends _ChartWidget {
   }
 
   List<HourlyWeather> get seriesData {
-    final currentHour = _truncatedToHour(DateTime.now().toUtc());
+    final currentHour = _truncatedToHour(DateTime.now()).toUtc();
     final hourly = weather.hourly;
     late int i;
     for (i = 0; i < hourly.length; ++i) {
