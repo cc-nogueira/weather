@@ -17,14 +17,12 @@ class HourlyWindChart extends ConsumerWidget {
     this.height,
     this.margin,
     this.padding,
-    this.backgroundColor,
   }) : super(key: key);
 
   final OneCallWeather weather;
   final double? height;
   final EdgeInsets? margin;
   final EdgeInsets? padding;
-  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,7 +32,6 @@ class HourlyWindChart extends ConsumerWidget {
       height: height,
       margin: margin,
       padding: padding,
-      backgroundColor: backgroundColor,
     );
   }
 }
@@ -47,14 +44,13 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
     double? height,
     EdgeInsets? margin,
     EdgeInsets? padding,
-    Color? backgroundColor,
   }) : super(
-            key: key,
-            weather: weather,
-            height: height,
-            margin: margin,
-            padding: padding,
-            backgroundColor: backgroundColor);
+          key: key,
+          weather: weather,
+          height: height,
+          margin: margin,
+          padding: padding,
+        );
 
   final Unit<Speed> unit;
 

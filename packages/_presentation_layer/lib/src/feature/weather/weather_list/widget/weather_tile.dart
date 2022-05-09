@@ -123,16 +123,13 @@ abstract class _WeatherTileBase extends StatelessWidget {
   Widget? details(BuildContext context) => null;
 
   @override
-  Widget build(BuildContext context) {
-    final decoratedTile = weatherDecorated(context, tile(context));
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: GestureDetector(
-        onTap: onTap,
-        child: decoratedTile,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: GestureDetector(
+          onTap: onTap,
+          child: weatherDecorated(context, tile(context)),
+        ),
+      );
 
   Widget weatherDecorated(BuildContext context, Widget child) => child;
 
@@ -153,37 +150,10 @@ abstract class _WeatherTileBase extends StatelessWidget {
     );
   }
 
-  Widget title(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final listTileTheme = ListTileTheme.of(context);
-    var defaultColor = theme.colorScheme.onSurface;
-    if (theme.brightness == Brightness.light && defaultColor.opacity == 1.0) {
-      defaultColor = defaultColor.withOpacity(0.8);
-    }
-    return WeatherTitleHero(
-      city: city,
-      style: textTheme.headline5!.copyWith(
-        fontWeight: FontWeight.w500,
-        color: textColor(theme, listTileTheme, defaultColor),
-      ),
-    );
-  }
-
-  Color? textColor(ThemeData theme, ListTileThemeData tileTheme, Color? defaultColor) =>
-      tileTheme.textColor ?? theme.listTileTheme.textColor ?? defaultColor;
-
-  Color? iconColor(ThemeData theme, ListTileThemeData tileTheme) {
-    final Color? color = tileTheme.iconColor ?? theme.listTileTheme.iconColor;
-    if (color != null) return color;
-
-    switch (theme.brightness) {
-      case Brightness.light:
-        return Colors.black45;
-      case Brightness.dark:
-        return null; // null - use current icon theme color
-    }
-  }
+  Widget title(BuildContext context) => WeatherTitleHero(
+        city: city,
+        style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.w500),
+      );
 }
 
 class _WeatherLoadingTile extends _WeatherTileBase {
@@ -239,35 +209,24 @@ class _WeatherTile extends _WeatherTileBase with WeatherMixin, WindMixin, Temper
   final Unit<Temperature> temperatureUnit;
 
   @override
-  Widget trailing(BuildContext context) {
-    final theme = Theme.of(context);
-    final ListTileThemeData tileTheme = ListTileTheme.of(context);
-    final iconThemeData = IconThemeData(color: iconColor(theme, tileTheme));
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TemperatureHero(city: city, weather: weather),
-            TimeHero(city),
-          ],
-        ),
-        IconTheme.merge(
-          data: iconThemeData,
-          child: heroWeatherIcon(city, weather),
-        ),
-      ],
-    );
-  }
+  Widget trailing(BuildContext context) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TemperatureHero(city: city, weather: weather),
+              TimeHero(city),
+            ],
+          ),
+          heroWeatherIcon(city, weather),
+        ],
+      );
 
   @override
   Widget subtitle(BuildContext context) {
     const bold = TextStyle(fontWeight: FontWeight.bold);
-    final theme = Theme.of(context);
-    final tileTheme = ListTileTheme.of(context);
-    final defaultColor = theme.textTheme.subtitle1!.color;
-    final iconColor = textColor(theme, tileTheme, defaultColor) ?? Colors.white;
+    final colors = Theme.of(context).colorScheme;
     final convertedWindSpeed = weather.conditions.wind.speedQuantity.convertTo(windSpeedUnit);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,7 +234,7 @@ class _WeatherTile extends _WeatherTileBase with WeatherMixin, WindMixin, Temper
         WeatherConditionsHero(city: city, weather: weather),
         Row(
           children: [
-            windIcon(weather.conditions.wind, size: 24, color: iconColor),
+            windIcon(weather.conditions.wind, size: 24, color: colors.onSurface),
             const SizedBox(width: 4),
             Text(windDirectionLabel(weather.conditions.wind), style: bold),
             const SizedBox(width: 4),

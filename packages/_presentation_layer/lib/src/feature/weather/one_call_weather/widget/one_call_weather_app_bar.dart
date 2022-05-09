@@ -130,18 +130,7 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherMixin {
     );
   }
 
-  Widget trailing2(BuildContext context) {
-    final theme = Theme.of(context);
-    final ListTileThemeData tileTheme = ListTileTheme.of(context);
-    final iconThemeData = IconThemeData(color: iconColor(theme, tileTheme));
-    return IconTheme.merge(
-      data: iconThemeData,
-      child: SizedBox(
-        height: 60.0,
-        child: heroWeatherIcon(city, weather),
-      ),
-    );
-  }
+  Widget trailing2(BuildContext context) => heroWeatherIcon(city, weather);
 
   Color? textColor(ThemeData theme, ListTileThemeData tileTheme) {
     final defaultColor = theme.textTheme.subtitle1!.color;

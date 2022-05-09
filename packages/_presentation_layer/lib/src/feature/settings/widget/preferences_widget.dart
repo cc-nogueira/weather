@@ -61,6 +61,7 @@ class _SlidingSettingsPanel extends AnimatedWidget {
       return Container();
     }
     return _panelBackdrop(
+      Theme.of(context).colorScheme,
       SizeTransition(
         sizeFactor: animation,
         axis: Axis.vertical,
@@ -73,8 +74,9 @@ class _SlidingSettingsPanel extends AnimatedWidget {
     );
   }
 
-  Widget _panelBackdrop(Widget child) {
-    const border = BorderSide(width: 1.5);
+  Widget _panelBackdrop(ColorScheme colors, Widget child) {
+    final side = BorderSide(width: 1.5, color: colors.onSurface);
+    final topSide = BorderSide(width: 1.5, color: colors.surface);
     return Positioned.fill(
       top: top,
       child: BackdropFilter(
@@ -91,8 +93,8 @@ class _SlidingSettingsPanel extends AnimatedWidget {
                   child: GestureDetector(
                     onTap: () {},
                     child: Container(
-                        decoration: const BoxDecoration(
-                          border: Border(top: border, left: border, right: border, bottom: border),
+                        decoration: BoxDecoration(
+                          border: Border(top: topSide, left: side, right: side, bottom: side),
                         ),
                         child: child),
                   ),
@@ -118,7 +120,7 @@ class _SettingsPanel extends StatelessWidget {
     final theme = Theme.of(context);
     final itemStyle = theme.textTheme.titleMedium;
     return Container(
-      decoration: BoxDecoration(color: theme.colorScheme.surfaceVariant.withOpacity(0.95)),
+      decoration: BoxDecoration(color: theme.scaffoldBackgroundColor.withOpacity(0.95)),
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,

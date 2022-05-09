@@ -13,14 +13,12 @@ class DailyWeatherChart extends HourlyChart with RainMixin, WeatherMixin {
     double? height,
     EdgeInsets? margin,
     EdgeInsets? padding,
-    Color? backgroundColor,
   }) : super(
           key: key,
           weather: weather,
           height: height,
           margin: margin,
           padding: padding,
-          backgroundColor: backgroundColor,
         );
 
   @override

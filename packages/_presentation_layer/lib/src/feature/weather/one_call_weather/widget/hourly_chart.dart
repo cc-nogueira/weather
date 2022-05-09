@@ -11,7 +11,6 @@ abstract class _ChartWidget extends ConsumerWidget {
     double? height,
     EdgeInsets? margin,
     EdgeInsets? padding,
-    Color? backgroundColor,
   })  : height = height ?? 200,
         margin = const EdgeInsets.symmetric(vertical: 4.0),
         padding = const EdgeInsets.all(10.0),
@@ -73,13 +72,11 @@ abstract class HourlyChart extends _ChartWidget {
     double? height,
     EdgeInsets? margin,
     EdgeInsets? padding,
-    Color? backgroundColor,
   }) : super(
           key: key,
           height: height,
           margin: margin,
           padding: padding,
-          backgroundColor: backgroundColor,
         );
 
   final OneCallWeather weather;

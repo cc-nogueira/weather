@@ -11,14 +11,12 @@ class HourlyWeatherChart extends HourlyChart with WeatherMixin {
     required OneCallWeather weather,
     EdgeInsets? margin,
     EdgeInsets? padding,
-    Color? backgroundColor,
   }) : super(
           key: key,
           weather: weather,
           height: 120,
           margin: margin,
           padding: padding,
-          backgroundColor: backgroundColor,
         );
 
   @override

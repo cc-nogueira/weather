@@ -32,7 +32,6 @@ class HourlyRainAndTemperatureChart extends ConsumerWidget {
       height: height,
       margin: margin,
       padding: padding,
-      backgroundColor: backgroundColor,
     );
   }
 }
@@ -45,14 +44,13 @@ class _HourlyRainAndTemperatureChart extends HourlyChart with RainMixin, Tempera
     double? height,
     EdgeInsets? margin,
     EdgeInsets? padding,
-    Color? backgroundColor,
   }) : super(
-            key: key,
-            weather: weather,
-            height: height,
-            margin: margin,
-            padding: padding,
-            backgroundColor: backgroundColor);
+          key: key,
+          weather: weather,
+          height: height,
+          margin: margin,
+          padding: padding,
+        );
 
   final Unit<Temperature> unit;
 

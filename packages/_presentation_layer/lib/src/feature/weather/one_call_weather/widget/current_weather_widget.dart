@@ -40,6 +40,10 @@ class _CurrentWeatherWidget extends ConsumerWidget with WindMixin {
     final minTemp = weather.conditions.temperatures.min?.quantity.convertTo(temperatureUnit);
     final maxTemp = weather.conditions.temperatures.max?.quantity.convertTo(temperatureUnit);
 
+    final theme = Theme.of(context);
+    final iconTheme = theme.iconTheme;
+    final iconColor = iconTheme.color ?? theme.colorScheme.onSurface;
+
     final minString =
         minTemp == null ? '---' : '${minTemp.amount.round()} ${temperatureUnit.symbol}';
     final maxString =
@@ -51,7 +55,7 @@ class _CurrentWeatherWidget extends ConsumerWidget with WindMixin {
         mainAxisAlignment: MainAxisAlignment.start,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16.0),
-          child: WeatherIcons.instance.thermometer(28, Colors.white),
+          child: WeatherIcons.instance.thermometer(28, iconColor),
         ),
         title: 'feels like',
         value: '${feelTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}',
@@ -77,7 +81,7 @@ class _CurrentWeatherWidget extends ConsumerWidget with WindMixin {
         context,
         leading: Padding(
           padding: const EdgeInsets.only(right: 2.0),
-          child: windIcon(weather.conditions.wind, size: 26, color: Colors.white),
+          child: windIcon(weather.conditions.wind, size: 26, color: iconColor),
         ),
         title: windDirectionLabel(weather.conditions.wind) + '  ',
         value: '${weather.conditions.wind.directionFrom} °',

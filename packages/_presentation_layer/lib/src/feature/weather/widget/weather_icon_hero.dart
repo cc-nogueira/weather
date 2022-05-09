@@ -20,7 +20,7 @@ class WeatherIconHero extends StatelessWidget {
           openWeatherCode: weatherCode,
           size: size,
           isDayTime: isDayTime,
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
       );
 }

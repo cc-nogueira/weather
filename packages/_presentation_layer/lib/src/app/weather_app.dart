@@ -1,8 +1,8 @@
-import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../common/page/message_page.dart';
+import '../provider/presentation_providers.dart';
 import '../routes/routes.dart';
 
 /// Weather App is this application MaterialApp.
@@ -23,17 +23,13 @@ class WeatherApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => error == null ? _app(ref) : _errorApp;
 
-  Widget _app(WidgetRef ref) {
-    final theme =
-        ref.watch(themeModeProvider) == ThemeMode.dark ? ThemeData.dark() : ThemeData.light();
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: title,
-      theme: theme,
-      onGenerateRoute: _routes.onGenerateRoute,
-      initialRoute: Routes.home,
-    );
-  }
+  Widget _app(WidgetRef ref) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: title,
+        theme: ref.watch(themeProvider),
+        onGenerateRoute: _routes.onGenerateRoute,
+        initialRoute: Routes.home,
+      );
 
   Widget get _errorApp => MaterialApp(
         debugShowCheckedModeBanner: false,

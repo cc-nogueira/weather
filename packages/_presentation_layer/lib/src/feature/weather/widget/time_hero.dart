@@ -2,7 +2,7 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../common/widget/hero_flight_shuttle_builder.dart';
+import '../../../common/helper/hero_flight_shuttle_builder.dart';
 
 class TimeHero extends ConsumerWidget {
   const TimeHero(this.city, {Key? key, this.color, this.fontSize}) : super(key: key);
