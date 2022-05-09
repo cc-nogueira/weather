@@ -74,19 +74,18 @@ class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, Weather
   List<XyDataSeries> series(List<HourlyWeather> data) {
     final tempRange = _temperatureRange(data);
     final weatherYValue = tempRange.item1;
-
     return [
       LineSeries<HourlyWeather, DateTime>(
         name: 'Temperature',
         dataSource: data,
         pointColorMapper: _temperatureColor,
         dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
-        xValueMapper: (item, idx) => item.localDateTime,
+        xValueMapper: (item, idx) => item.localShiftedDateTime, // was local
         yValueMapper: (item, _) => _temperature(item).amount,
       ),
       ScatterSeries<HourlyWeather, DateTime>(
         dataSource: seriesDataForAxisIntervals(data),
-        xValueMapper: (item, idx) => item.localDateTime,
+        xValueMapper: (item, idx) => item.localShiftedDateTime, // was local
         yValueMapper: (item, idx) => weatherYValue,
         color: Colors.transparent,
         dataLabelSettings: DataLabelSettings(

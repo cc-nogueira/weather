@@ -38,13 +38,13 @@ class DailyWeatherChart extends HourlyChart with RainMixin, WeatherMixin {
     return [
       ColumnSeries<HourlyWeather, DateTime>(
         dataSource: data,
-        xValueMapper: (data, _) => data.localDateTime,
+        xValueMapper: (data, _) => data.localShiftedDateTime, // was local
         yValueMapper: (data, _) => data.conditions.rain1h,
         spacing: 0.8,
       ),
       ScatterSeries<HourlyWeather, DateTime>(
         dataSource: data,
-        xValueMapper: (data, idx) => data.localDateTime,
+        xValueMapper: (data, idx) => data.localShiftedDateTime, // was local
         yValueMapper: (data, idx) => 0.0,
         legendIconType: LegendIconType.image,
         dataLabelSettings: DataLabelSettings(

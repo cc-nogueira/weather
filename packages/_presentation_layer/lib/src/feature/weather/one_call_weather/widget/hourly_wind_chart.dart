@@ -81,7 +81,7 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
         color: palette[0].withOpacity(0.6),
         gradient: colorGrad,
         dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
-        xValueMapper: (item, idx) => item.localDateTime,
+        xValueMapper: (item, idx) => item.localShiftedDateTime, // was local
         yValueMapper: (item, _) => _windInChartUnit(item).amount,
       ),
       SplineSeries<HourlyWeather, DateTime>(
@@ -90,12 +90,12 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
         pointColorMapper: (HourlyWeather hourly, int index) => windColor(hourly.conditions.wind),
         width: 3.0,
         dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
-        xValueMapper: (item, idx) => item.localDateTime,
+        xValueMapper: (item, idx) => item.localShiftedDateTime, // was local
         yValueMapper: (item, _) => _windInChartUnit(item).amount,
       ),
       ScatterSeries<HourlyWeather, DateTime>(
         dataSource: seriesDataForAxisIntervals(data),
-        xValueMapper: (item, idx) => item.localDateTime,
+        xValueMapper: (item, idx) => item.localShiftedDateTime, // was local
         yValueMapper: (item, idx) => windValue,
         color: Colors.transparent,
         dataLabelSettings: DataLabelSettings(

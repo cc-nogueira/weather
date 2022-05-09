@@ -173,9 +173,9 @@ abstract class HourlyChart extends _ChartWidget {
     final bands = <PlotBand>[];
     if (data.isNotEmpty) {
       late DateTime end;
-      var start = data.first.localDateTime;
+      var start = data.first.localShiftedDateTime; // was local
       for (final hourly in data) {
-        end = hourly.localDateTime;
+        end = hourly.localShiftedDateTime; // was local
         if (end.day != start.day) {
           _addBand(bands, start: start, end: end);
           start = end;
@@ -204,10 +204,10 @@ abstract class HourlyChart extends _ChartWidget {
     final labels = <DateTimeMultiLevelLabel>[];
     if (data.isNotEmpty) {
       late DateTime end;
-      var start = data.first.localDateTime;
+      var start = data.first.localShiftedDateTime; // was local
       var label = dowFormat.format(start);
       for (final hourly in data) {
-        end = hourly.localDateTime;
+        end = hourly.localShiftedDateTime; // was local
         if (end.day != start.day) {
           labels.add(DateTimeMultiLevelLabel(start: start, end: end, text: label));
           start = end;
@@ -236,7 +236,8 @@ abstract class HourlyChart extends _ChartWidget {
     final intervalsData = <HourlyWeather>[];
     final interval = primaryXAxisInterval.toInt();
     for (var i = 0; i < data.length; ++i) {
-      if (data[i].localDateTime.hour % interval == 0) {
+      if (data[i].utcDateTime.hour % interval == 0) {
+        // was local
         intervalsData.add(data[i]);
       }
     }

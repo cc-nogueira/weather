@@ -10,8 +10,12 @@ mixin Localtime {
   Geo get geo;
 
   DateTime get utcDateTime => DateTime.fromMillisecondsSinceEpoch(dateTimeMillis, isUtc: true);
-  DateTime get localDateTime =>
-      DateTime.fromMillisecondsSinceEpoch(dateTimeMillis + geo.timeShiftMillis, isUtc: false);
+  DateTime get localShiftedDateTime {
+    final shifted =
+        DateTime.fromMillisecondsSinceEpoch(dateTimeMillis + geo.timeShiftMillis, isUtc: true);
+    return DateTime(shifted.year, shifted.month, shifted.day, shifted.hour, shifted.minute,
+        shifted.second, shifted.millisecond, shifted.microsecond);
+  }
 }
 
 abstract class ConditionsContainer {

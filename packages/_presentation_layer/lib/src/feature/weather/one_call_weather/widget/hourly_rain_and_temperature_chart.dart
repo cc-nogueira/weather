@@ -94,7 +94,7 @@ class _HourlyRainAndTemperatureChart extends HourlyChart with RainMixin, Tempera
       ColumnSeries<HourlyWeather, DateTime>(
         name: 'Rain',
         dataSource: data,
-        xValueMapper: (data, _) => data.localDateTime,
+        xValueMapper: (data, _) => data.localShiftedDateTime, // was local
         yValueMapper: (data, _) => data.conditions.rain1h,
         yAxisName: primaryYAxisName,
         pointColorMapper: (hourly, idx) => rainColor(hourly.conditions.rain1h ?? 0.0),
@@ -102,7 +102,8 @@ class _HourlyRainAndTemperatureChart extends HourlyChart with RainMixin, Tempera
       LineSeries<HourlyWeather, DateTime>(
         name: 'Temperature',
         dataSource: data,
-        xValueMapper: (data, _) => data.localDateTime, //data.localDateTime.hour,
+        xValueMapper: (data, _) =>
+            data.localShiftedDateTime, // was local //data.localDateTime.hour,
         yValueMapper: (data, _) => _temperature(data, unit).amount,
         yAxisName: _temperatureYAxisName,
         pointColorMapper: _temperatureColor,

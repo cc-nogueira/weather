@@ -39,13 +39,13 @@ class HourlyWeatherChart extends HourlyChart with WeatherMixin {
     return [
       ColumnSeries<HourlyWeather, DateTime>(
         dataSource: data,
-        xValueMapper: (data, _) => data.localDateTime,
+        xValueMapper: (data, _) => data.localShiftedDateTime, // was local
         yValueMapper: (data, _) => 1.0,
         spacing: 0.05,
       ),
       ScatterSeries<HourlyWeather, DateTime>(
         dataSource: data,
-        xValueMapper: (data, idx) => data.localDateTime,
+        xValueMapper: (data, idx) => data.localShiftedDateTime, // was local
         yValueMapper: (data, idx) => 0.5,
         color: Colors.transparent,
         dataLabelSettings: DataLabelSettings(

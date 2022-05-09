@@ -45,11 +45,11 @@ class HourlyRainChart extends HourlyChart with RainMixin, TemperatureMixin {
   }
 
   Widget _noRainMessage(BuildContext context, List<HourlyWeather> data) {
-    var lastDryTime = data.last.localDateTime;
+    var lastDryTime = data.last.localShiftedDateTime; // was local
     const hrsToDayEnd = Duration(hours: 23);
     for (final daily in weather.daily) {
       if (daily.conditions.rain == null || daily.conditions.rain == 0.0) {
-        final dayEnd = daily.localDateTime.add(hrsToDayEnd);
+        final dayEnd = daily.localShiftedDateTime.add(hrsToDayEnd); // was local
         if (dayEnd.isAfter(lastDryTime)) {
           lastDryTime = dayEnd;
         }
@@ -59,7 +59,7 @@ class HourlyRainChart extends HourlyChart with RainMixin, TemperatureMixin {
     }
 
     late final String periodMsg;
-    final dryPeriod = lastDryTime.difference(data[0].localDateTime);
+    final dryPeriod = lastDryTime.difference(data[0].localShiftedDateTime); // was local
     final inHours = dryPeriod.inHours;
     if (dryPeriod.inHours < 2) {
       periodMsg = 'hour';
@@ -81,7 +81,7 @@ class HourlyRainChart extends HourlyChart with RainMixin, TemperatureMixin {
     return [
       ColumnSeries<HourlyWeather, DateTime>(
         dataSource: data,
-        xValueMapper: (data, idx) => data.localDateTime,
+        xValueMapper: (data, idx) => data.localShiftedDateTime, // was local
         yValueMapper: (data, _) => data.conditions.rain1h,
         pointColorMapper: (hourly, idx) => rainColor(hourly.conditions.rain1h ?? 0.0),
       ),
