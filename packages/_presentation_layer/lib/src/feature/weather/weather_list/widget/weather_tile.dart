@@ -142,10 +142,10 @@ abstract class _WeatherTileBase extends StatelessWidget {
       ],
     );
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      padding: const EdgeInsets.only(left: 16.0, top: 12.0, right: 8.0, bottom: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [info, trailing(context)],
+        children: [Expanded(child: info), trailing(context)],
       ),
     );
   }

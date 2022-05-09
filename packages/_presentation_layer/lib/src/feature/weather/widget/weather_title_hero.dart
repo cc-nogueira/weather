@@ -14,6 +14,9 @@ class WeatherTitleHero extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => Hero(
         tag: '${city.id}_weatherTitle',
         flightShuttleBuilder: heroTextFlightShuttleBuilder,
-        child: Text(city.name, style: style),
+        child: FittedBox(
+          alignment: Alignment.topLeft,
+          child: Text(city.name, style: style),
+        ),
       );
 }
