@@ -73,7 +73,6 @@ class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, Weather
   @override
   List<XyDataSeries> series(List<HourlyWeather> data) {
     final tempRange = _temperatureRange(data);
-    // final guessInterval = guessYAxisInterval(tempRange.item1, tempRange.item2);
     final weatherYValue = tempRange.item1;
 
     return [
@@ -102,15 +101,19 @@ class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, Weather
     ];
   }
 
-  Widget _hourlyWeatherIcon(HourlyWeather hourly) => SizedBox(
-        height: 40,
-        width: 26,
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: hourlyWeatherIcon(
-            hourly,
-            size: 28,
-            color: temperatureColor(hourly.conditions.temperatures.temperature),
+  Widget _hourlyWeatherIcon(HourlyWeather hourly) => SizedOverflowBox(
+        alignment: Alignment.topCenter,
+        size: const Size(25, 25),
+        child: SizedBox(
+          width: 25,
+          height: 40,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: hourlyWeatherIcon(
+              hourly,
+              size: 26,
+              color: temperatureColor(hourly.conditions.temperatures.temperature),
+            ),
           ),
         ),
       );
