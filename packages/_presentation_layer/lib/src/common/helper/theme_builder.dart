@@ -22,5 +22,5 @@ class ThemeBuilder {
       mode == ThemeMode.dark ? base : base.apply(bodyColor: Colors.brown[900]);
 
   Color _scaffoldBackgroundColor(ThemeMode mode) =>
-      mode == ThemeMode.dark ? Colors.grey[900]! : const Color(0xFFEAE4DB);
+      mode == ThemeMode.dark ? Colors.grey[900]! : const Color(0xFFFFFAF0);
 }
