@@ -15,12 +15,21 @@ dependencies:
     
   flutter:
     sdk: flutter
+  flutter_native_splash: ^2.1.6
   flutter_riverpod: ^2.0.0-dev.5
 
 dev_dependencies:
   flutter_lints: ^1.0.0
+  
   flutter_test:
     sdk: flutter
+
+  icons_launcher: ^1.1.7
         
 flutter:
   uses-material-design: true
+
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon/app_launcher_icon.png"

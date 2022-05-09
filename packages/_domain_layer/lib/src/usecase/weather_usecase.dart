@@ -1,3 +1,5 @@
+import 'package:logging/logging.dart';
+
 import '../entity/common/location.dart';
 import '../entity/weather/city.dart';
 import '../entity/weather/current_weather.dart';
@@ -10,13 +12,14 @@ import '../service/weather_service.dart';
 /// This constants are used to configure automatic refresh of weather information directly at
 /// the definition of weather providers (@see [providers.dart])
 class WeatherUsecase {
-  const WeatherUsecase({required this.service});
+  const WeatherUsecase({required this.service, required this.log});
 
   static const defaultLanguage = 'en';
   static const currentWeatherRefreshInterval = Duration(minutes: 60);
   static const oneCallWeatherRefreshInterval = Duration(hours: 2);
 
   final WeatherService service;
+  final Logger log;
 
   /// Search cities matching the argument (name and country)
   Future<List<City>> searchCitiesLike(City city) => service.searchCitiesLike(city);
@@ -26,13 +29,13 @@ class WeatherUsecase {
 
   /// Get the CurrentWeather for a location
   Future<CurrentWeather> getCurrentWeatherByLocation(Location location) {
-    print('${DateTime.now()}: fetching currentWeather');
+    log.fine('fetching currentWeather');
     return service.getCurrentWeatherByLocation(location);
   }
 
   /// Get the OneCallWeather for a location
   Future<OneCallWeather> getOneCallByLocation(Location location) {
-    print('${DateTime.now()}: fetching oneCallWeather');
+    log.fine('fetching oneCallWeather');
     return service.getOneCallByLocation(location);
   }
 }

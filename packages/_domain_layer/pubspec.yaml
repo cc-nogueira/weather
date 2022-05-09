@@ -15,8 +15,8 @@ dependencies:
     sdk: flutter
   freezed_annotation: ^1.1.0
   json_annotation: ^4.4.0
+  logging: ^1.0.2
   qty: ^0.9.1
-  #  path: ../../../../../dart/qty
   quiver: ^3.0.1+1
   riverpod: ^2.0.0-dev.5
   tuple: ^2.0.0

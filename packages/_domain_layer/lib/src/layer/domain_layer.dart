@@ -1,4 +1,5 @@
 import 'package:_core_layer/core_layer.dart';
+import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../repository/cities_repository.dart';
@@ -44,9 +45,10 @@ class DomainLayer extends AppLayer {
     required TimeZoneService timeZoneService,
     required WeatherService weatherService,
   }) {
+    final log = Logger('usecase');
     preferencesUsecase = PreferencesUsecase(read: read, repository: preferencesRepository);
     citiesUsecase = CitiesUsecase(repository: citiesRepository);
     timeUsecase = TimeZoneUsecase(service: timeZoneService);
-    weatherUsecase = WeatherUsecase(service: weatherService);
+    weatherUsecase = WeatherUsecase(service: weatherService, log: log);
   }
 }
