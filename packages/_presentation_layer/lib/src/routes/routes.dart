@@ -2,8 +2,8 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
+import '../common/helper/page_transitions.dart';
 import '../common/page/message_page.dart';
-import '../common/widget/page_transitions.dart';
 import '../feature/city/page/city_page.dart';
 import '../feature/weather/one_call_weather/page/one_call_weather_page.dart';
 import '../feature/weather/weather_list/page/weather_list_page.dart';
