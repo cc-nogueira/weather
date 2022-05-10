@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tuple/tuple.dart';
 
+import '../helper/one_call_weather_stats.dart';
+
 abstract class _ChartWidget extends ConsumerWidget {
   const _ChartWidget({
     Key? key,
@@ -69,6 +71,7 @@ abstract class HourlyChart extends _ChartWidget {
   const HourlyChart({
     Key? key,
     required this.weather,
+    required this.stats,
     double? height,
     EdgeInsets? margin,
     EdgeInsets? padding,
@@ -80,6 +83,7 @@ abstract class HourlyChart extends _ChartWidget {
         );
 
   final OneCallWeather weather;
+  final OneCallWeatherStats stats;
 
   final palette = const <Color>[
     Color.fromRGBO(75, 135, 185, 1),
@@ -134,6 +138,7 @@ abstract class HourlyChart extends _ChartWidget {
         rangePadding: primaryYAxisRangePadding,
         axisLabelFormatter: primaryYAxisLabelFormatter,
         minimum: primaryYAxisMinimum,
+        maximum: primaryYAxisMaximum,
       );
 
   bool get anchorRangeToVisiblePoints => false;
@@ -147,6 +152,8 @@ abstract class HourlyChart extends _ChartWidget {
   ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => null;
 
   double? get primaryYAxisMinimum => null;
+
+  double? get primaryYAxisMaximum => null;
 
   ChartAxis? primaryXAxis(List<HourlyWeather> data) => DateTimeAxis(
         interval: primaryXAxisInterval,
@@ -170,9 +177,9 @@ abstract class HourlyChart extends _ChartWidget {
     final bands = <PlotBand>[];
     if (data.isNotEmpty) {
       late DateTime end;
-      var start = data.first.localShiftedDateTime; // was local
+      var start = data.first.localShiftedDateTime;
       for (final hourly in data) {
-        end = hourly.localShiftedDateTime; // was local
+        end = hourly.localShiftedDateTime;
         if (end.day != start.day) {
           _addBand(bands, start: start, end: end);
           start = end;
@@ -201,10 +208,10 @@ abstract class HourlyChart extends _ChartWidget {
     final labels = <DateTimeMultiLevelLabel>[];
     if (data.isNotEmpty) {
       late DateTime end;
-      var start = data.first.localShiftedDateTime; // was local
+      var start = data.first.localShiftedDateTime;
       var label = dowFormat.format(start);
       for (final hourly in data) {
-        end = hourly.localShiftedDateTime; // was local
+        end = hourly.localShiftedDateTime;
         if (end.day != start.day) {
           labels.add(DateTimeMultiLevelLabel(start: start, end: end, text: label));
           start = end;
@@ -234,7 +241,6 @@ abstract class HourlyChart extends _ChartWidget {
     final interval = primaryXAxisInterval.toInt();
     for (var i = 0; i < data.length; ++i) {
       if (data[i].utcDateTime.hour % interval == 0) {
-        // was local
         intervalsData.add(data[i]);
       }
     }

@@ -23,7 +23,7 @@ mixin WeatherMixin {
       );
 
   bool? isDayTime(Localtime weather) {
-    final time = weather.localShiftedDateTime; // was local
+    final time = weather.localShiftedDateTime;
     final sunrise = weather.geo.localSunrise;
     final sunset = weather.geo.localSunset;
     if (_minutesBetween(time, sunrise) < 60) return null;

@@ -8,18 +8,21 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../widget/wind_mixin.dart';
+import '../helper/one_call_weather_stats.dart';
 import 'hourly_chart.dart';
 
 class HourlyWindChart extends ConsumerWidget {
   const HourlyWindChart({
     Key? key,
     required this.weather,
+    required this.stats,
     this.height,
     this.margin,
     this.padding,
   }) : super(key: key);
 
   final OneCallWeather weather;
+  final OneCallWeatherStats stats;
   final double? height;
   final EdgeInsets? margin;
   final EdgeInsets? padding;
@@ -28,6 +31,7 @@ class HourlyWindChart extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return _HourlyWindChart(
       weather: weather,
+      stats: stats,
       unit: ref.watch(windSpeedUnitProvider),
       height: height,
       margin: margin,
@@ -40,6 +44,7 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
   const _HourlyWindChart({
     Key? key,
     required OneCallWeather weather,
+    required OneCallWeatherStats stats,
     required this.unit,
     double? height,
     EdgeInsets? margin,
@@ -47,6 +52,7 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
   }) : super(
           key: key,
           weather: weather,
+          stats: stats,
           height: height,
           margin: margin,
           padding: padding,
@@ -68,7 +74,7 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
   List<XyDataSeries> series(List<HourlyWeather> data) {
     final windRange = _windRangeInChartUnit(data);
     final colorGrad = _windColorGradient(data, windRange);
-    final windValue = min(2.0, windRange.item2 / 5.0);
+    final windValue = max(0.8, windRange.item2 / 6.0);
 
     return [
       SplineAreaSeries<HourlyWeather, DateTime>(
@@ -77,7 +83,7 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
         color: palette[0].withOpacity(0.6),
         gradient: colorGrad,
         dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
-        xValueMapper: (item, idx) => item.localShiftedDateTime, // was local
+        xValueMapper: (item, idx) => item.localShiftedDateTime,
         yValueMapper: (item, _) => _windInChartUnit(item).amount,
       ),
       SplineSeries<HourlyWeather, DateTime>(
@@ -86,20 +92,18 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
         pointColorMapper: (HourlyWeather hourly, int index) => windColor(hourly.conditions.wind),
         width: 3.0,
         dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
-        xValueMapper: (item, idx) => item.localShiftedDateTime, // was local
+        xValueMapper: (item, idx) => item.localShiftedDateTime,
         yValueMapper: (item, _) => _windInChartUnit(item).amount,
       ),
       ScatterSeries<HourlyWeather, DateTime>(
         dataSource: seriesDataForAxisIntervals(data),
-        xValueMapper: (item, idx) => item.localShiftedDateTime, // was local
+        xValueMapper: (item, idx) => item.localShiftedDateTime,
         yValueMapper: (item, idx) => windValue,
         color: Colors.transparent,
         dataLabelSettings: DataLabelSettings(
           isVisible: true,
-          builder: (dynamic item, dynamic point, dynamic series, int pointIndex, int seriesIndex) {
-            final hourly = item as HourlyWeather;
-            return hourlyWindIcon(hourly.conditions.wind, 20);
-          },
+          builder: (dynamic item, dynamic point, dynamic series, int pointIndex, int seriesIndex) =>
+              hourlyWindIcon(item.conditions.wind, 20),
           alignment: ChartAlignment.center,
           labelAlignment: ChartDataLabelAlignment.middle,
         ),

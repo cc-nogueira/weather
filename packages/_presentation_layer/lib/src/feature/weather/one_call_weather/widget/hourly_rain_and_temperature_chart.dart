@@ -6,12 +6,14 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../widget/rain_mixin.dart';
 import '../../widget/temperature_mixin.dart';
+import '../helper/one_call_weather_stats.dart';
 import 'hourly_chart.dart';
 
 class HourlyRainAndTemperatureChart extends ConsumerWidget {
   const HourlyRainAndTemperatureChart({
     Key? key,
     required this.weather,
+    required this.stats,
     this.height,
     this.margin,
     this.padding,
@@ -19,6 +21,7 @@ class HourlyRainAndTemperatureChart extends ConsumerWidget {
   }) : super(key: key);
 
   final OneCallWeather weather;
+  final OneCallWeatherStats stats;
   final double? height;
   final EdgeInsets? margin;
   final EdgeInsets? padding;
@@ -28,6 +31,7 @@ class HourlyRainAndTemperatureChart extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return _HourlyRainAndTemperatureChart(
       weather: weather,
+      stats: stats,
       unit: ref.watch(temperatureUnitProvider),
       height: height,
       margin: margin,
@@ -40,6 +44,7 @@ class _HourlyRainAndTemperatureChart extends HourlyChart with RainMixin, Tempera
   const _HourlyRainAndTemperatureChart({
     Key? key,
     required OneCallWeather weather,
+    required OneCallWeatherStats stats,
     required this.unit,
     double? height,
     EdgeInsets? margin,
@@ -47,6 +52,7 @@ class _HourlyRainAndTemperatureChart extends HourlyChart with RainMixin, Tempera
   }) : super(
           key: key,
           weather: weather,
+          stats: stats,
           height: height,
           margin: margin,
           padding: padding,
@@ -92,7 +98,7 @@ class _HourlyRainAndTemperatureChart extends HourlyChart with RainMixin, Tempera
       ColumnSeries<HourlyWeather, DateTime>(
         name: 'Rain',
         dataSource: data,
-        xValueMapper: (data, _) => data.localShiftedDateTime, // was local
+        xValueMapper: (data, _) => data.localShiftedDateTime,
         yValueMapper: (data, _) => data.conditions.rain1h,
         yAxisName: primaryYAxisName,
         pointColorMapper: (hourly, idx) => rainColor(hourly.conditions.rain1h ?? 0.0),
@@ -100,8 +106,7 @@ class _HourlyRainAndTemperatureChart extends HourlyChart with RainMixin, Tempera
       LineSeries<HourlyWeather, DateTime>(
         name: 'Temperature',
         dataSource: data,
-        xValueMapper: (data, _) =>
-            data.localShiftedDateTime, // was local //data.localDateTime.hour,
+        xValueMapper: (data, _) => data.localShiftedDateTime,
         yValueMapper: (data, _) => _temperature(data, unit).amount,
         yAxisName: _temperatureYAxisName,
         pointColorMapper: _temperatureColor,

@@ -4,18 +4,21 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../widget/rain_mixin.dart';
 import '../../widget/weather_mixin.dart';
+import '../helper/one_call_weather_stats.dart';
 import 'hourly_chart.dart';
 
 class DailyWeatherChart extends HourlyChart with RainMixin, WeatherMixin {
   const DailyWeatherChart({
     Key? key,
     required OneCallWeather weather,
+    required OneCallWeatherStats stats,
     double? height,
     EdgeInsets? margin,
     EdgeInsets? padding,
   }) : super(
           key: key,
           weather: weather,
+          stats: stats,
           height: height,
           margin: margin,
           padding: padding,
@@ -36,13 +39,13 @@ class DailyWeatherChart extends HourlyChart with RainMixin, WeatherMixin {
     return [
       ColumnSeries<HourlyWeather, DateTime>(
         dataSource: data,
-        xValueMapper: (data, _) => data.localShiftedDateTime, // was local
+        xValueMapper: (data, _) => data.localShiftedDateTime,
         yValueMapper: (data, _) => data.conditions.rain1h,
         spacing: 0.8,
       ),
       ScatterSeries<HourlyWeather, DateTime>(
         dataSource: data,
-        xValueMapper: (data, idx) => data.localShiftedDateTime, // was local
+        xValueMapper: (data, idx) => data.localShiftedDateTime,
         yValueMapper: (data, idx) => 0.0,
         legendIconType: LegendIconType.image,
         dataLabelSettings: DataLabelSettings(
