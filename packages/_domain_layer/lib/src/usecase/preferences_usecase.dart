@@ -49,11 +49,11 @@ class PreferencesUsecase {
   ];
 
   final Reader read;
-  late final themeProvider = StateProvider((_) => theme);
-  late final combineRainAndTemperatureProvider = StateProvider((_) => false);
-  late final weatherOrderProvider = StateProvider((_) => weatherOrder);
-  late final temperatureUnitProvider = StateProvider<Unit<Temperature>>((ref) => temperatureUnit);
-  late final windSpeedUnitProvider = StateProvider<Unit<Speed>>((ref) => windSpeedUnit);
+  late final themeProvider = StateProvider((_) => _theme);
+  late final combineRainAndTemperatureProvider = StateProvider((_) => _combineRainAndTemperature);
+  late final weatherOrderProvider = StateProvider((_) => _weatherOrder);
+  late final temperatureUnitProvider = StateProvider<Unit<Temperature>>((ref) => _temperatureUnit);
+  late final windSpeedUnitProvider = StateProvider<Unit<Speed>>((ref) => _windSpeedUnit);
 
   final PreferencesRepository _repository;
 
@@ -64,7 +64,7 @@ class PreferencesUsecase {
   }
 
   /// Read the theme from storage using a default initial value
-  ThemeMode get theme {
+  ThemeMode get _theme {
     final pref = _repository.getByKey(_themeKey);
     if (pref?.value == ThemeMode.light.name) return ThemeMode.light;
     if (pref?.value == ThemeMode.dark.name) return ThemeMode.dark;
@@ -78,7 +78,7 @@ class PreferencesUsecase {
   }
 
   /// Read the combineRainAndTemperature option from storage using a default initial value
-  bool get combineRainAndTemperature {
+  bool get _combineRainAndTemperature {
     final pref = _repository.getByKey(_combineRainAndTemperatureKey);
     if (pref?.value == "true") return true;
     if (pref?.value == "false") return false;
@@ -92,7 +92,7 @@ class PreferencesUsecase {
   }
 
   /// Read the weather order preference from storage using a default initial value
-  WeatherOrder get weatherOrder {
+  WeatherOrder get _weatherOrder {
     final pref = _repository.getByKey(_weatherOrderKey);
     for (final option in WeatherOrder.values) {
       if (pref?.value == option.name) return option;
@@ -107,7 +107,7 @@ class PreferencesUsecase {
   }
 
   /// Read the temperature unit preference from storage using a default initial value
-  Unit<Temperature> get temperatureUnit {
+  Unit<Temperature> get _temperatureUnit {
     final pref = _repository.getByKey(_temperatureUnitKey);
     for (final option in temperatureUnits) {
       if (pref?.value == option.symbol) return option;
@@ -123,7 +123,7 @@ class PreferencesUsecase {
   }
 
   /// Read the wind speed unit preference from storage using a default initial value
-  Unit<Speed> get windSpeedUnit {
+  Unit<Speed> get _windSpeedUnit {
     final pref = _repository.getByKey(_windSpeedUnitKey);
     for (final option in windSpeedUnits) {
       if (pref?.value == option.symbol) return option;

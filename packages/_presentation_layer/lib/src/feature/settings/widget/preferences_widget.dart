@@ -5,7 +5,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../provider/presentation_providers.dart';
-import 'combine_rain_and_temperature_switch.dart';
 import 'dark_light_mode_switch.dart';
 import 'temperature_unit_dropdown.dart';
 import 'wind_speed_unit_dropdown.dart';
@@ -146,15 +145,6 @@ class _SettingsPanel extends StatelessWidget {
               WindSpeedUnitDropdown(changeCallback: _onChangePreference),
             ],
           ),
-          if (showChartOptions) const Divider(),
-          if (showChartOptions)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Combine Rain/Temp Charts', style: itemStyle),
-                CombineRainAndTemperatureSwitch(changeCallback: _onChangePreference),
-              ],
-            ),
         ],
       ),
     );
