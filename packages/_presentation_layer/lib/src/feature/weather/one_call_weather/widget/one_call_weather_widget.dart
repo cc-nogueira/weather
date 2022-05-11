@@ -5,7 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../widget/powered_by_widget.dart';
 import '../helper/one_call_weather_stats.dart';
 import 'current_weather_widget.dart';
+import 'hourly_rain_and_temperature_chart.dart';
 import 'hourly_rain_chart.dart';
+import 'hourly_snow_and_temperature_chart.dart';
 import 'hourly_snow_chart.dart';
 import 'hourly_temperature_chart.dart';
 import 'hourly_wind_chart.dart';
@@ -20,6 +22,7 @@ class OneCallWeatherWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final combineTempToRainAndSnow = ref.watch(combineTemperatureToRainAndSnowProvider);
     final stats = OneCallWeatherStats(oneCallWeather);
 
     bool hideRain = false;
@@ -52,8 +55,14 @@ class OneCallWeatherWidget extends ConsumerWidget {
           Container(height: 20, color: Colors.black87),
           //HourlyWeatherChart(weather: oneCallWeather),
           HourlyTemperatureChart(weather: oneCallWeather, stats: stats),
-          if (!hideRain) HourlyRainChart(weather: oneCallWeather, stats: stats),
-          if (!hideSnow) HourlySnowChart(weather: oneCallWeather, stats: stats),
+          if (!hideRain)
+            combineTempToRainAndSnow
+                ? HourlyRainAndTemperatureChart(weather: oneCallWeather, stats: stats)
+                : HourlyRainChart(weather: oneCallWeather, stats: stats),
+          if (!hideSnow)
+            combineTempToRainAndSnow
+                ? HourlySnowAndTemperatureChart(weather: oneCallWeather, stats: stats)
+                : HourlySnowChart(weather: oneCallWeather, stats: stats),
           if (noPrecipitation) NoPrecipitationChart(weather: oneCallWeather, stats: stats),
           HourlyWindChart(weather: oneCallWeather, stats: stats),
           _poweredByWidget,
