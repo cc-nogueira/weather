@@ -4,12 +4,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../chart_scale/widget/rain_scale_widget.dart';
+import '../../../chart_scale/widget/snow_scale_widget.dart';
 import '../helper/one_call_weather_stats.dart';
-import 'hourly_rain_chart.dart';
+import 'hourly_snow_chart.dart';
 
-class HourlyRainAndTemperatureChart extends ConsumerWidget {
-  const HourlyRainAndTemperatureChart({
+class HourlySnowAndTemperatureChart extends ConsumerWidget {
+  const HourlySnowAndTemperatureChart({
     Key? key,
     required this.weather,
     required this.stats,
@@ -28,7 +28,7 @@ class HourlyRainAndTemperatureChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return _HourlyRainAndTemperatureChart(
+    return _HourlySnowAndTemperatureChart(
       weather: weather,
       stats: stats,
       unit: ref.watch(precipitationUnitProvider),
@@ -40,8 +40,8 @@ class HourlyRainAndTemperatureChart extends ConsumerWidget {
   }
 }
 
-class _HourlyRainAndTemperatureChart extends HourlyRainChartChart {
-  const _HourlyRainAndTemperatureChart({
+class _HourlySnowAndTemperatureChart extends HourlySnowChartChart {
+  const _HourlySnowAndTemperatureChart({
     Key? key,
     required OneCallWeather weather,
     required OneCallWeatherStats stats,
@@ -64,21 +64,21 @@ class _HourlyRainAndTemperatureChart extends HourlyRainChartChart {
 
   @override
   Widget? chartTitle(BuildContext context) {
-    final rainC = rainColor(weather.weather.conditions.rain1h ?? 0);
+    final snowC = snowColor(weather.weather.conditions.snow1h ?? 0);
     final tempC = temperatureColor(weather.weather.conditions.temperatures.temperature);
     return Row(
       children: [
-        Text('Rain ', style: titleStyle(context), textScaleFactor: 1.2),
-        Text('(${unit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: rainC)),
+        Text('Snow ', style: titleStyle(context), textScaleFactor: 1.2),
+        Text('(${unit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: snowC)),
         Text(' and Temperature ', style: titleStyle(context), textScaleFactor: 1.2),
         Text('(${tempUnit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: tempC)),
-        helpButton(context, (_) => const RainScaleWidget()),
+        helpButton(context, (_) => const SnowScaleWidget()),
       ],
     );
   }
 
   @override
-  String? get primaryYAxisName => 'rain';
+  String? get primaryYAxisName => 'snow';
 
   String get _temperatureYAxisName => 'temp';
 

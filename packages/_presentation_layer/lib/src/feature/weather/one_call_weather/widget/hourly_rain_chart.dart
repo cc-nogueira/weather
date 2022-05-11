@@ -29,7 +29,7 @@ class HourlyRainChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return _HourlyRainChart(
+    return HourlyRainChartChart(
       weather: weather,
       stats: stats,
       unit: ref.watch(precipitationUnitProvider),
@@ -40,8 +40,8 @@ class HourlyRainChart extends ConsumerWidget {
   }
 }
 
-class _HourlyRainChart extends HourlyChart with ColorRangeMixin, RainMixin, TemperatureMixin {
-  const _HourlyRainChart({
+class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, TemperatureMixin {
+  const HourlyRainChartChart({
     Key? key,
     required OneCallWeather weather,
     required OneCallWeatherStats stats,
@@ -66,22 +66,7 @@ class _HourlyRainChart extends HourlyChart with ColorRangeMixin, RainMixin, Temp
       children: [
         Text('Rain ', style: titleStyle(context), textScaleFactor: 1.2),
         Text('(${unit.symbol})', style: titleUnitsStyle(context)),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: InkWell(
-            child: const Icon(Icons.help, size: 20),
-            onTap: () {
-              showGeneralDialog(
-                context: context,
-                barrierColor: const Color(0x80FFFFFF),
-                barrierLabel: 'Label',
-                barrierDismissible: true,
-                transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (_, __, ___) => const RainScaleWidget(),
-              );
-            },
-          ),
-        ),
+        helpButton(context, (_) => const RainScaleWidget()),
       ],
     );
   }
@@ -133,11 +118,13 @@ class _HourlyRainChart extends HourlyChart with ColorRangeMixin, RainMixin, Temp
   }
 
   @override
-  List<ColumnSeries> series(List<HourlyWeather> data) => [
+  List<ChartSeries> series(List<HourlyWeather> data) => [
         ColumnSeries<HourlyWeather, DateTime>(
+          name: 'Rain',
           dataSource: data,
           xValueMapper: (data, idx) => data.localShiftedDateTime,
           yValueMapper: (data, _) => _precipitationInChartUnit(data.conditions.rain1h ?? 0.0),
+          yAxisName: primaryYAxisName,
           pointColorMapper: (hourly, idx) => rainColor(hourly.conditions.rain1h ?? 0.0),
         ),
       ];

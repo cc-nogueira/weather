@@ -59,4 +59,21 @@ abstract class ChartWidget extends ConsumerWidget {
         fontWeight: FontWeight.normal,
         color: Color(0xbeffffff),
       );
+
+  Widget helpButton(BuildContext context, WidgetBuilder widgetBuilder) => Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: InkWell(
+          child: const Icon(Icons.help, size: 20),
+          onTap: () {
+            showGeneralDialog(
+              context: context,
+              barrierColor: const Color(0x80FFFFFF),
+              barrierLabel: 'Label',
+              barrierDismissible: true,
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (_, __, ___) => widgetBuilder(context),
+            );
+          },
+        ),
+      );
 }
