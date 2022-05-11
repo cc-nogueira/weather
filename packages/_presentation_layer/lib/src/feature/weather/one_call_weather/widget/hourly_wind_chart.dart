@@ -7,6 +7,8 @@ import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../../chart_scale/widget/wind_scale_widget.dart';
+import '../../widget/color_range_mixin.dart';
 import '../../widget/wind_mixin.dart';
 import '../helper/one_call_weather_stats.dart';
 import 'hourly_chart.dart';
@@ -40,7 +42,7 @@ class HourlyWindChart extends ConsumerWidget {
   }
 }
 
-class _HourlyWindChart extends HourlyChart with WindMixin {
+class _HourlyWindChart extends HourlyChart with ColorRangeMixin, WindMixin {
   const _HourlyWindChart({
     Key? key,
     required OneCallWeather weather,
@@ -66,6 +68,22 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
       children: [
         Text('Wind ', style: titleStyle(context), textScaleFactor: 1.2),
         Text('(${unit.symbol})', style: titleUnitsStyle(context)),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: InkWell(
+            child: const Icon(Icons.help, size: 20),
+            onTap: () {
+              showGeneralDialog(
+                context: context,
+                barrierColor: const Color(0x80FFFFFF),
+                barrierLabel: 'Label',
+                barrierDismissible: true,
+                transitionDuration: const Duration(milliseconds: 500),
+                pageBuilder: (_, __, ___) => const WindScaleWidget(),
+              );
+            },
+          ),
+        ),
       ],
     );
   }
@@ -113,17 +131,17 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
 
   @override
   ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => (AxisLabelRenderDetails details) {
-        late final double speed;
+        late final double value;
         if (unit == Speed().meterPerSecond) {
-          speed = details.value.toDouble();
+          value = details.value.toDouble();
         } else {
-          speed = Quantity(amount: details.value.toDouble(), unit: unit)
+          value = Quantity(amount: details.value.toDouble(), unit: unit)
               .convertTo(Speed().meterPerSecond)
               .amount;
         }
         return ChartAxisLabel(
           details.text,
-          details.textStyle.copyWith(color: windColor(Wind(speed: speed))),
+          details.textStyle.copyWith(color: windColor(Wind(speed: value))),
         );
       };
 
@@ -149,15 +167,19 @@ class _HourlyWindChart extends HourlyChart with WindMixin {
     );
     final colors = [Colors.transparent];
     final steps = [0.0];
-    if (topWind > 2.5) {
-      colors.add(windColor(const Wind(speed: 2.5)));
-      steps.add(2.5);
+    if (topWind > 3.0) {
+      colors.add(windColor(const Wind(speed: 3.0)));
+      steps.add(3.0);
       if (topWind > 6.0) {
         colors.add(windColor(const Wind(speed: 6.0)));
         steps.add(6.0);
-        if (topWind > 10.0) {
-          colors.add(windColor(const Wind(speed: 10.0)));
-          steps.add(10.0);
+        if (topWind > 8.0) {
+          colors.add(windColor(const Wind(speed: 8.0)));
+          steps.add(8.0);
+          if (topWind > 10.0) {
+            colors.add(windColor(const Wind(speed: 10.0)));
+            steps.add(10.0);
+          }
         }
       }
     }

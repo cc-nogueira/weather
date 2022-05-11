@@ -31,12 +31,14 @@ class PreferencesUsecase {
   static const _weatherOrderKey = 'weatherOrder';
   static const _temperatureUnitKey = 'temperatureUnit';
   static const _windSpeedUnitKey = 'windSpeedUnit';
+  static const _precipitationUnitKey = 'precipitationUnit';
 
   static const _initialTheme = ThemeMode.dark;
   static const _initialCombineRainAndTemperature = false;
   static const _initialWeatherOrder = WeatherOrder.byTemp;
   static get _initialTemperatureUnit => Temperature().celcius;
   static get _initialWindSpeedUnit => Speed().knot;
+  static get _initialPrecipitationUnit => Speed().millimeterPerHour;
 
   final themes = const [ThemeMode.dark, ThemeMode.light];
   final weatherOrders = WeatherOrder.values;
@@ -47,6 +49,7 @@ class PreferencesUsecase {
     Speed().kilometerPerHour,
     Speed().milePerHour,
   ];
+  final precipitationUnits = [Speed().millimeterPerHour, Speed().inchPerHour];
 
   final Reader read;
   late final themeProvider = StateProvider((_) => _theme);
@@ -54,6 +57,7 @@ class PreferencesUsecase {
   late final weatherOrderProvider = StateProvider((_) => _weatherOrder);
   late final temperatureUnitProvider = StateProvider<Unit<Temperature>>((ref) => _temperatureUnit);
   late final windSpeedUnitProvider = StateProvider<Unit<Speed>>((ref) => _windSpeedUnit);
+  late final precipitationUnitProvider = StateProvider<Unit<Speed>>((ref) => _precipitationUnit);
 
   final PreferencesRepository _repository;
 
@@ -129,5 +133,20 @@ class PreferencesUsecase {
       if (pref?.value == option.symbol) return option;
     }
     return _initialWindSpeedUnit;
+  }
+
+  /// Save the precipitation unit preference and update this usecase [precipitationUnitProvider].
+  set precipitationUnit(Unit<Speed> unit) {
+    _repository.saveByKey(Preference(key: _precipitationUnitKey, value: unit.symbol));
+    read(precipitationUnitProvider.notifier).state = unit;
+  }
+
+  /// Read the wind speed unit preference from storage using a default initial value
+  Unit<Speed> get _precipitationUnit {
+    final pref = _repository.getByKey(_precipitationUnitKey);
+    for (final option in precipitationUnits) {
+      if (pref?.value == option.symbol) return option;
+    }
+    return _initialPrecipitationUnit;
   }
 }

@@ -60,6 +60,11 @@ final windSpeedUnitProvider = Provider<Unit<Speed>>((ref) {
   return ref.watch(usecase.windSpeedUnitProvider);
 });
 
+final precipitationUnitProvider = Provider<Unit<Speed>>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase.precipitationUnitProvider);
+});
+
 // -- Cities:
 
 final citiesUsecaseProvider =

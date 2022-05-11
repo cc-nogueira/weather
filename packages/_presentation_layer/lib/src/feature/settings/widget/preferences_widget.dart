@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../provider/presentation_providers.dart';
 import 'dark_light_mode_switch.dart';
+import 'precipitation_unit_dropdown.dart';
 import 'temperature_unit_dropdown.dart';
 import 'wind_speed_unit_dropdown.dart';
 
@@ -143,6 +144,13 @@ class _SettingsPanel extends StatelessWidget {
             children: [
               Text('Wind speed unit', style: itemStyle),
               WindSpeedUnitDropdown(changeCallback: _onChangePreference),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Precipitation unit', style: itemStyle),
+              PrecipitationUnitDropdown(changeCallback: _onChangePreference),
             ],
           ),
         ],
