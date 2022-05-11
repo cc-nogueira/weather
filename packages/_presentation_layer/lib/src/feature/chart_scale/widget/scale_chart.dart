@@ -37,14 +37,7 @@ abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget wit
     );
   }
 
-  Map<String, List<double>> get intensityMap;
-
-  List<double> get seriesData => [
-        ...intensityMap['light']!,
-        ...intensityMap['moderate']!,
-        ...intensityMap['strong']!,
-        ...intensityMap['storm']!,
-      ];
+  List<double> get seriesData;
 
   List<ChartSeries> series(List<double> data);
 
@@ -56,19 +49,9 @@ abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget wit
         multiLevelLabelStyle: multiLevelLabelStyle,
       );
 
-  List<NumericMultiLevelLabel>? multiLevelLabels(List<double> data) {
-    final labels = <NumericMultiLevelLabel>[];
-    var start = -0.5;
-    for (final intensity in intensityMap.entries) {
-      final end = start + intensity.value.length;
-      labels.add(NumericMultiLevelLabel(start: start, end: end, text: intensity.key));
-      start = end;
-    }
-    return labels;
-  }
+  List<NumericMultiLevelLabel>? multiLevelLabels(List<double> data) => null;
 
-  MultiLevelLabelStyle get multiLevelLabelStyle =>
-      const MultiLevelLabelStyle(borderType: MultiLevelBorderType.rectangle);
+  MultiLevelLabelStyle? get multiLevelLabelStyle => null;
 
   ChartAxis? primaryYAxis(List<double> data) => NumericAxis(
         isVisible: true,
@@ -82,4 +65,35 @@ abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget wit
   ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => null;
   double? get primaryYAxisMinimum => null;
   double? get primaryYAxisMaximum => null;
+}
+
+abstract class IntensityScaleChart<T extends PhysicalProperty<T>> extends ScaleChart<T> {
+  const IntensityScaleChart({Key? key, double? height, required Unit<T> unit})
+      : super(key: key, height: height, unit: unit);
+
+  Map<String, List<double>> get intensityMap;
+
+  @override
+  List<double> get seriesData => [
+        ...intensityMap['light']!,
+        ...intensityMap['moderate']!,
+        ...intensityMap['strong']!,
+        ...intensityMap['storm']!,
+      ];
+
+  @override
+  List<NumericMultiLevelLabel>? multiLevelLabels(List<double> data) {
+    final labels = <NumericMultiLevelLabel>[];
+    var start = -0.5;
+    for (final intensity in intensityMap.entries) {
+      final end = start + intensity.value.length;
+      labels.add(NumericMultiLevelLabel(start: start, end: end, text: intensity.key));
+      start = end;
+    }
+    return labels;
+  }
+
+  @override
+  MultiLevelLabelStyle? get multiLevelLabelStyle =>
+      const MultiLevelLabelStyle(borderType: MultiLevelBorderType.rectangle);
 }

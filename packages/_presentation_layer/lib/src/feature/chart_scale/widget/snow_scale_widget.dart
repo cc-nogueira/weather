@@ -33,7 +33,7 @@ class SnowScaleChart extends ConsumerWidget {
   }
 }
 
-class _SnowScaleChart extends ScaleChart<Speed> with SnowMixin {
+class _SnowScaleChart extends IntensityScaleChart<Speed> with SnowMixin {
   const _SnowScaleChart({Key? key, required Unit<Speed> unit, double? height})
       : super(key: key, height: height, unit: unit);
 

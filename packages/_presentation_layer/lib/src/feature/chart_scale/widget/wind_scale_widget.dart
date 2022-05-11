@@ -33,7 +33,7 @@ class WindScaleChart extends ConsumerWidget {
   }
 }
 
-class _WindScaleChart extends ScaleChart<Speed> with WindMixin {
+class _WindScaleChart extends IntensityScaleChart<Speed> with WindMixin {
   const _WindScaleChart({Key? key, required Unit<Speed> unit, double? height})
       : super(key: key, height: height, unit: unit);
 

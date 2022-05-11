@@ -33,7 +33,7 @@ class RainScaleChart extends ConsumerWidget {
   }
 }
 
-class _RainScaleChart extends ScaleChart<Speed> with RainMixin {
+class _RainScaleChart extends IntensityScaleChart<Speed> with RainMixin {
   const _RainScaleChart({Key? key, required Unit<Speed> unit, double? height})
       : super(key: key, height: height, unit: unit);
 
