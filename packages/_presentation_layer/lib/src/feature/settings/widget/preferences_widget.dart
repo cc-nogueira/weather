@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../provider/presentation_providers.dart';
+import 'combine_temperature_to_rain_and_snow_switch.dart';
 import 'dark_light_mode_switch.dart';
 import 'precipitation_unit_dropdown.dart';
 import 'temperature_unit_dropdown.dart';
@@ -132,6 +133,7 @@ class _SettingsPanel extends StatelessWidget {
               DarkLightModeSwitch(changeCallback: _onChangePreference),
             ],
           ),
+          const Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -151,6 +153,14 @@ class _SettingsPanel extends StatelessWidget {
             children: [
               Text('Precipitation unit', style: itemStyle),
               PrecipitationUnitDropdown(changeCallback: _onChangePreference),
+            ],
+          ),
+          const Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(child: Text('Add Temp to Rain/Snow Charts', style: itemStyle)),
+              CombineTemperatureToRainAndSnowSwitch(changeCallback: _onChangePreference),
             ],
           ),
         ],

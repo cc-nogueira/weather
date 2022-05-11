@@ -27,14 +27,14 @@ class PreferencesUsecase {
       : _repository = repository;
 
   static const _themeKey = 'theme';
-  static const _combineRainAndTemperatureKey = 'combineRainAndTemperature';
+  static const _combineTemperatureToRainAndSnowKey = 'combineTemperatureToRainAndSnow';
   static const _weatherOrderKey = 'weatherOrder';
   static const _temperatureUnitKey = 'temperatureUnit';
   static const _windSpeedUnitKey = 'windSpeedUnit';
   static const _precipitationUnitKey = 'precipitationUnit';
 
   static const _initialTheme = ThemeMode.dark;
-  static const _initialCombineRainAndTemperature = false;
+  static const _initialCombineTemperatureToRainAndSnow = false;
   static const _initialWeatherOrder = WeatherOrder.byTemp;
   static get _initialTemperatureUnit => Temperature().celcius;
   static get _initialWindSpeedUnit => Speed().knot;
@@ -53,7 +53,8 @@ class PreferencesUsecase {
 
   final Reader read;
   late final themeProvider = StateProvider((_) => _theme);
-  late final combineRainAndTemperatureProvider = StateProvider((_) => _combineRainAndTemperature);
+  late final combineTemperatureToRainAndSnowProvider =
+      StateProvider((_) => _combineTemperatureToRainAndSnow);
   late final weatherOrderProvider = StateProvider((_) => _weatherOrder);
   late final temperatureUnitProvider = StateProvider<Unit<Temperature>>((ref) => _temperatureUnit);
   late final windSpeedUnitProvider = StateProvider<Unit<Speed>>((ref) => _windSpeedUnit);
@@ -75,18 +76,19 @@ class PreferencesUsecase {
     return _initialTheme;
   }
 
-  /// Save the combineRainAndTemperature preference and updates this usecase [combineRainAndTemperatureProvider].
-  set combineRainAndTemperature(bool option) {
-    _repository.saveByKey(Preference(key: _combineRainAndTemperatureKey, value: option.toString()));
-    read(combineRainAndTemperatureProvider.notifier).state = option;
+  /// Save the combineTemperatureToRainAndSnow preference and updates this usecase [combineTemperatureToRainAndSnowProvider].
+  set combineTemperatureToRainAndSnow(bool option) {
+    _repository
+        .saveByKey(Preference(key: _combineTemperatureToRainAndSnowKey, value: option.toString()));
+    read(combineTemperatureToRainAndSnowProvider.notifier).state = option;
   }
 
-  /// Read the combineRainAndTemperature option from storage using a default initial value
-  bool get _combineRainAndTemperature {
-    final pref = _repository.getByKey(_combineRainAndTemperatureKey);
+  /// Read the combineTemperatureToRainAndSnow option from storage using a default initial value
+  bool get _combineTemperatureToRainAndSnow {
+    final pref = _repository.getByKey(_combineTemperatureToRainAndSnowKey);
     if (pref?.value == "true") return true;
     if (pref?.value == "false") return false;
-    return _initialCombineRainAndTemperature;
+    return _initialCombineTemperatureToRainAndSnow;
   }
 
   /// Save the weather order preference and update this usecase [weatherOrderProvider].

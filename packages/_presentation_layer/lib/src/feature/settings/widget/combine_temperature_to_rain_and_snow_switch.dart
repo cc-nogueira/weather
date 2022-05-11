@@ -2,8 +2,8 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CombineRainAndTemperatureSwitch extends ConsumerWidget {
-  const CombineRainAndTemperatureSwitch({
+class CombineTemperatureToRainAndSnowSwitch extends ConsumerWidget {
+  const CombineTemperatureToRainAndSnowSwitch({
     Key? key,
     this.padding,
     this.iconSize,
@@ -16,7 +16,7 @@ class CombineRainAndTemperatureSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final combine = ref.watch(combineRainAndTemperatureProvider);
+    final combine = ref.watch(combineTemperatureToRainAndSnowProvider);
     final spacer = SizedBox(width: iconSize ?? IconTheme.of(context).size ?? 24.0);
     final widget = Row(
       children: [
@@ -31,7 +31,7 @@ class CombineRainAndTemperatureSwitch extends ConsumerWidget {
   }
 
   void _onChange(Reader read, bool option) {
-    read(preferencesUsecaseProvider).combineRainAndTemperature = option;
+    read(preferencesUsecaseProvider).combineTemperatureToRainAndSnow = option;
     changeCallback?.call();
   }
 }
