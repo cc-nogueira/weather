@@ -12,14 +12,9 @@ import 'temperature_unit_dropdown.dart';
 import 'wind_speed_unit_dropdown.dart';
 
 class PreferencesWidget extends HookConsumerWidget {
-  const PreferencesWidget({
-    Key? key,
-    this.top = 0.0,
-    this.showChartOptions = false,
-  }) : super(key: key);
+  const PreferencesWidget({Key? key, this.top = 0.0}) : super(key: key);
 
   final double top;
-  final bool showChartOptions;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,7 +30,6 @@ class PreferencesWidget extends HookConsumerWidget {
     }
     return _SlidingSettingsPanel(
         top: top,
-        showChartOptions: showChartOptions,
         animation: animation,
         onDismiss: () => ref.read(showPreferencesPanelProvider.notifier).state = false);
   }
@@ -47,12 +41,10 @@ class _SlidingSettingsPanel extends AnimatedWidget {
     required Animation<double> animation,
     required this.onDismiss,
     required this.top,
-    required this.showChartOptions,
   }) : super(key: key, listenable: animation);
 
   final VoidCallback onDismiss;
   final double top;
-  final bool showChartOptions;
 
   Animation<double> get animation => super.listenable as Animation<double>;
 
@@ -67,10 +59,7 @@ class _SlidingSettingsPanel extends AnimatedWidget {
         sizeFactor: animation,
         axis: Axis.vertical,
         axisAlignment: -1,
-        child: _SettingsPanel(
-          showChartOptions: showChartOptions,
-          onDismiss: onDismiss,
-        ),
+        child: _SettingsPanel(onDismiss: onDismiss),
       ),
     );
   }
@@ -110,10 +99,8 @@ class _SlidingSettingsPanel extends AnimatedWidget {
 }
 
 class _SettingsPanel extends StatelessWidget {
-  const _SettingsPanel({Key? key, required this.showChartOptions, required this.onDismiss})
-      : super(key: key);
+  const _SettingsPanel({Key? key, required this.onDismiss}) : super(key: key);
 
-  final bool showChartOptions;
   final VoidCallback onDismiss;
 
   @override

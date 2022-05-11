@@ -13,7 +13,8 @@ import '../../widget/weather_mixin.dart';
 import '../../widget/weather_title_hero.dart';
 
 class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  const OneCallWeatherAppBar({Key? key, required this.city, required this.initialWeather})
+  const OneCallWeatherAppBar(
+      {Key? key, required this.city, required this.initialWeather, required this.isRefreshing})
       : super(key: key);
 
   @override
@@ -21,13 +22,18 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
 
   final City city;
   final Weather initialWeather;
+  final bool isRefreshing;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentWeather = ref.watch(currentWeatherByLocationAutoRefreshProvider(city.location!));
-    return currentWeather.maybeWhen(
-      data: (data) => _WeatherAppBar(city: city, weather: data.weather),
-      orElse: () => _WeatherAppBar(city: city, weather: initialWeather),
+    final asyncValue = ref.watch(currentWeatherByLocationAutoRefreshProvider(city.location!));
+    return asyncValue.maybeWhen(
+      data: (data) => _WeatherAppBar(
+        city: city,
+        weather: data.weather,
+        isRefreshing: asyncValue.isRefreshing || isRefreshing,
+      ),
+      orElse: () => _WeatherAppBar(city: city, weather: initialWeather, isRefreshing: isRefreshing),
     );
   }
 }
@@ -37,10 +43,12 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
     Key? key,
     required this.city,
     required this.weather,
+    required this.isRefreshing,
   }) : super(key: key);
 
   final City city;
   final Weather weather;
+  final bool isRefreshing;
 
   @override
   Widget build(BuildContext context) => AppBar(
@@ -74,6 +82,7 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
           child: _TimeAndWeatherBar(
             city: city,
             weather: weather,
+            isRefreshing: isRefreshing,
           ),
         ),
       ],
@@ -93,10 +102,12 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherMixin {
     Key? key,
     required this.city,
     required this.weather,
+    required this.isRefreshing,
   }) : super(key: key);
 
   final City city;
   final Weather weather;
+  final bool isRefreshing;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +142,17 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherMixin {
     );
   }
 
-  Widget trailing2(BuildContext context) => heroWeatherIcon(city, weather);
+  Widget trailing2(BuildContext context) =>
+      isRefreshing ? loadingIndicator : heroWeatherIcon(city, weather);
+
+  Widget get loadingIndicator => const SizedBox(
+        height: 60,
+        width: 60,
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: CircularProgressIndicator(color: Colors.grey),
+        ),
+      );
 
   Color? textColor(ThemeData theme, ListTileThemeData tileTheme) {
     final defaultColor = theme.textTheme.subtitle1!.color;

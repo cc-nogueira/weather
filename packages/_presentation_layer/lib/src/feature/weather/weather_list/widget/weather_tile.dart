@@ -49,29 +49,31 @@ class WeatherTile extends ConsumerWidget {
     final temperatureUnit = ref.watch(temperatureUnitProvider);
     final windSpeedUnit = ref.watch(windSpeedUnitProvider);
 
-    final tile = ref.watch(currentWeatherByLocationAutoRefreshProvider(location)).when(
-          loading: () => _WeatherLoadingTile(
-            city: city,
-            onRemove: onRemove,
-            onTap: () => {},
-          ),
-          error: (_, __) => _WeatherErrorTile(
-            city: city,
-            onRemove: onRemove,
-            onTap: () {},
-          ),
-          data: (data) {
-            _updateTemperature(ref.read, data.weather);
-            return _WeatherTile(
-              city: city,
-              weather: data.weather,
-              temperatureUnit: temperatureUnit,
-              windSpeedUnit: windSpeedUnit,
-              onRemove: onRemove,
-              onTap: () => _onTap(context, data.weather),
-            );
-          },
+    final asyncValue = ref.watch(currentWeatherByLocationAutoRefreshProvider(location));
+    final tile = asyncValue.when(
+      loading: () => _WeatherLoadingTile(
+        city: city,
+        onRemove: onRemove,
+        onTap: () => {},
+      ),
+      error: (_, __) => _WeatherErrorTile(
+        city: city,
+        onRemove: onRemove,
+        onTap: () {},
+      ),
+      data: (data) {
+        _updateTemperature(ref.read, data.weather);
+        return _WeatherTile(
+          city: city,
+          weather: data.weather,
+          isRefreshing: asyncValue.isRefreshing,
+          temperatureUnit: temperatureUnit,
+          windSpeedUnit: windSpeedUnit,
+          onRemove: onRemove,
+          onTap: () => _onTap(context, data.weather),
         );
+      },
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -155,6 +157,15 @@ abstract class _WeatherTileBase extends StatelessWidget {
         city: city,
         style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.w500),
       );
+
+  Widget get loadingIndicator => const SizedBox(
+        height: 60,
+        width: 60,
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: CircularProgressIndicator(color: Colors.grey),
+        ),
+      );
 }
 
 class _WeatherLoadingTile extends _WeatherTileBase {
@@ -166,14 +177,7 @@ class _WeatherLoadingTile extends _WeatherTileBase {
   }) : super(key: key, city: city, onRemove: onRemove, onTap: onTap);
 
   @override
-  Widget trailing(BuildContext context) => const SizedBox(
-        height: 60,
-        width: 60,
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: CircularProgressIndicator(color: Colors.grey),
-        ),
-      );
+  Widget trailing(BuildContext context) => loadingIndicator;
 
   @override
   Widget subtitle(BuildContext context) => const Text('Loading...');
@@ -202,11 +206,13 @@ class _WeatherTile extends _WeatherTileBase
     required VoidCallback onRemove,
     required VoidCallback onTap,
     required this.weather,
+    required this.isRefreshing,
     required this.temperatureUnit,
     required this.windSpeedUnit,
   }) : super(key: key, city: city, onRemove: onRemove, onTap: onTap);
 
   final Weather weather;
+  final bool isRefreshing;
   final Unit<Speed> windSpeedUnit;
   final Unit<Temperature> temperatureUnit;
 
@@ -221,7 +227,7 @@ class _WeatherTile extends _WeatherTileBase
               TimeHero(city),
             ],
           ),
-          heroWeatherIcon(city, weather),
+          isRefreshing ? loadingIndicator : heroWeatherIcon(city, weather),
         ],
       );
 
