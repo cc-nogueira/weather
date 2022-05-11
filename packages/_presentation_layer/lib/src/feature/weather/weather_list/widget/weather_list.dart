@@ -75,7 +75,7 @@ class _WeatherList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return RefreshIndicator(
-      onRefresh: () => _refresh(ref),
+      onRefresh: () => _refresh(context, ref),
       child: ListView(
         padding: const EdgeInsets.only(bottom: 48.0, top: 4.0),
         children: tiles,
@@ -83,8 +83,16 @@ class _WeatherList extends ConsumerWidget {
     );
   }
 
-  Future<void> _refresh(WidgetRef ref) {
+  Future<void> _refresh(BuildContext context, WidgetRef ref) async {
+    const minRefreshInterval = WeatherUsecase.currentWeatherMinRefreshInterval;
+    final lastRefresh = ref.read(currentWeatherMetronomeProvider);
+    if (DateTime.now().difference(lastRefresh) < minRefreshInterval) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              'Weather already refreshed in the last ${minRefreshInterval.inMinutes} minutes')));
+      return;
+    }
+
     ref.invalidate(currentWeatherMetronomeProvider);
-    return Future.value();
   }
 }

@@ -41,32 +41,32 @@ class OneCallWeatherWidget extends ConsumerWidget {
       noPrecipitation = true;
     }
 
-    // return RefreshIndicator(
-    //   onRefresh: () => _refresh(ref),
-    //   child:
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: ListView(
-        children: [
-          CurrentWeatherWidget(
-            city: city,
-            initialWeather: oneCallWeather.weather,
-          ),
-          Container(height: 20, color: Colors.black87),
-          //HourlyWeatherChart(weather: oneCallWeather),
-          HourlyTemperatureChart(weather: oneCallWeather, stats: stats),
-          if (!hideRain)
-            combineTempToRainAndSnow
-                ? HourlyRainAndTemperatureChart(weather: oneCallWeather, stats: stats)
-                : HourlyRainChart(weather: oneCallWeather, stats: stats),
-          if (!hideSnow)
-            combineTempToRainAndSnow
-                ? HourlySnowAndTemperatureChart(weather: oneCallWeather, stats: stats)
-                : HourlySnowChart(weather: oneCallWeather, stats: stats),
-          if (noPrecipitation) NoPrecipitationChart(weather: oneCallWeather, stats: stats),
-          HourlyWindChart(weather: oneCallWeather, stats: stats),
-          _poweredByWidget,
-        ],
+    return RefreshIndicator(
+      onRefresh: () => _refresh(context, ref),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: ListView(
+          children: [
+            CurrentWeatherWidget(
+              city: city,
+              initialWeather: oneCallWeather.weather,
+            ),
+            Container(height: 20, color: Colors.black87),
+            //HourlyWeatherChart(weather: oneCallWeather),
+            HourlyTemperatureChart(weather: oneCallWeather, stats: stats),
+            if (!hideRain)
+              combineTempToRainAndSnow
+                  ? HourlyRainAndTemperatureChart(weather: oneCallWeather, stats: stats)
+                  : HourlyRainChart(weather: oneCallWeather, stats: stats),
+            if (!hideSnow)
+              combineTempToRainAndSnow
+                  ? HourlySnowAndTemperatureChart(weather: oneCallWeather, stats: stats)
+                  : HourlySnowChart(weather: oneCallWeather, stats: stats),
+            if (noPrecipitation) NoPrecipitationChart(weather: oneCallWeather, stats: stats),
+            HourlyWindChart(weather: oneCallWeather, stats: stats),
+            _poweredByWidget,
+          ],
+        ),
       ),
     );
   }
@@ -82,10 +82,17 @@ class OneCallWeatherWidget extends ConsumerWidget {
         ]),
       );
 
-  // Future<void> _refresh(WidgetRef ref) {
-  //   ref.invalidate(oneCallWeatherTupleByLocationProvider(city.location!));
-  //   ref.invalidate(oneCallWeatherByLocationAutoEvictProvider(city.location!));
-  //   return Future.value();
-  // }
+  Future<void> _refresh(BuildContext context, WidgetRef ref) async {
+    const minRefreshInterval = WeatherUsecase.oneCallWeatherMinRefreshInterval;
+    final tuple = await ref.read(oneCallWeatherTupleByLocationProvider(city.location!).future);
+    if (DateTime.now().difference(tuple.item2) < minRefreshInterval) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              'Weather already refreshed in the last ${minRefreshInterval.inMinutes} minutes')));
+      return;
+    }
 
+    ref.invalidate(oneCallWeatherTupleByLocationProvider(city.location!));
+    ref.invalidate(oneCallWeatherByLocationAutoEvictProvider(city.location!));
+  }
 }

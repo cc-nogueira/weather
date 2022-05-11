@@ -16,7 +16,9 @@ class WeatherUsecase {
 
   static const defaultLanguage = 'en';
   static const currentWeatherRefreshInterval = Duration(minutes: 60);
+  static const currentWeatherMinRefreshInterval = Duration(minutes: 10);
   static const oneCallWeatherRefreshInterval = Duration(hours: 2);
+  static const oneCallWeatherMinRefreshInterval = Duration(minutes: 10);
 
   final WeatherService service;
   final Logger log;
