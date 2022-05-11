@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 
+import '../../widget/color_range_mixin.dart';
 import '../../widget/weather_icons.dart';
 import '../../widget/wind_mixin.dart';
 
@@ -23,7 +24,7 @@ class CurrentWeatherWidget extends ConsumerWidget {
   }
 }
 
-class _CurrentWeatherWidget extends ConsumerWidget with WindMixin {
+class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMixin {
   const _CurrentWeatherWidget({
     Key? key,
     required this.weather,

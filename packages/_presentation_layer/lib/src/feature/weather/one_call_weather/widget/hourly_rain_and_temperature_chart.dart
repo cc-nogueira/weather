@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../widget/color_range_mixin.dart';
 import '../../widget/rain_mixin.dart';
 import '../../widget/temperature_mixin.dart';
 import '../helper/one_call_weather_stats.dart';
@@ -40,7 +41,8 @@ class HourlyRainAndTemperatureChart extends ConsumerWidget {
   }
 }
 
-class _HourlyRainAndTemperatureChart extends HourlyChart with RainMixin, TemperatureMixin {
+class _HourlyRainAndTemperatureChart extends HourlyChart
+    with ColorRangeMixin, RainMixin, TemperatureMixin {
   const _HourlyRainAndTemperatureChart({
     Key? key,
     required OneCallWeather weather,

@@ -2,12 +2,13 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../widget/color_range_mixin.dart';
 import '../../widget/rain_mixin.dart';
 import '../../widget/temperature_mixin.dart';
 import '../helper/one_call_weather_stats.dart';
 import 'hourly_chart.dart';
 
-class NoPrecipitationChart extends HourlyChart with RainMixin, TemperatureMixin {
+class NoPrecipitationChart extends HourlyChart with ColorRangeMixin, RainMixin, TemperatureMixin {
   const NoPrecipitationChart({
     Key? key,
     required OneCallWeather weather,

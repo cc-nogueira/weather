@@ -3,21 +3,28 @@ import 'dart:math';
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 
+import 'color_range_mixin.dart';
 import 'weather_icons.dart';
 
-mixin WindMixin {
-  Color windColor(Wind wind) {
-    final speed = wind.speed;
-    if (speed < 2.5) {
-      return Color.lerp(Colors.blue[100], Colors.blue[600]!, _rangePercent(speed, 0, 2.5))!;
-    } else if (speed < 6.0) {
-      return Color.lerp(Colors.blue[600]!, Colors.blue[900]!, _rangePercent(speed, 2.5, 6.0))!;
-    } else if (speed < 10.0) {
-      return Color.lerp(Colors.blue[900]!, Colors.orange[900]!, _rangePercent(speed, 6.0, 10.0))!;
-    } else {
-      return Color.lerp(Colors.orange[900]!, Colors.red[900]!, _rangePercent(speed, 10.0, 15.0))!;
-    }
-  }
+final _colorStops = <double, Color>{
+  0.0: Colors.blue[100]!,
+  3.0: Colors.blue[600]!,
+  6.0: Colors.blue[900]!,
+  8.0: Colors.yellow,
+  10.0: Colors.orange[900]!,
+  15.0: Colors.red[900]!,
+};
+
+const _rangeStops = <double>[0.0, 3.0, 6.0, 10.0, 15.0];
+
+mixin WindMixin on ColorRangeMixin {
+  Map<double, Color> get windColorStops => _colorStops;
+
+  List<double> get windRangeStops => _rangeStops;
+
+  List<Color> windColors() => rangeColors(_rangeStops, _colorStops);
+
+  Color windColor(Wind wind) => rangeColor(_colorStops, wind.speed);
 
   Widget hourlyWindIcon(Wind wind, double size, [Color? color]) => Transform.rotate(
         angle: wind.directionTo * pi / 180,
@@ -66,15 +73,4 @@ mixin WindMixin {
         alignment: Alignment.center,
         child: WeatherIcons.instance.windDeg(size, color),
       );
-
-  double _rangePercent(double value, double start, double end) {
-    if (start > end) {
-      value *= -1;
-      start *= -1;
-      end *= -1;
-    }
-    if (value <= start) return 0;
-    if (value >= end) return 1;
-    return (value - start) / (end - start);
-  }
 }

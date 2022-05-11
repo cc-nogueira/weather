@@ -31,7 +31,6 @@ class Routes {
               settings.arguments,
               (context, args) => OneCallWeatherPage(city: args.item1, weather: args.item2)),
         );
-
       case city:
         return _route((_) => CityPage());
       default:
