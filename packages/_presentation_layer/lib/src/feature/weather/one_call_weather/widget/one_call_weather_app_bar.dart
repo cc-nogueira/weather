@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../settings/widget/preferences_button.dart';
+import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_gradient_box_hero.dart';
 import '../../widget/temperature_hero.dart';
 import '../../widget/temperature_mixin.dart';
@@ -31,7 +32,7 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
   }
 }
 
-class _WeatherAppBar extends StatelessWidget with TemperatureMixin {
+class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMixin {
   _WeatherAppBar({
     Key? key,
     required this.city,

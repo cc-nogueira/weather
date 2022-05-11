@@ -4,6 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../chart_scale/widget/temperature_scale_widget.dart';
+import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_mixin.dart';
 import '../../widget/weather_mixin.dart';
 import '../helper/one_call_weather_stats.dart';
@@ -27,7 +29,6 @@ class HourlyTemperatureChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(hourMetronomeProvider);
     return _HourlyTemperatureChart(
       weather: weather,
       stats: stats,
@@ -39,7 +40,8 @@ class HourlyTemperatureChart extends ConsumerWidget {
   }
 }
 
-class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, WeatherMixin {
+class _HourlyTemperatureChart extends HourlyChart
+    with ColorRangeMixin, TemperatureMixin, WeatherMixin {
   const _HourlyTemperatureChart({
     Key? key,
     required OneCallWeather weather,
@@ -65,6 +67,7 @@ class _HourlyTemperatureChart extends HourlyChart with TemperatureMixin, Weather
       children: [
         Text('Temperature ', style: titleStyle(context), textScaleFactor: 1.2),
         Text('(${unit.symbol})', style: titleUnitsStyle(context)),
+        helpButton(context, (_) => const TemperatureScaleWidget())
       ],
     );
   }

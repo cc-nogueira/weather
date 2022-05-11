@@ -1,7 +1,22 @@
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 
-mixin TemperatureMixin {
+import 'color_range_mixin.dart';
+
+final _colorStops = <double, Color>{
+  -20.0: Colors.blue[600]!,
+  0.0: Colors.blue[100]!,
+  10.0: Colors.yellow[50]!,
+  20.0: Colors.yellow[300]!,
+  30.0: Colors.orange[900]!,
+  40.0: Colors.red[900]!,
+};
+
+mixin TemperatureMixin on ColorRangeMixin {
+  Map<double, Color> get temperatureColorStops => _colorStops;
+
+  Color temperatureColor(Celcius celcius) => rangeColor(_colorStops, celcius.value);
+
   Gradient temperatureGradient({
     required Color startColor,
     required Celcius celcius,
@@ -23,31 +38,5 @@ mixin TemperatureMixin {
         celcius: celcius,
         begin: Alignment.centerLeft,
         end: Alignment.centerRight);
-  }
-
-  Color temperatureColor(Celcius celcius) {
-    final temp = celcius.value;
-    if (temp < 0) {
-      return Color.lerp(Colors.blue[100], Colors.blue[600]!, _rangePercent(temp, 0, -20))!;
-    } else if (temp < 10) {
-      return Color.lerp(Colors.blue[100]!, Colors.white, _rangePercent(temp, 0, 10))!;
-    } else if (temp < 20) {
-      return Color.lerp(Colors.yellow[50], Colors.yellow[300]!, _rangePercent(temp, 10, 20))!;
-    } else if (temp < 30) {
-      return Color.lerp(Colors.yellow[300]!, Colors.orange[900]!, _rangePercent(temp, 20, 30))!;
-    } else {
-      return Color.lerp(Colors.orange[900]!, Colors.red[900]!, _rangePercent(temp, 30, 40))!;
-    }
-  }
-
-  double _rangePercent(double value, double start, double end) {
-    if (start > end) {
-      value *= -1;
-      start *= -1;
-      end *= -1;
-    }
-    if (value <= start) return 0;
-    if (value >= end) return 1;
-    return (value - start) / (end - start);
   }
 }
