@@ -2,6 +2,7 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../common/widget/flip_widget.dart';
 import '../../../settings/widget/preferences_button.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_gradient_box_hero.dart';
@@ -78,11 +79,13 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
       children: [
         TemperatureGradientBoxHero(city: city, gradient: _gradient(context)),
         Padding(
-          padding: const EdgeInsets.only(top: 72.0),
-          child: _TimeAndWeatherBar(
-            city: city,
-            weather: weather,
-            isRefreshing: isRefreshing,
+          padding: const EdgeInsets.only(top: 72.0, left: 8, right: 8, bottom: 8),
+          child: FlipAd(
+            child: _TimeAndWeatherBar(
+              city: city,
+              weather: weather,
+              isRefreshing: isRefreshing,
+            ),
           ),
         ),
       ],
@@ -112,11 +115,11 @@ class _TimeAndWeatherBar extends StatelessWidget with WeatherMixin {
   @override
   Widget build(BuildContext context) {
     final leading = Padding(
-      padding: const EdgeInsets.only(left: 16.0),
+      padding: const EdgeInsets.only(left: 8.0),
       child: TimeHero(city, fontSize: 32.0),
     );
     final trailing = Padding(
-      padding: const EdgeInsets.only(right: 16.0),
+      padding: const EdgeInsets.only(right: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [trailing1(context), trailing2(context)],

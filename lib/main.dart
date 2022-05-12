@@ -25,9 +25,14 @@ void main() {
 ///
 /// Async initialzes all layers through DI Layer init method.
 final appProvider = FutureProvider.autoDispose<Widget>((ref) async {
+  _configureLogger();
+
   final diLayer = ref.watch(diLayerProvider);
   await diLayer.init();
-  _configureLogger();
+
+  final adState = ref.watch(adStateProvider);
+  await adState.init();
+
   FlutterNativeSplash.remove();
   return const WeatherApp();
 });
