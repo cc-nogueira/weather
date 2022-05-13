@@ -9,7 +9,7 @@ class PresentationLayer extends AppLayer with WidgetsBindingObserver {
 
   @override
   Future<void> init() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     return Future.value();
   }
 
@@ -24,6 +24,6 @@ class PresentationLayer extends AppLayer with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
   }
 }
