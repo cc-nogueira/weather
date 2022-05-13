@@ -80,11 +80,13 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
         TemperatureGradientBoxHero(city: city, gradient: _gradient(context)),
         Padding(
           padding: const EdgeInsets.only(top: 72.0, left: 8, right: 8, bottom: 8),
-          child: FlipAd(
-            child: _TimeAndWeatherBar(
-              city: city,
-              weather: weather,
-              isRefreshing: isRefreshing,
+          child: Center(
+            child: FlipAd(
+              child: _TimeAndWeatherBar(
+                city: city,
+                weather: weather,
+                isRefreshing: isRefreshing,
+              ),
             ),
           ),
         ),
