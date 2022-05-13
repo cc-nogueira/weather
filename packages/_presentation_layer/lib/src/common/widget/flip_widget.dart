@@ -19,8 +19,8 @@ class FlipAd extends HookConsumerWidget {
     Key? key,
     required this.child,
     this.adHeight,
-    this.adDelay = const Duration(seconds: 5),
-    this.adDuration = const Duration(seconds: 20),
+    this.adDelay = const Duration(seconds: 2),
+    this.adDuration = const Duration(seconds: 5),
     this.decorationDuration = const Duration(seconds: 2),
     this.flipDuration = const Duration(seconds: 2),
   }) : super(key: key);
