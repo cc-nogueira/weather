@@ -26,7 +26,7 @@ final themeProvider = Provider((ref) {
   return ref.watch(darkThemeProvider);
 });
 
-final adAutoReleaseProvider = Provider.autoDispose.family<AdContainer, AdContainer>(
+final adAutoReleaseProvider = Provider.autoDispose.family<AdInRowContainer, AdInRowContainer>(
   (ref, adContainer) {
     ref.onDispose(() => adContainer.dispose());
     return adContainer;

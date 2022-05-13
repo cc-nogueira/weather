@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
@@ -45,23 +46,34 @@ class FlipAd extends HookConsumerWidget {
   }
 
   void _flipAd(WidgetRef ref) {
-    final flipController = ref.read(_flipProvider.notifier);
-    final adState = ref.read(adStateProvider);
     bool handledLoaded = false;
-    late final AdContainer adContainer;
-    adContainer = adState.createBunnerAd(onAdLoaded: () {
+    late final AdInRowContainer adContainer;
+    adContainer = createBannerAdInRowContainer(ref.read, onAdLoaded: (_) {
       if (!handledLoaded) {
         handledLoaded = true;
-        flipController.state = adContainer;
+        ref.read(_flipProvider.notifier).state = adContainer;
       }
     });
     ref.watch(adAutoReleaseProvider(adContainer));
     adContainer.load();
   }
 
+  AdInRowContainer createBannerAdInRowContainer(
+    Reader read, {
+    AdEventCallback? onAdLoaded,
+    AdSize? size,
+    double? height,
+  }) {
+    final adState = read(adStateProvider);
+    return AdInRowContainer(
+      ad: adState.createBannerAd(onAdLoaded: onAdLoaded, size: size),
+      height: height,
+    );
+  }
+
   Widget? _decorateWidgetForAnimation(
       BuildContext context, Widget widget, Animation<double> animation) {
-    if (widget is AdContainer) return null;
+    if (widget is AdInRowContainer) return null;
     final color = Theme.of(context).colorScheme.onSurface;
     return CustomPaint(
       foregroundPainter: AnimatedBorderPainter(
@@ -75,7 +87,7 @@ class FlipAd extends HookConsumerWidget {
 
   void _onflipFinished(Reader read) {
     final flipFace = read(_flipProvider);
-    if (flipFace is AdContainer) {
+    if (flipFace is AdInRowContainer) {
       flipFace.dispose();
     }
   }

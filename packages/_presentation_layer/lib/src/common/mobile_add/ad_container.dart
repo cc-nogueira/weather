@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class AdContainer extends StatelessWidget {
-  const AdContainer({Key? key, required this.ad, this.height}) : super(key: key);
+class AdInRowContainer extends StatelessWidget {
+  const AdInRowContainer({Key? key, required this.ad, this.height}) : super(key: key);
 
   final BannerAd ad;
   final double? height;
