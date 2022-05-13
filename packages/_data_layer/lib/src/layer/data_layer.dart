@@ -30,7 +30,7 @@ class DataLayer extends AppLayer {
 
   Future<Store> _openStore() async {
     final appDir = await getApplicationDocumentsDirectory();
-    final objectboxPath = appDir.path + '/objectbox';
+    final objectboxPath = '${appDir.path}/objectbox';
     if (Store.isOpen(objectboxPath)) {
       return Store.attach(getObjectBoxModel(), objectboxPath);
     } else {

@@ -41,8 +41,9 @@ class OneCallWeatherWidget extends ConsumerWidget {
       noPrecipitation = true;
     }
 
+    final messenger = ScaffoldMessenger.of(context);
     return RefreshIndicator(
-      onRefresh: () => _refresh(context, ref),
+      onRefresh: () => _refresh(ref, messenger),
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: ListView(
@@ -82,11 +83,11 @@ class OneCallWeatherWidget extends ConsumerWidget {
         ]),
       );
 
-  Future<void> _refresh(BuildContext context, WidgetRef ref) async {
+  Future<void> _refresh(WidgetRef ref, ScaffoldMessengerState messenger) async {
     const minRefreshInterval = WeatherUsecase.oneCallWeatherMinRefreshInterval;
     final tuple = await ref.read(oneCallWeatherTupleByLocationProvider(city.location!).future);
     if (DateTime.now().difference(tuple.item2) < minRefreshInterval) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      messenger.showSnackBar(SnackBar(
           content: Text(
               'Weather already refreshed in the last ${minRefreshInterval.inMinutes} minutes')));
       return;

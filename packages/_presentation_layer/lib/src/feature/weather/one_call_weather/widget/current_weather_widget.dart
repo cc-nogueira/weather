@@ -84,7 +84,7 @@ class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMix
           padding: const EdgeInsets.only(right: 2.0),
           child: windIcon(weather.conditions.wind, size: 26, color: iconColor),
         ),
-        title: windDirectionLabel(weather.conditions.wind) + '  ',
+        title: '${windDirectionLabel(weather.conditions.wind)}  ',
         value: '${weather.conditions.wind.directionFrom} °',
       ),
     ];
@@ -100,9 +100,9 @@ class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMix
               child: GridView.count(
                 childAspectRatio: gridWidth / desiredHeight,
                 shrinkWrap: true,
-                children: elements,
                 crossAxisCount: 3,
                 primary: false,
+                children: elements,
               ),
             ),
           ],

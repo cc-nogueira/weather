@@ -82,8 +82,8 @@ class WeatherTile extends ConsumerWidget {
         endActionPane: ActionPane(
           motion: const BehindMotion(),
           extentRatio: 0.25,
-          children: [_slideTrashAction],
           dismissible: DismissiblePane(onDismissed: onRemove),
+          children: [_slideTrashAction],
         ),
         child: tile,
       ),

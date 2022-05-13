@@ -4,11 +4,11 @@ import 'package:_domain_layer/domain_layer.dart';
 
 class OneCallWeatherStats {
   OneCallWeatherStats(OneCallWeather oneCallWeather)
-      : hourlyStats = _HourlyStats(oneCallWeather),
-        dailyStats = _DailyStats(oneCallWeather);
+      : hourlyStats = HourlyStats(oneCallWeather),
+        dailyStats = DailyStats(oneCallWeather);
 
-  final _HourlyStats hourlyStats;
-  final _DailyStats dailyStats;
+  final HourlyStats hourlyStats;
+  final DailyStats dailyStats;
 
   Celcius get minTemp => Celcius(min(hourlyStats._minTemp, dailyStats._minTemp));
   Celcius get maxTemp => Celcius(max(hourlyStats._maxTemp, dailyStats._maxTemp));
@@ -16,8 +16,8 @@ class OneCallWeatherStats {
   bool get hasSnow => hourlyStats.hasSnow || dailyStats.hasSnow;
 }
 
-class _HourlyStats {
-  _HourlyStats(OneCallWeather oneCallWeather)
+class HourlyStats {
+  HourlyStats(OneCallWeather oneCallWeather)
       : hasRain = false,
         hasSnow = false {
     _calculate(oneCallWeather);
@@ -68,8 +68,8 @@ class _HourlyStats {
   DateTime _truncatedToHour(DateTime dt) => DateTime(dt.year, dt.month, dt.day, dt.hour);
 }
 
-class _DailyStats {
-  _DailyStats(OneCallWeather oneCallWeather)
+class DailyStats {
+  DailyStats(OneCallWeather oneCallWeather)
       : assert(oneCallWeather.daily.isNotEmpty),
         hasRain = false,
         hasSnow = false {

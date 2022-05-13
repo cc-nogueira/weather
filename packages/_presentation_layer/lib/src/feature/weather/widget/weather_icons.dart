@@ -25,8 +25,8 @@ class PathPainter extends CustomPainter {
 class WeatherIcons {
   WeatherIcons._();
 
-  static late final WeatherIcons instance = WeatherIcons._();
-  static late final WeatherIcons _i = instance;
+  static final WeatherIcons instance = WeatherIcons._();
+  static final WeatherIcons _i = instance;
 
   static CustomPaint forOpenWeather({
     required int openWeatherCode,
@@ -39,7 +39,7 @@ class WeatherIcons {
     return builder(size, color);
   }
 
-  static late final Map<int, List<WeatherIconBuilder>> _openWeatherToBuilderMap = {
+  static final Map<int, List<WeatherIconBuilder>> _openWeatherToBuilderMap = {
     200: [_i.thunderstorm, _i.dayThunderstorm, _i.nightThunderstorm],
     201: [_i.thunderstorm, _i.dayThunderstorm, _i.nightThunderstorm],
     202: [_i.thunderstorm, _i.dayThunderstorm, _i.nightThunderstorm],
