@@ -46,6 +46,7 @@ class FlipAd extends HookConsumerWidget {
       flipDuration: flipDuration,
       waitDuration: adDuration,
       onFlipBackFinished: () => _onflipFinished(ref.read),
+      perspectiveEffect: 0.002,
     );
   }
 
@@ -119,7 +120,9 @@ class CutAndFlipWidget<T extends Widget> extends FlipWidget {
   @override
   Widget? decorateWidgetForAnimation(
       BuildContext context, Widget widget, Animation<double> animation) {
-    if (widget is T) return null;
+    if (widget is T) {
+      return null;
+    }
     final color = Theme.of(context).colorScheme.onSurface;
     return CustomPaint(
       foregroundPainter: AnimatedBorderPainter(
@@ -212,9 +215,9 @@ class FlipWidget extends HookConsumerWidget {
     return _FlipWidget(
       controller: controller,
       face: face,
-      flipFace: flipFace,
+      flipFace: decoratedFlipFace ?? flipFace,
       decoratedFace: decoratedFace,
-      decoratedFlipFace: decoratedFlipFace,
+      decoratedFlipFace: null,
       flipDirection: VerticalDirection.down,
       flipAnimation: flipAnimation,
       perspectiveAnimation: perspectiveAnimation,
