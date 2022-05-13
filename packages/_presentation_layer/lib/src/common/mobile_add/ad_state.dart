@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logging/logging.dart';
 
+import 'ad_container.dart';
+
 class AdState {
   AdState();
 
@@ -14,11 +16,19 @@ class AdState {
     return initializationStatus;
   }
 
-  BannerAd createBunnerAd({void Function()? onAdLoaded, AdSize size = AdSize.banner}) => BannerAd(
-        size: size,
-        adUnitId: bannerAdUnitId,
-        listener: listener(onAdLoaded: onAdLoaded),
-        request: const AdRequest(),
+  AdContainer createBunnerAd({
+    void Function()? onAdLoaded,
+    AdSize size = AdSize.banner,
+    double? height,
+  }) =>
+      AdContainer(
+        ad: BannerAd(
+          size: size,
+          adUnitId: bannerAdUnitId,
+          listener: listener(onAdLoaded: onAdLoaded),
+          request: const AdRequest(),
+        ),
+        height: height,
       );
 
   String get bannerAdUnitId => Platform.isAndroid

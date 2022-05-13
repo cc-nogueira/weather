@@ -2,84 +2,81 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logging/logging.dart';
 
 import '../../../presentation_layer.dart';
+import '../../provider/presentation_providers.dart';
+import '../mobile_add/ad_container.dart';
+import 'animated_border_painter.dart';
 
-class AdContainer extends StatelessWidget {
-  const AdContainer({Key? key, required this.ad, this.height}) : super(key: key);
-
-  final BannerAd ad;
-  final double? height;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        decoration: const BoxDecoration(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: ad.size.width.toDouble(),
-              height: height ?? ad.size.height.toDouble(),
-              child: AdWidget(ad: ad),
-            )
-          ],
-        ),
-      );
-
-  void dispose() => ad.dispose();
-}
-
-class FlipAd extends ConsumerWidget {
+class FlipAd extends HookConsumerWidget {
   FlipAd({
     Key? key,
     required this.child,
     this.adDelay = const Duration(seconds: 5),
-    this.adDuration = const Duration(seconds: 30),
+    this.adDuration = const Duration(seconds: 20),
+    this.decorationDuration = const Duration(seconds: 2),
+    this.flipDuration = const Duration(seconds: 3),
   }) : super(key: key);
 
+  final Logger log = Logger('FlipAd');
   final Widget child;
   final Duration adDelay;
   final Duration adDuration;
-  late final _faceProvider = StateProvider<Widget>((_) => child);
+  final Duration decorationDuration;
+  final Duration flipDuration;
+  late final _flipProvider = StateProvider<Widget?>((_) => null);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final flipWidget = FlipWidget(
-      widgetProvider: _faceProvider,
+      face: child,
+      flipProvider: _flipProvider,
       flipDirection: VerticalDirection.down,
-      decorateWidgetBeforeAnimation: _decorateWidgetForAnimation,
-      onFlipFinished: _onflipFinished,
+      decorationDuration: decorationDuration,
+      flipDuration: flipDuration,
+      waitDuration: adDuration,
+      decorateWidgetForAnimation: _decorateWidgetForAnimation,
+      onFlipBackFinished: () => _onflipFinished(ref.read),
     );
-    Future.delayed(adDelay, () => _flipAd(ref.read));
+    Future.delayed(adDelay, () => _flipAd(ref));
     return flipWidget;
   }
 
-  void _flipAd(Reader read) {
-    final faceController = read(_faceProvider.notifier);
-    final adState = read(adStateProvider);
+  void _flipAd(WidgetRef ref) {
+    final flipController = ref.read(_flipProvider.notifier);
+    final adState = ref.read(adStateProvider);
     bool handledLoaded = false;
-    late final BannerAd ad;
-    ad = adState.createBunnerAd(onAdLoaded: () {
+    late final AdContainer adContainer;
+    adContainer = adState.createBunnerAd(onAdLoaded: () {
       if (!handledLoaded) {
         handledLoaded = true;
-        faceController.state = AdContainer(ad: ad, height: 84);
-        Future.delayed(adDuration, () => faceController.state = child);
+        flipController.state = adContainer;
       }
     });
-    ad.load();
+    ref.watch(adAutoReleaseProvider(adContainer));
+    adContainer.load();
   }
 
-  Widget? _decorateWidgetForAnimation(Widget widget) {
+  Widget? _decorateWidgetForAnimation(
+      BuildContext context, Widget widget, Animation<double> animation) {
     if (widget is AdContainer) return null;
-    return Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.white)), child: widget);
+    final color = Theme.of(context).colorScheme.onSurface;
+    return CustomPaint(
+      foregroundPainter: AnimatedBorderPainter(
+        animation: animation,
+        pathType: PathType.rRect,
+        strokeColor: color,
+      ),
+      child: widget,
+    );
   }
 
-  void _onflipFinished({required Widget prev, required Widget next}) {
-    if (prev is AdContainer) {
-      prev.dispose();
+  void _onflipFinished(Reader read) {
+    final flipFace = read(_flipProvider);
+    if (flipFace is AdContainer) {
+      flipFace.dispose();
     }
   }
 }
@@ -87,85 +84,88 @@ class FlipAd extends ConsumerWidget {
 class FlipWidget extends HookConsumerWidget {
   FlipWidget({
     Key? key,
-    required this.widgetProvider,
+    required this.face,
+    required this.flipProvider,
     required this.flipDirection,
-    this.onFlipFinished,
-    this.decorateWidgetBeforeAnimation,
-    this.flipDuration = const Duration(milliseconds: 3000),
+    required this.decorationDuration,
+    required this.flipDuration,
+    required this.waitDuration,
+    this.onFlipBackFinished,
+    this.decorateWidgetForAnimation,
+    this.decorationCurve = Curves.easeIn,
     this.flipCurve = Curves.easeInOut,
     this.perspectiveEffect = 0.006,
   }) : super(key: key);
 
-  /// Custom animation Curve for a fast bounce effect (bang! effect).
-  static const bounceFastFlip = _BounceFastFlipCurve();
-
-  /// Custom animation animation for a slow bounce effect (slow bang! effect).
-  static const bounceSlowFlip = _BounceSlowFlipCurve();
-
-  /// Default animation Curve.
-  static const defaultFlip = Curves.easeInOut;
-
-  /// Provider of display widgets
-  final StateProvider<Widget> widgetProvider;
-
-  final void Function({required Widget prev, required Widget next})? onFlipFinished;
-
-  final Widget? Function(Widget)? decorateWidgetBeforeAnimation;
-
-  /// Direction of the flip animation.
+  final Widget face;
+  final StateProvider<Widget?> flipProvider;
+  final VoidCallback? onFlipBackFinished;
+  final Widget? Function(BuildContext, Widget, Animation<double> animation)?
+      decorateWidgetForAnimation;
   final VerticalDirection flipDirection;
-
-  /// Duration of the flip animation.
+  final Duration decorationDuration;
+  final Duration waitDuration;
   final Duration flipDuration;
-
-  /// Curve for the flip animation.
-  ///
-  /// Defaults to Curves.easeInOut
+  final Curve decorationCurve;
   final Curve flipCurve;
-
-  /// Perspective effect for the Transform Matrix4.
-  ///
-  /// Defaults to 0.006
   final double perspectiveEffect;
 
-  final _previousWidgetController = StateController<Widget?>(null);
-  final _finishedWidgetController = StateController<Widget?>(null);
+  final _animationControllerHolder = StateController<AnimationController?>(null);
+  final _isMountedHolder = StateController<bool Function()?>(null);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = useAnimationController(duration: flipDuration);
-    final curvedAnimation = CurvedAnimation(parent: controller, curve: flipCurve);
-    final flipAnimation = Tween(begin: 0.0, end: math.pi).animate(curvedAnimation);
+    final animationDuration = flipDuration + decorationDuration;
+    final controller = useAnimationController(duration: animationDuration);
+    final isMounted = useIsMounted();
+    _animationControllerHolder.state = controller;
+    _isMountedHolder.state = isMounted;
+
+    /// watch new faces provider
+    final flipFace = ref.watch(flipProvider);
+    if (flipFace == null) {
+      return face;
+    }
+
+    final decorationCurvedAnimation = CurvedAnimation(
+      parent: controller,
+      curve: Interval(
+        0.0,
+        decorationDuration.inMilliseconds / animationDuration.inMilliseconds,
+        curve: decorationCurve,
+      ),
+    );
+    final decorationAnimation = Tween(begin: 0.0, end: 1.0).animate(decorationCurvedAnimation);
+    final flipCurvedAnimation = CurvedAnimation(
+      parent: controller,
+      curve: Interval(
+        decorationDuration.inMilliseconds / animationDuration.inMilliseconds,
+        1.0,
+        curve: flipCurve,
+      ),
+    );
+    final flipAnimation = Tween(begin: 0.0, end: math.pi).animate(flipCurvedAnimation);
     final perspectiveAnimation = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 0.0, end: perspectiveEffect), weight: 1.0),
       TweenSequenceItem(tween: Tween(begin: perspectiveEffect, end: 0.0), weight: 1.0),
-    ]).animate(curvedAnimation);
+    ]).animate(flipCurvedAnimation);
 
-    /// watch new faces provider
-    final newFace = ref.watch(widgetProvider);
+    final decoratedFlipFace =
+        decorateWidgetForAnimation?.call(context, flipFace, decorationAnimation);
+    final decoratedFace = decorateWidgetForAnimation?.call(context, face, decorationAnimation);
 
-    final previousFace = _finishedWidgetController.state;
-    _previousWidgetController.state = previousFace;
-    _finishedWidgetController.state = newFace;
+    controller.removeStatusListener(_statusListener);
+    controller.reset();
 
-    if (previousFace == null) {
-      return newFace;
-    }
-
-    final decoratedNew = decorateWidgetBeforeAnimation?.call(newFace);
-    final decoratedOld = decorateWidgetBeforeAnimation?.call(previousFace);
-
-    if (onFlipFinished != null) {
-      controller.removeStatusListener(_statusListener);
-      controller.addStatusListener(_statusListener);
-    }
+    controller.addStatusListener(_statusListener);
+    controller.forward();
 
     return _FlipWidget(
       controller: controller,
-      oldFace: previousFace,
-      newFace: newFace,
-      decoratedOldFace: decoratedOld,
-      decoratedNewFace: decoratedNew,
+      face: face,
+      flipFace: flipFace,
+      decoratedFace: decoratedFace,
+      decoratedFlipFace: decoratedFlipFace,
       flipDirection: VerticalDirection.down,
       flipAnimation: flipAnimation,
       perspectiveAnimation: perspectiveAnimation,
@@ -173,37 +173,39 @@ class FlipWidget extends HookConsumerWidget {
   }
 
   void _statusListener(AnimationStatus status) {
+    final isMounted = _isMountedHolder.state;
     if (status == AnimationStatus.completed) {
-      onFlipFinished?.call(
-        prev: _previousWidgetController.state!,
-        next: _finishedWidgetController.state!,
-      );
+      final controller = _animationControllerHolder.state!;
+      Future.delayed(waitDuration, () {
+        if (isMounted!()) {
+          controller.reverse();
+        }
+      });
+    } else if (status == AnimationStatus.dismissed) {
+      onFlipBackFinished?.call();
     }
   }
 }
 
 class _FlipWidget extends AnimatedWidget {
-  _FlipWidget({
+  const _FlipWidget({
     required AnimationController controller,
-    required this.oldFace,
-    required this.newFace,
-    this.decoratedOldFace,
-    this.decoratedNewFace,
+    required this.face,
+    required this.flipFace,
+    this.decoratedFace,
+    this.decoratedFlipFace,
     required this.flipAnimation,
     required this.perspectiveAnimation,
     required this.flipDirection,
-  }) : super(listenable: controller) {
-    controller.reset();
-    controller.forward();
-  }
+  }) : super(listenable: controller);
 
   /// Half turn
   static const _piBy2 = math.pi / 2;
 
-  final Widget oldFace;
-  final Widget newFace;
-  final Widget? decoratedOldFace;
-  final Widget? decoratedNewFace;
+  final Widget face;
+  final Widget flipFace;
+  final Widget? decoratedFace;
+  final Widget? decoratedFlipFace;
   final Animation<double> flipAnimation;
   final Animation<double> perspectiveAnimation;
   final VerticalDirection flipDirection;
@@ -221,9 +223,9 @@ class _FlipWidget extends AnimatedWidget {
 
     late Widget child;
     if (isPastMiddle) {
-      child = flipAnimation.isCompleted ? newFace : decoratedNewFace ?? newFace;
+      child = flipAnimation.isCompleted ? flipFace : decoratedFlipFace ?? flipFace;
     } else {
-      child = flipAnimation.isCompleted ? oldFace : decoratedOldFace ?? oldFace;
+      child = flipAnimation.isDismissed ? face : decoratedFace ?? face;
     }
 
     return Transform(
@@ -231,49 +233,5 @@ class _FlipWidget extends AnimatedWidget {
       transform: transform,
       child: child,
     );
-  }
-}
-
-class _BounceFastFlipCurve extends Curve {
-  const _BounceFastFlipCurve();
-
-  static const factor_1 = 121.0 / 49.0;
-  static const factor_2 = 121.0 / 16.0;
-  static const factor_3 = 121.0 / 4.0;
-
-  @override
-  double transformInternal(double t) => _bounce(t);
-
-  double _bounce(double t) {
-    if (t < 1.75 / 2.75) {
-      return factor_1 * t * t;
-    } else if (t < 2.5 / 2.75) {
-      t -= 2.125 / 2.75;
-      return factor_2 * t * t + 0.859375;
-    }
-    t -= 2.625 / 2.75;
-    return factor_3 * t * t + 0.9375;
-  }
-}
-
-class _BounceSlowFlipCurve extends Curve {
-  const _BounceSlowFlipCurve();
-
-  static const factor_1 = 121.0 / 64.0;
-  static const factor_2 = 121.0 / 8.0;
-  static const factor_3 = 121.0 / 4.0;
-
-  @override
-  double transformInternal(double t) => _bounce(t);
-
-  double _bounce(double t) {
-    if (t < 2.0 / 2.75) {
-      return factor_1 * t * t;
-    } else if (t < 2.5 / 2.75) {
-      t -= 2.25 / 2.75;
-      return factor_2 * t * t + 0.875;
-    }
-    t -= 2.625 / 2.75;
-    return factor_3 * t * t + 0.9375;
   }
 }

@@ -22,6 +22,7 @@ class AnimatedBorderPainter extends CustomPainter {
     this.radius = const Radius.circular(4.0),
     this.startingPercentage = 0,
     this.animationDirection = AnimationDirection.clockwise,
+    this.dissolveOnReverse = true,
   }) : super(repaint: animation);
 
   final Animation<double> animation;
@@ -31,29 +32,62 @@ class AnimatedBorderPainter extends CustomPainter {
   final Radius radius;
   final int startingPercentage;
   final AnimationDirection animationDirection;
+  final bool dissolveOnReverse;
 
-  late Path _originalPath;
-  late Paint _paint;
+  final isInit = [false];
+
+  late final Path _originalPath;
+  late final double _totalLength;
+  late final Paint _paint;
+  late final Paint _backPaint;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final animationPercent = animation.value;
-
-    // Construct original path once when animation starts
-    if (animationPercent == 0.0) {
-      _originalPath = _createOriginalPath(size);
-      _paint = Paint()
-        ..strokeWidth = strokeWidth
-        ..style = PaintingStyle.stroke
-        ..color = strokeColor;
+    if (animation.value == 0.0) {
+      _init(size);
+      return;
+    } else if (animation.value == 1.0) {
+      canvas.drawPath(_originalPath, _paint);
+    } else if (animation.status == AnimationStatus.forward || !dissolveOnReverse) {
+      final currentPath = _createAnimatedPath();
+      canvas.drawPath(currentPath, _paint);
+    } else if (animation.status == AnimationStatus.reverse && dissolveOnReverse) {
+      _dissolveBackPaint();
+      canvas.drawPath(_originalPath, _backPaint);
     }
+  }
 
-    final currentPath = _createAnimatedPath(
-      _originalPath,
-      animationPercent,
-    );
+  void _init(Size size) {
+    if (!isInit[0]) {
+      _originalPath = _createOriginalPath(size);
 
-    canvas.drawPath(currentPath, _paint);
+      // ComputeMetrics can only be iterated once!
+      _totalLength = _originalPath
+          .computeMetrics()
+          .fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
+
+      _paint = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..color = strokeColor;
+
+      _backPaint = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..color = strokeColor;
+
+      isInit[0] = true;
+    }
+  }
+
+  void _dissolveBackPaint() {
+    final percent = animation.value;
+    _backPaint.strokeWidth = percent * strokeWidth;
+    if (percent < 0.01) {
+      _backPaint.color = Colors.transparent;
+    } else {
+      _backPaint.color = strokeColor;
+    }
   }
 
   Path _createOriginalPath(Size size) {
@@ -124,38 +158,25 @@ class AnimatedBorderPainter extends CustomPainter {
       ..addPath(firstSubPath, Offset.zero);
   }
 
-  Path _createAnimatedPath(
-    Path originalPath,
-    double animationPercent,
-  ) {
-    // ComputeMetrics can only be iterated once!
-    final totalLength = originalPath
-        .computeMetrics()
-        .fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
-
-    final currentLength = totalLength * animationPercent;
-
-    return _extractPathUntilLength(originalPath, currentLength);
+  Path _createAnimatedPath() {
+    final currentLength = _totalLength * animation.value;
+    return _extractPathUntilLength(currentLength);
   }
 
-  Path _extractPathUntilLength(
-    Path originalPath,
-    double length,
-  ) {
+  Path _extractPathUntilLength(double length) {
     var currentLength = 0.0;
 
     final path = Path();
 
     final metricsIterator = animationDirection == AnimationDirection.clockwise
-        ? originalPath.computeMetrics().iterator
-        : originalPath.computeMetrics().toList().reversed.iterator;
+        ? _originalPath.computeMetrics().iterator
+        : _originalPath.computeMetrics().toList().reversed.iterator;
 
     while (metricsIterator.moveNext()) {
       final metric = metricsIterator.current;
-
       final nextLength = currentLength + metric.length;
-
       final isLastSegment = nextLength > length;
+
       if (isLastSegment) {
         final remainingLength = length - currentLength;
         final pathSegment = animationDirection == AnimationDirection.clockwise
@@ -177,7 +198,5 @@ class AnimatedBorderPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
