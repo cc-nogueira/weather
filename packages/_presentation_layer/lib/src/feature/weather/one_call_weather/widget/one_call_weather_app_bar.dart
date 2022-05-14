@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -75,11 +77,12 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
   }
 
   Widget _background(BuildContext context) {
+    final topPadding = (Platform.isAndroid || Platform.isAndroid) ? 72.0 : 48.0;
     return Stack(
       children: [
         TemperatureGradientBoxHero(city: city, gradient: _gradient(context)),
         Padding(
-          padding: const EdgeInsets.only(top: 72.0, left: 8, right: 8, bottom: 8),
+          padding: EdgeInsets.only(top: topPadding, left: 8, right: 8, bottom: 8),
           child: Center(
             child: FlipAd(
               child: _TimeAndWeatherBar(

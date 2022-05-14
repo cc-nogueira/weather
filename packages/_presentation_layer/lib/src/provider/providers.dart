@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -7,4 +9,5 @@ import '../layer/presentation_layer.dart';
 final presentationLayerProvider =
     Provider((ref) => PresentationLayer(ref.watch(appLifecycleUsecaseProvider)));
 
-final adStateProvider = Provider((_) => AdState());
+final adStateProvider =
+    Provider((_) => Platform.isAndroid || Platform.isIOS ? MobileAdState() : FakeAdState());

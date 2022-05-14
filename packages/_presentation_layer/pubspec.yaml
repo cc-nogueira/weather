@@ -38,6 +38,7 @@ flutter:
   uses-material-design: true
   
   assets:
+    - assets/image/brazil-grunge-flag.jpg
     - assets/image/open_weather_logo.png
     - assets/image/syncfusion_logo_150dpi.png
     - assets/image/wind_direction_black.png

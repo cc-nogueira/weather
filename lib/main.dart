@@ -1,13 +1,21 @@
+import 'dart:io';
+
 import 'package:_di_layer/di_layer.dart';
 import 'package:_presentation_layer/presentation_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
+import 'package:window_size/window_size.dart';
 
 void main() {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    setWindowMaxSize(const Size(640, -1));
+    setWindowMinSize(const Size(540, 700));
+  } else {
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  }
   runApp(
     ProviderScope(
       child: Consumer(
@@ -33,14 +41,14 @@ final appProvider = FutureProvider.autoDispose<Widget>((ref) async {
   final adState = ref.watch(adStateProvider);
   await adState.init();
 
-  FlutterNativeSplash.remove();
+  if (Platform.isAndroid || Platform.isIOS) {
+    FlutterNativeSplash.remove();
+  }
+
   return const WeatherApp();
 });
 
 void _configureLogger() {
   Logger.root.level = Level.FINE; // defaults to Level.INFO
-  Logger.root.onRecord.listen((record) {
-    // ignore: avoid_print
-    print('${record.level.name}: ${record.time}: ${record.message}');
-  });
+  Logger.root.onRecord.listen((record) {});
 }
