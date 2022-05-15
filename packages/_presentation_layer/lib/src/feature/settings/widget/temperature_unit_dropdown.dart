@@ -6,7 +6,7 @@ import 'package:qty/qty.dart';
 import 'unit_dropdown.dart';
 
 class TemperatureUnitDropdown extends UnitDropdown<Temperature> {
-  const TemperatureUnitDropdown({Key? key, this.changeCallback}) : super(key: key);
+  const TemperatureUnitDropdown({super.key, this.changeCallback});
 
   final VoidCallback? changeCallback;
 

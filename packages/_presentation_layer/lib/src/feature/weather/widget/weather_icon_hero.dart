@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'weather_icons.dart';
 
 class WeatherIconHero extends StatelessWidget {
-  const WeatherIconHero(
-      {Key? key, required this.city, required this.weatherCode, required this.size, this.isDayTime})
-      : super(key: key);
+  const WeatherIconHero({
+    super.key,
+    required this.city,
+    required this.weatherCode,
+    required this.size,
+    this.isDayTime,
+  });
 
   final City city;
   final int weatherCode;

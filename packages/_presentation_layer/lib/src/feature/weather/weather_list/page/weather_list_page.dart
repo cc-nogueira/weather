@@ -10,7 +10,7 @@ import '../widget/weather_list.dart';
 import '../widget/weather_list_app_bar.dart';
 
 class WeatherListPage extends ConsumerWidget {
-  const WeatherListPage({Key? key}) : super(key: key);
+  const WeatherListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ref.watch(watchAllCitiesProvider).when(

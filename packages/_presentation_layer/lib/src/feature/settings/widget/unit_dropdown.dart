@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 
 abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidget {
-  const UnitDropdown({Key? key}) : super(key: key);
+  const UnitDropdown({super.key});
 
   StateProvider<Unit<T>> unitProvider(Reader read);
   List<Unit<T>> unitOptions(Reader read);

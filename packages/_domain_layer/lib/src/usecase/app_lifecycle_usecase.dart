@@ -3,9 +3,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../domain_layer.dart';
 
 class AppLifecycleUsecase {
-  AppLifecycleUsecase({
-    required this.ref,
-  });
+  AppLifecycleUsecase({required this.ref});
 
   final ProviderRef ref;
 

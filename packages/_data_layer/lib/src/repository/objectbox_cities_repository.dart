@@ -7,8 +7,7 @@ import 'objectbox_repository.dart';
 
 class ObjectboxCitiesRepository extends ObjectboxRepository<City, CityModel>
     implements CitiesRepository {
-  ObjectboxCitiesRepository({required Box<CityModel> box})
-      : super(box: box, mapper: const CityMapper());
+  ObjectboxCitiesRepository({required super.box}) : super(mapper: const CityMapper());
 
   /// Id of my model
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PoweredByWidget extends StatelessWidget {
-  const PoweredByWidget({Key? key}) : super(key: key);
+  const PoweredByWidget({super.key});
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
@@ -15,30 +15,18 @@ class PoweredByWidget extends StatelessWidget {
 }
 
 class PoweredByOpenWeather extends _PoweredByBase {
-  const PoweredByOpenWeather({Key? key, double? width, double? height})
-      : super(
-          key: key,
-          width: width,
-          height: height,
-          assetName: 'assets/image/open_weather_logo.png',
-          text: 'weather forecast',
-        );
+  const PoweredByOpenWeather({super.key, super.width, super.height})
+      : super(assetName: 'assets/image/open_weather_logo.png', text: 'weather forecast');
 }
 
 class PoweredBySyncFusion extends _PoweredByBase {
-  const PoweredBySyncFusion({Key? key, double? width, double? height})
-      : super(
-          key: key,
-          width: width,
-          height: height,
-          assetName: 'assets/image/syncfusion_logo_150dpi.png',
-          text: 'charts engine',
-        );
+  const PoweredBySyncFusion({super.key, super.width, super.height})
+      : super(assetName: 'assets/image/syncfusion_logo_150dpi.png', text: 'charts engine');
 }
 
 class _PoweredByBase extends StatelessWidget {
   const _PoweredByBase({
-    Key? key,
+    super.key,
     required this.assetName,
     required this.text,
     double? width,
@@ -46,8 +34,7 @@ class _PoweredByBase extends StatelessWidget {
     Color? textColor,
   })  : width = width ?? 96.0,
         height = height ?? 32.0,
-        textColor = textColor ?? Colors.white70,
-        super(key: key);
+        textColor = textColor ?? Colors.white70;
 
   final double width;
   final double height;

@@ -14,8 +14,7 @@ import 'hourly_wind_chart.dart';
 import 'no_precipitation_chart.dart';
 
 class OneCallWeatherWidget extends ConsumerWidget {
-  const OneCallWeatherWidget({Key? key, required this.city, required this.oneCallWeather})
-      : super(key: key);
+  const OneCallWeatherWidget({super.key, required this.city, required this.oneCallWeather});
 
   final City city;
   final OneCallWeather oneCallWeather;

@@ -45,10 +45,7 @@ abstract class AdState {
 
   late final InitializationStatus initializationStatus;
 
-  Future<InitializationStatus> init() async {
-    initializationStatus = InitializationStatus({});
-    return initializationStatus;
-  }
+  Future<InitializationStatus> init();
 
   BannerAd createBannerAd({
     AdSize? size,
@@ -98,6 +95,12 @@ abstract class AdState {
 
 class FakeAdState extends AdState {
   @override
+  Future<InitializationStatus> init() async {
+    initializationStatus = InitializationStatus({});
+    return initializationStatus;
+  }
+
+  @override
   BannerAd createBannerAd({
     AdSize? size,
     AdEventCallback? onAdLoaded,
@@ -118,7 +121,9 @@ class FakeAdState extends AdState {
 }
 
 class MobileAdState extends AdState {
-  MobileAdState();
+  MobileAdState({required this.useTestAdUnit});
+
+  final bool useTestAdUnit;
 
   @override
   Future<InitializationStatus> init() async {
@@ -126,9 +131,13 @@ class MobileAdState extends AdState {
     return initializationStatus;
   }
 
-  String get bannerAdUnitId => Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
+  String get bannerAdUnitId => useTestAdUnit
+      ? Platform.isAndroid
+          ? 'ca-app-pub-3940256099942544/6300978111'
+          : 'ca-app-pub-3940256099942544/2934735716'
+      : Platform.isAndroid
+          ? 'ca-app-pub-1549146349472886~6494206645'
+          : 'ca-app-pub-1549146349472886~3460849195';
 
   @override
   BannerAd createBannerAd({

@@ -1,4 +1,5 @@
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 
 import '../entity/common/location.dart';
 import '../entity/weather/city.dart';
@@ -20,6 +21,7 @@ class WeatherUsecase {
   static const oneCallWeatherRefreshInterval = Duration(hours: 2);
   static const oneCallWeatherMinRefreshInterval = Duration(minutes: 10);
 
+  @internal
   final WeatherService service;
   final Logger log;
 

@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../common/helper/hero_flight_shuttle_builder.dart';
 
 class WeatherConditionsHero extends StatelessWidget {
-  const WeatherConditionsHero({Key? key, required this.city, required this.weather})
-      : super(key: key);
+  const WeatherConditionsHero({super.key, required this.city, required this.weather});
 
   final City city;
   final Weather weather;

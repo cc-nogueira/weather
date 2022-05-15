@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../common/helper/hero_flight_shuttle_builder.dart';
 
 class WeatherTitleHero extends ConsumerWidget {
-  const WeatherTitleHero({Key? key, required this.city, required this.style}) : super(key: key);
+  const WeatherTitleHero({super.key, required this.city, required this.style});
 
   final City city;
   final TextStyle style;

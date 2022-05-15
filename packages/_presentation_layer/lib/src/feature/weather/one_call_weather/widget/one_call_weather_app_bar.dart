@@ -16,9 +16,12 @@ import '../../widget/weather_mixin.dart';
 import '../../widget/weather_title_hero.dart';
 
 class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  const OneCallWeatherAppBar(
-      {Key? key, required this.city, required this.initialWeather, required this.isRefreshing})
-      : super(key: key);
+  const OneCallWeatherAppBar({
+    super.key,
+    required this.city,
+    required this.initialWeather,
+    required this.isRefreshing,
+  });
 
   @override
   final Size preferredSize = const Size.fromHeight(120);
@@ -42,12 +45,7 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
 }
 
 class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMixin {
-  _WeatherAppBar({
-    Key? key,
-    required this.city,
-    required this.weather,
-    required this.isRefreshing,
-  }) : super(key: key);
+  _WeatherAppBar({required this.city, required this.weather, required this.isRefreshing});
 
   final City city;
   final Weather weather;
@@ -106,12 +104,7 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
 }
 
 class _TimeAndWeatherBar extends StatelessWidget with WeatherMixin {
-  const _TimeAndWeatherBar({
-    Key? key,
-    required this.city,
-    required this.weather,
-    required this.isRefreshing,
-  }) : super(key: key);
+  const _TimeAndWeatherBar({required this.city, required this.weather, required this.isRefreshing});
 
   final City city;
   final Weather weather;

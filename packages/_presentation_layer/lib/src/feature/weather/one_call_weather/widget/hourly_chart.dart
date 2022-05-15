@@ -10,18 +10,13 @@ import 'chart_widget.dart';
 
 abstract class HourlyChart extends ChartWidget {
   const HourlyChart({
-    Key? key,
+    super.key,
     required this.weather,
     required this.stats,
-    double? height,
-    EdgeInsets? margin,
-    EdgeInsets? padding,
-  }) : super(
-          key: key,
-          height: height,
-          margin: margin,
-          padding: padding,
-        );
+    super.height,
+    super.margin,
+    super.padding,
+  });
 
   final OneCallWeather weather;
   final OneCallWeatherStats stats;

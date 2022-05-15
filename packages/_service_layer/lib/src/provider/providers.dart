@@ -5,7 +5,7 @@ import '../time/service/time_api_service.dart';
 import '../weather/service/open_weather_service.dart';
 
 /// Layer provider
-final serviceLayerProvider = Provider((_) => ServiceLayer());
+final serviceLayerProvider = Provider((_) => const ServiceLayer());
 
 final timeApiServiceProvider = Provider((_) => const TimeApiService());
 

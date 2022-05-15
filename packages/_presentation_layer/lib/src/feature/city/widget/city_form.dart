@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CityForm extends ConsumerWidget {
-  const CityForm(this.cityProvider, {Key? key, required this.onCountryChanged}) : super(key: key);
+  const CityForm(this.cityProvider, {super.key, required this.onCountryChanged});
 
   final StateProvider<City> cityProvider;
   final VoidCallback onCountryChanged;
@@ -18,12 +18,7 @@ class CityForm extends ConsumerWidget {
 }
 
 class _CityForm extends HookConsumerWidget {
-  const _CityForm(
-    this.cityProvider,
-    this.cityController,
-    this.onCountryChanged, {
-    Key? key,
-  }) : super(key: key);
+  const _CityForm(this.cityProvider, this.cityController, this.onCountryChanged);
 
   final StateProvider<City> cityProvider;
   final StateController<City> cityController;

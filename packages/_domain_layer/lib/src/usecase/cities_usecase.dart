@@ -1,6 +1,5 @@
 import '../entity/weather/city.dart';
 import '../exception/validation_exception.dart';
-import '../repository/cities_repository.dart';
 import 'entity_stream_usecase.dart';
 
 /// CitiesUsecase is a typical EntityStreamUsecase.
@@ -11,7 +10,7 @@ import 'entity_stream_usecase.dart';
 ///   - validate
 ///   - adjust
 class CitiesUsecase extends EntityStreamUsecase<City> {
-  const CitiesUsecase({required CitiesRepository repository}) : super(repository: repository);
+  const CitiesUsecase({required super.repository});
 
   /// Compare two cities by user defined order.
   @override

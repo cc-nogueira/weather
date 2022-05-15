@@ -9,7 +9,7 @@ import 'scale_chart.dart';
 import 'scale_widget.dart';
 
 class WindScaleWidget extends ScaleWidget with WindMixin {
-  const WindScaleWidget({Key? key}) : super(key: key);
+  const WindScaleWidget({super.key});
 
   @override
   final chartName = 'Wind';
@@ -34,8 +34,7 @@ class WindScaleChart extends ConsumerWidget {
 }
 
 class _WindScaleChart extends IntensityScaleChart<Speed> with WindMixin {
-  const _WindScaleChart({Key? key, required Unit<Speed> unit, double? height})
-      : super(key: key, height: height, unit: unit);
+  const _WindScaleChart({required super.unit, super.height});
 
   @override
   final chartName = 'Wind';

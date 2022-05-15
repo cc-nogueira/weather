@@ -4,7 +4,7 @@ import '../../../common/helper/theme_builder.dart';
 import '../../weather/widget/color_range_mixin.dart';
 
 abstract class ScaleWidget extends StatelessWidget with ColorRangeMixin {
-  const ScaleWidget({Key? key}) : super(key: key);
+  const ScaleWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

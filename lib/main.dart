@@ -31,15 +31,13 @@ void main() {
 
 /// Provides the configured application.
 ///
+/// Configure global logger.
 /// Async initialzes all layers through DI Layer init method.
 final appProvider = FutureProvider.autoDispose<Widget>((ref) async {
   _configureLogger();
 
   final diLayer = ref.watch(diLayerProvider);
   await diLayer.init();
-
-  final adState = ref.watch(adStateProvider);
-  await adState.init();
 
   if (Platform.isAndroid || Platform.isIOS) {
     FlutterNativeSplash.remove();
@@ -50,5 +48,8 @@ final appProvider = FutureProvider.autoDispose<Widget>((ref) async {
 
 void _configureLogger() {
   Logger.root.level = Level.FINE; // defaults to Level.INFO
-  Logger.root.onRecord.listen((record) {});
+  Logger.root.onRecord.listen((record) {
+    // ignore: avoid_print
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
 }

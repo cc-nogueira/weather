@@ -2,15 +2,18 @@ import 'package:_core_layer/core_layer.dart';
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 
+import '../common/mobile_add/ad_state.dart';
+
 class PresentationLayer extends AppLayer with WidgetsBindingObserver {
-  const PresentationLayer(this.appLifecycleUsecase);
+  const PresentationLayer({required this.appLifecycleUsecase, required this.adState});
 
   final AppLifecycleUsecase appLifecycleUsecase;
+  final AdState adState;
 
   @override
-  Future<void> init() {
+  Future<void> init() async {
     WidgetsBinding.instance.addObserver(this);
-    return Future.value();
+    await adState.init();
   }
 
   @override

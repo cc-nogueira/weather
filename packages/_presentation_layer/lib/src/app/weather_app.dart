@@ -10,11 +10,9 @@ import '../routes/routes.dart';
 /// Besides the regular constructor there is WeatherApp.error constructor to
 /// handle initialization errors.
 class WeatherApp extends ConsumerWidget {
-  const WeatherApp({Key? key})
-      : error = null,
-        super(key: key);
+  const WeatherApp({super.key}) : error = null;
 
-  const WeatherApp.error(this.error, {Key? key}) : super(key: key);
+  const WeatherApp.error(this.error, {super.key});
 
   final title = 'Weather';
   final _routes = const Routes();

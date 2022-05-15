@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import '../entity/common/location.dart';
 import '../entity/time_zone/time_zone.dart';
 import '../service/time_zone_service.dart';
@@ -9,6 +11,7 @@ import '../service/time_zone_service.dart';
 class TimeZoneUsecase {
   const TimeZoneUsecase({required this.service});
 
+  @internal
   final TimeZoneService service;
 
   /// Get current TimeZone by location.

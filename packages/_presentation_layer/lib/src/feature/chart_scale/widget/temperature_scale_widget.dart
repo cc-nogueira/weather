@@ -9,7 +9,7 @@ import '../../weather/widget/temperature_mixin.dart';
 import 'scale_chart.dart';
 
 class TemperatureScaleWidget extends StatelessWidget {
-  const TemperatureScaleWidget({Key? key}) : super(key: key);
+  const TemperatureScaleWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class TemperatureScaleWidget extends StatelessWidget {
 }
 
 class TemperatureScaleChart extends ConsumerWidget {
-  const TemperatureScaleChart({Key? key, this.height}) : super(key: key);
+  const TemperatureScaleChart({super.key, this.height});
 
   final double? height;
 
@@ -60,8 +60,7 @@ class TemperatureScaleChart extends ConsumerWidget {
 }
 
 class _TemperatureScaleChart extends ScaleChart<Temperature> with TemperatureMixin {
-  const _TemperatureScaleChart({Key? key, required Unit<Temperature> unit, double? height})
-      : super(key: key, height: height, unit: unit);
+  const _TemperatureScaleChart({required super.unit, super.height});
 
   @override
   final chartName = 'Temperature';

@@ -3,20 +3,20 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
-import '../../provider/providers.dart';
+import '../../provider/presentation_providers.dart';
 import '../mobile_add/ad_container.dart';
 import 'cut_and_flip_widget.dart';
 
 class CutAndFlipAd extends ConsumerWidget {
   CutAndFlipAd({
-    Key? key,
+    super.key,
     required this.child,
     this.adHeight,
     this.adDelay = const Duration(seconds: 2),
     this.adDuration = const Duration(seconds: 5),
     this.cutDuration = const Duration(seconds: 2),
     this.flipDuration = const Duration(seconds: 2),
-  }) : super(key: key);
+  });
 
   final Logger log = Logger('FlipAd');
   final Widget child;

@@ -10,7 +10,7 @@ import '../widget/one_call_weather_app_bar.dart';
 import '../widget/one_call_weather_widget.dart';
 
 class OneCallWeatherPage extends ConsumerWidget {
-  const OneCallWeatherPage({Key? key, required this.city, required this.weather}) : super(key: key);
+  const OneCallWeatherPage({super.key, required this.city, required this.weather});
 
   final City city;
   final Weather weather;

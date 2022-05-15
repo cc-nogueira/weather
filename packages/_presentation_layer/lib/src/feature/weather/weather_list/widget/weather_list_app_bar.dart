@@ -4,7 +4,7 @@ import '../../../settings/widget/settings_app_bar.dart';
 import 'order_dropdown.dart';
 
 class WeatherListAppBar extends SettingsAppBar {
-  WeatherListAppBar({Key? key}) : super(key: key);
+  WeatherListAppBar({super.key});
 
   @override
   Widget get title => Row(

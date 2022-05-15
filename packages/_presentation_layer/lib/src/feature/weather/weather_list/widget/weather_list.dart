@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'weather_tile.dart';
 
 class WeatherList extends StatelessWidget {
-  const WeatherList({Key? key, required this.read, required this.cities}) : super(key: key);
+  const WeatherList({super.key, required this.read, required this.cities});
 
   final Reader read;
   final List<City> cities;
@@ -30,7 +30,7 @@ class WeatherList extends StatelessWidget {
 }
 
 class _SortedWeatherList extends ConsumerWidget {
-  const _SortedWeatherList({Key? key, required this.tiles}) : super(key: key);
+  const _SortedWeatherList({required this.tiles});
 
   final List<WeatherTile> tiles;
 
@@ -68,7 +68,7 @@ class _SortedWeatherList extends ConsumerWidget {
 }
 
 class _WeatherList extends ConsumerWidget {
-  const _WeatherList({Key? key, required this.tiles}) : super(key: key);
+  const _WeatherList({required this.tiles});
 
   final List<WeatherTile> tiles;
 

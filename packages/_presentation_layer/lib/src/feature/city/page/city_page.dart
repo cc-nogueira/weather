@@ -6,7 +6,8 @@ import '../widget/city_form.dart';
 import '../widget/city_search.dart';
 
 class CityPage extends ConsumerWidget {
-  CityPage({Key? key}) : super(key: key);
+  CityPage({super.key});
+
   final _formCityProvider = StateProvider((ref) => const City());
   final _searchCityProvider = StateProvider((ref) => const City());
   final _formKey = GlobalKey<FormState>();

@@ -9,7 +9,7 @@ import 'scale_chart.dart';
 import 'scale_widget.dart';
 
 class RainScaleWidget extends ScaleWidget with RainMixin {
-  const RainScaleWidget({Key? key}) : super(key: key);
+  const RainScaleWidget({super.key});
 
   @override
   final chartName = 'Rain';
@@ -22,7 +22,7 @@ class RainScaleWidget extends ScaleWidget with RainMixin {
 }
 
 class RainScaleChart extends ConsumerWidget {
-  const RainScaleChart({Key? key, this.height}) : super(key: key);
+  const RainScaleChart({super.key, this.height});
 
   final double? height;
 
@@ -34,8 +34,7 @@ class RainScaleChart extends ConsumerWidget {
 }
 
 class _RainScaleChart extends IntensityScaleChart<Speed> with RainMixin {
-  const _RainScaleChart({Key? key, required Unit<Speed> unit, double? height})
-      : super(key: key, height: height, unit: unit);
+  const _RainScaleChart({required super.unit, super.height});
 
   @override
   final chartName = 'Rain';

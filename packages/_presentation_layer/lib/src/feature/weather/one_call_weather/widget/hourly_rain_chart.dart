@@ -13,13 +13,13 @@ import 'hourly_chart.dart';
 
 class HourlyRainChart extends ConsumerWidget {
   const HourlyRainChart({
-    Key? key,
+    super.key,
     required this.weather,
     required this.stats,
     this.height,
     this.margin,
     this.padding,
-  }) : super(key: key);
+  });
 
   final OneCallWeather weather;
   final OneCallWeatherStats stats;
@@ -42,21 +42,14 @@ class HourlyRainChart extends ConsumerWidget {
 
 class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, TemperatureMixin {
   const HourlyRainChartChart({
-    Key? key,
-    required OneCallWeather weather,
-    required OneCallWeatherStats stats,
+    super.key,
+    required super.weather,
+    required super.stats,
     required this.unit,
-    double? height,
-    EdgeInsets? margin,
-    EdgeInsets? padding,
-  }) : super(
-          key: key,
-          weather: weather,
-          stats: stats,
-          height: height,
-          margin: margin,
-          padding: padding,
-        );
+    super.height,
+    super.margin,
+    super.padding,
+  });
 
   final Unit<Speed> unit;
 

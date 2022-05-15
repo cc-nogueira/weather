@@ -9,7 +9,7 @@ import 'scale_chart.dart';
 import 'scale_widget.dart';
 
 class SnowScaleWidget extends ScaleWidget with SnowMixin {
-  const SnowScaleWidget({Key? key}) : super(key: key);
+  const SnowScaleWidget({super.key});
 
   @override
   final chartName = 'Snow';
@@ -34,8 +34,7 @@ class SnowScaleChart extends ConsumerWidget {
 }
 
 class _SnowScaleChart extends IntensityScaleChart<Speed> with SnowMixin {
-  const _SnowScaleChart({Key? key, required Unit<Speed> unit, double? height})
-      : super(key: key, height: height, unit: unit);
+  const _SnowScaleChart({required super.unit, super.height});
 
   @override
   final chartName = 'Snow';

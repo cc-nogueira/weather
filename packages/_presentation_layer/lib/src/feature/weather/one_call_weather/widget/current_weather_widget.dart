@@ -8,8 +8,7 @@ import '../../widget/weather_icons.dart';
 import '../../widget/wind_mixin.dart';
 
 class CurrentWeatherWidget extends ConsumerWidget {
-  const CurrentWeatherWidget({Key? key, required this.city, required this.initialWeather})
-      : super(key: key);
+  const CurrentWeatherWidget({super.key, required this.city, required this.initialWeather});
 
   final City city;
   final Weather initialWeather;
@@ -25,10 +24,7 @@ class CurrentWeatherWidget extends ConsumerWidget {
 }
 
 class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMixin {
-  const _CurrentWeatherWidget({
-    Key? key,
-    required this.weather,
-  }) : super(key: key);
+  const _CurrentWeatherWidget({required this.weather});
 
   final Weather weather;
 

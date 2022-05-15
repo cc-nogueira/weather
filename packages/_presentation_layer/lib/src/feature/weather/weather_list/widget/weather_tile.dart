@@ -29,11 +29,7 @@ class TemperatureNotifier extends StateNotifier<Celcius?> {
 }
 
 class WeatherTile extends ConsumerWidget {
-  WeatherTile({
-    Key? key,
-    required this.city,
-    required this.onRemove,
-  }) : super(key: key);
+  WeatherTile({super.key, required this.city, required this.onRemove});
 
   final City city;
   final VoidCallback onRemove;
@@ -111,11 +107,10 @@ class WeatherTile extends ConsumerWidget {
 
 abstract class _WeatherTileBase extends StatelessWidget {
   const _WeatherTileBase({
-    Key? key,
     required this.city,
     required this.onRemove,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final City city;
   final VoidCallback onRemove;
@@ -169,12 +164,7 @@ abstract class _WeatherTileBase extends StatelessWidget {
 }
 
 class _WeatherLoadingTile extends _WeatherTileBase {
-  const _WeatherLoadingTile({
-    Key? key,
-    required City city,
-    required VoidCallback onRemove,
-    required VoidCallback onTap,
-  }) : super(key: key, city: city, onRemove: onRemove, onTap: onTap);
+  const _WeatherLoadingTile({required super.city, required super.onRemove, required super.onTap});
 
   @override
   Widget trailing(BuildContext context) => loadingIndicator;
@@ -184,12 +174,7 @@ class _WeatherLoadingTile extends _WeatherTileBase {
 }
 
 class _WeatherErrorTile extends _WeatherTileBase {
-  const _WeatherErrorTile({
-    Key? key,
-    required City city,
-    required VoidCallback onRemove,
-    required VoidCallback onTap,
-  }) : super(key: key, city: city, onRemove: onRemove, onTap: onTap);
+  const _WeatherErrorTile({required super.city, required super.onRemove, required super.onTap});
 
   @override
   Widget trailing(BuildContext context) => WeatherIconHero(city: city, weatherCode: -1, size: 60);
@@ -201,15 +186,14 @@ class _WeatherErrorTile extends _WeatherTileBase {
 class _WeatherTile extends _WeatherTileBase
     with ColorRangeMixin, WeatherMixin, WindMixin, TemperatureMixin {
   const _WeatherTile({
-    Key? key,
-    required City city,
-    required VoidCallback onRemove,
-    required VoidCallback onTap,
+    required super.city,
+    required super.onRemove,
+    required super.onTap,
     required this.weather,
     required this.isRefreshing,
     required this.temperatureUnit,
     required this.windSpeedUnit,
-  }) : super(key: key, city: city, onRemove: onRemove, onTap: onTap);
+  });
 
   final Weather weather;
   final bool isRefreshing;

@@ -3,24 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../widget/weather_mixin.dart';
-import '../helper/one_call_weather_stats.dart';
 import 'hourly_chart.dart';
 
 class HourlyWeatherChart extends HourlyChart with WeatherMixin {
   const HourlyWeatherChart({
-    Key? key,
-    required OneCallWeather weather,
-    required OneCallWeatherStats stats,
-    EdgeInsets? margin,
-    EdgeInsets? padding,
-  }) : super(
-          key: key,
-          weather: weather,
-          stats: stats,
-          height: 120,
-          margin: margin,
-          padding: padding,
-        );
+    super.key,
+    required super.weather,
+    required super.stats,
+    super.margin,
+    super.padding,
+  }) : super(height: 120);
 
   @override
   Widget? chartTitle(BuildContext context) =>

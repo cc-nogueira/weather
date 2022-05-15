@@ -4,11 +4,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CombineTemperatureToRainAndSnowSwitch extends ConsumerWidget {
   const CombineTemperatureToRainAndSnowSwitch({
-    Key? key,
+    super.key,
     this.padding,
     this.iconSize,
     this.changeCallback,
-  }) : super(key: key);
+  });
 
   final double? iconSize;
   final EdgeInsets? padding;

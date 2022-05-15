@@ -7,7 +7,7 @@ enum Scale {
 }
 
 class ChartScaleDialog extends StatelessWidget {
-  const ChartScaleDialog(this.scale, {Key? key}) : super(key: key);
+  const ChartScaleDialog(this.scale, {super.key});
 
   final Scale scale;
 

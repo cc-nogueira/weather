@@ -19,8 +19,9 @@ class PreferencesWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final duration = ref.watch(preferencesPanelAnimationDurationProvider);
+    final curve = ref.watch(preferencesPanelAnimationCurve);
     final controller = useAnimationController(duration: duration);
-    final animation = ref.watch(preferencesPanelAnimationProvider(controller));
+    final animation = CurvedAnimation(parent: controller, curve: curve);
 
     final show = ref.watch(showPreferencesPanelProvider);
     if (show) {

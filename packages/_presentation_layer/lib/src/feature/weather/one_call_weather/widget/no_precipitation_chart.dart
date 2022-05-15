@@ -5,25 +5,17 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/rain_mixin.dart';
 import '../../widget/temperature_mixin.dart';
-import '../helper/one_call_weather_stats.dart';
 import 'hourly_chart.dart';
 
 class NoPrecipitationChart extends HourlyChart with ColorRangeMixin, RainMixin, TemperatureMixin {
   const NoPrecipitationChart({
-    Key? key,
-    required OneCallWeather weather,
-    required OneCallWeatherStats stats,
-    double? height,
-    EdgeInsets? margin,
-    EdgeInsets? padding,
-  }) : super(
-          key: key,
-          weather: weather,
-          stats: stats,
-          height: height,
-          margin: margin,
-          padding: padding,
-        );
+    super.key,
+    required super.weather,
+    required super.stats,
+    super.height,
+    super.margin,
+    super.padding,
+  });
 
   @override
   Widget? chartTitle(BuildContext context) {

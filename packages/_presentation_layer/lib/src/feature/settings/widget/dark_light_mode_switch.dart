@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DarkLightModeSwitch extends ConsumerWidget {
-  const DarkLightModeSwitch({
-    Key? key,
-    this.padding,
-    this.iconSize,
-    this.changeCallback,
-  }) : super(key: key);
+  const DarkLightModeSwitch({super.key, this.padding, this.iconSize, this.changeCallback});
 
   final double? iconSize;
   final EdgeInsets? padding;

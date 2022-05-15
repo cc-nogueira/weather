@@ -5,8 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 typedef CityCallback = void Function(City city);
 
 class CitySearch extends ConsumerWidget {
-  const CitySearch({Key? key, required this.cityProvider, required this.onCitySelected})
-      : super(key: key);
+  const CitySearch({super.key, required this.cityProvider, required this.onCitySelected});
 
   final StateProvider<City> cityProvider;
   final CityCallback onCitySelected;

@@ -7,8 +7,7 @@ import 'objectbox_repository.dart';
 
 class ObjectboxPreferencesRepository extends ObjectboxRepository<Preference, PreferenceModel>
     implements PreferencesRepository {
-  ObjectboxPreferencesRepository({required Box<PreferenceModel> box})
-      : super(box: box, mapper: const PreferenceMapper());
+  ObjectboxPreferencesRepository({required super.box}) : super(mapper: const PreferenceMapper());
 
   @override
   get idProperty => PreferenceModel_.id;

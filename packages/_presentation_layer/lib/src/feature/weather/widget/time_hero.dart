@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../common/helper/hero_flight_shuttle_builder.dart';
 
 class TimeHero extends ConsumerWidget {
-  const TimeHero(this.city, {Key? key, this.color, this.fontSize}) : super(key: key);
+  const TimeHero(this.city, {super.key, this.color, this.fontSize});
 
   final City city;
   final Color? color;
@@ -29,12 +29,7 @@ class TimeHero extends ConsumerWidget {
 }
 
 class _TimeHero extends ConsumerWidget {
-  const _TimeHero({
-    Key? key,
-    required this.city,
-    required this.timeZone,
-    required this.style,
-  }) : super(key: key);
+  const _TimeHero({required this.city, required this.timeZone, required this.style});
 
   final City city;
   final TimeZone timeZone;

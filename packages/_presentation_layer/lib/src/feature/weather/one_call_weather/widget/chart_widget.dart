@@ -3,15 +3,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 abstract class ChartWidget extends ConsumerWidget {
   const ChartWidget({
-    Key? key,
+    super.key,
     double? height,
     EdgeInsets? margin,
     EdgeInsets? padding,
   })  : height = height ?? 200,
         margin = const EdgeInsets.symmetric(vertical: 4.0),
         padding = const EdgeInsets.all(10.0),
-        backgroundColor = Colors.black87,
-        super(key: key);
+        backgroundColor = Colors.black87;
 
   final double height;
   final EdgeInsets margin;

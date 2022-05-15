@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdInRowContainer extends StatefulWidget {
-  const AdInRowContainer({Key? key, required this.ad, this.height}) : super(key: key);
+  const AdInRowContainer({super.key, required this.ad, this.height});
 
   static const messages = ['Bolsoringa', 'Ta OK?', 'Bonossauro'];
   static final rand = Random(DateTime.now().millisecondsSinceEpoch);

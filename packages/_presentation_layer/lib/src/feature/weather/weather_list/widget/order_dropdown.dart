@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderDropdown extends ConsumerWidget {
-  const OrderDropdown({Key? key}) : super(key: key);
+  const OrderDropdown({super.key});
 
   final orderOptions = const [
     MapEntry('by name', WeatherOrder.byName),

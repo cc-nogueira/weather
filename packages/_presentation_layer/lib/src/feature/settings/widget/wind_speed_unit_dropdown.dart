@@ -6,7 +6,7 @@ import 'package:qty/qty.dart';
 import 'unit_dropdown.dart';
 
 class WindSpeedUnitDropdown extends UnitDropdown<Speed> {
-  const WindSpeedUnitDropdown({Key? key, this.changeCallback}) : super(key: key);
+  const WindSpeedUnitDropdown({super.key, this.changeCallback});
 
   final VoidCallback? changeCallback;
 

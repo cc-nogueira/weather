@@ -6,8 +6,7 @@ import '../../weather/one_call_weather/widget/chart_widget.dart';
 import '../../weather/widget/color_range_mixin.dart';
 
 abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget with ColorRangeMixin {
-  const ScaleChart({Key? key, double? height, required this.unit})
-      : super(key: key, height: height);
+  const ScaleChart({super.key, super.height, required this.unit});
 
   final Unit<T> unit;
 
@@ -68,8 +67,7 @@ abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget wit
 }
 
 abstract class IntensityScaleChart<T extends PhysicalProperty<T>> extends ScaleChart<T> {
-  const IntensityScaleChart({Key? key, double? height, required Unit<T> unit})
-      : super(key: key, height: height, unit: unit);
+  const IntensityScaleChart({super.key, super.height, required super.unit});
 
   Map<String, List<double>> get intensityMap;
 

@@ -6,7 +6,7 @@ import 'package:qty/qty.dart';
 import 'unit_dropdown.dart';
 
 class PrecipitationUnitDropdown extends UnitDropdown<Speed> {
-  const PrecipitationUnitDropdown({Key? key, this.changeCallback}) : super(key: key);
+  const PrecipitationUnitDropdown({super.key, this.changeCallback});
 
   final VoidCallback? changeCallback;
 
