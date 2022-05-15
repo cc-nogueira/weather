@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class AdInRowContainer extends StatelessWidget {
+class AdInRowContainer extends StatefulWidget {
   const AdInRowContainer({Key? key, required this.ad, this.height}) : super(key: key);
 
   static const messages = ['Bolsoringa', 'Ta OK?', 'Bonossauro'];
@@ -12,6 +12,25 @@ class AdInRowContainer extends StatelessWidget {
 
   final BannerAd ad;
   final double? height;
+
+  @override
+  State<AdInRowContainer> createState() => _AdInRowContainerState();
+}
+
+class _AdInRowContainerState extends State<AdInRowContainer> {
+  @override
+  void didUpdateWidget(covariant AdInRowContainer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget != widget) {
+      oldWidget.ad.dispose();
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.ad.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +42,10 @@ class AdInRowContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            width: ad.size.width.toDouble(),
-            height: height ?? ad.size.height.toDouble(),
+            width: widget.ad.size.width.toDouble(),
+            height: widget.height ?? widget.ad.size.height.toDouble(),
             child: isMobile
-                ? AdWidget(ad: ad)
+                ? AdWidget(ad: widget.ad)
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,7 +66,8 @@ class AdInRowContainer extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
                           child: FittedBox(
                             child: Text(
-                              messages[rand.nextInt(messages.length)],
+                              AdInRowContainer.messages[
+                                  AdInRowContainer.rand.nextInt(AdInRowContainer.messages.length)],
                               style: const TextStyle(
                                 fontSize: 40.0,
                                 fontWeight: FontWeight.w700,
@@ -65,8 +85,4 @@ class AdInRowContainer extends StatelessWidget {
       ),
     );
   }
-
-  void dispose() => ad.dispose();
-
-  Future<void> load() => ad.load();
 }

@@ -34,9 +34,7 @@ class AnimatedBorderPainter extends CustomPainter {
   final AnimationDirection animationDirection;
   final bool dissolveOnReverse;
 
-  final isInit = [false];
-
-  late final Path _originalPath;
+  Path? _originalPath;
   late final double _totalLength;
   late final Paint _paint;
   late final Paint _backPaint;
@@ -44,25 +42,26 @@ class AnimatedBorderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (animation.value == 0.0) {
-      _init(size);
       return;
-    } else if (animation.value == 1.0) {
-      canvas.drawPath(_originalPath, _paint);
+    }
+    _init(size);
+    if (animation.value == 1.0) {
+      canvas.drawPath(_originalPath!, _paint);
     } else if (animation.status == AnimationStatus.forward || !dissolveOnReverse) {
       final currentPath = _createAnimatedPath();
       canvas.drawPath(currentPath, _paint);
     } else if (animation.status == AnimationStatus.reverse && dissolveOnReverse) {
       _dissolveBackPaint();
-      canvas.drawPath(_originalPath, _backPaint);
+      canvas.drawPath(_originalPath!, _backPaint);
     }
   }
 
   void _init(Size size) {
-    if (!isInit[0]) {
+    if (_originalPath == null) {
       _originalPath = _createOriginalPath(size);
 
       // ComputeMetrics can only be iterated once!
-      _totalLength = _originalPath
+      _totalLength = _originalPath!
           .computeMetrics()
           .fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
 
@@ -75,8 +74,6 @@ class AnimatedBorderPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth
         ..color = strokeColor;
-
-      isInit[0] = true;
     }
   }
 
@@ -169,8 +166,8 @@ class AnimatedBorderPainter extends CustomPainter {
     final path = Path();
 
     final metricsIterator = animationDirection == AnimationDirection.clockwise
-        ? _originalPath.computeMetrics().iterator
-        : _originalPath.computeMetrics().toList().reversed.iterator;
+        ? _originalPath!.computeMetrics().iterator
+        : _originalPath!.computeMetrics().toList().reversed.iterator;
 
     while (metricsIterator.moveNext()) {
       final metric = metricsIterator.current;

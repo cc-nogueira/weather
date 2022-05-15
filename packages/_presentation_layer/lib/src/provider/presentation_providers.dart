@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../common/helper/theme_builder.dart';
-import '../common/mobile_add/ad_container.dart';
 
 final showPreferencesPanelProvider = StateProvider((_) => false);
 
@@ -25,10 +24,3 @@ final themeProvider = Provider((ref) {
   }
   return ref.watch(darkThemeProvider);
 });
-
-final adAutoReleaseProvider = Provider.autoDispose.family<AdInRowContainer, AdInRowContainer>(
-  (ref, adContainer) {
-    ref.onDispose(() => adContainer.dispose());
-    return adContainer;
-  },
-);

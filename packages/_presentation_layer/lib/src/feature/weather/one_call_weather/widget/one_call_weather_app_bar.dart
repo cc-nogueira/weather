@@ -4,7 +4,7 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../common/widget/flip_widget.dart';
+import '../../../../common/widget/cut_and_flip_ad.dart';
 import '../../../settings/widget/preferences_button.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_gradient_box_hero.dart';
@@ -84,7 +84,7 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
         Padding(
           padding: EdgeInsets.only(top: topPadding, left: 8, right: 8, bottom: 8),
           child: Center(
-            child: FlipAd(
+            child: CutAndFlipAd(
               child: _TimeAndWeatherBar(
                 city: city,
                 weather: weather,
