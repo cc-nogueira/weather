@@ -10,11 +10,11 @@ import 'package:window_size/window_size.dart';
 
 void main() {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+  if (Platform.isAndroid || Platform.isIOS) {
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  } else {
     setWindowMaxSize(const Size(640, -1));
     setWindowMinSize(const Size(540, 700));
-  } else {
-    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   }
   runApp(
     ProviderScope(
