@@ -136,8 +136,8 @@ class MobileAdState extends AdState {
           ? 'ca-app-pub-3940256099942544/6300978111'
           : 'ca-app-pub-3940256099942544/2934735716'
       : Platform.isAndroid
-          ? 'ca-app-pub-1549146349472886~6494206645'
-          : 'ca-app-pub-1549146349472886~3460849195';
+          ? 'ca-app-pub-1549146349472886/8359582968'
+          : 'ca-app-pub-1549146349472886/1227198405';
 
   @override
   BannerAd createBannerAd({
