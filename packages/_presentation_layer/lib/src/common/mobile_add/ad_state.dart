@@ -1,7 +1,7 @@
-import 'dart:io';
-
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logging/logging.dart';
+
+import 'ad_unit_ids.dart';
 
 class FakeBannerAd implements BannerAd {
   FakeBannerAd({
@@ -121,9 +121,10 @@ class FakeAdState extends AdState {
 }
 
 class MobileAdState extends AdState {
-  MobileAdState({required this.useTestAdUnit});
+  MobileAdState({required this.adUnitIds, required this.useTestAdUnit});
 
   final bool useTestAdUnit;
+  final AdUnitIds adUnitIds;
 
   @override
   Future<InitializationStatus> init() async {
@@ -131,13 +132,7 @@ class MobileAdState extends AdState {
     return initializationStatus;
   }
 
-  String get bannerAdUnitId => useTestAdUnit
-      ? Platform.isAndroid
-          ? 'ca-app-pub-3940256099942544/6300978111'
-          : 'ca-app-pub-3940256099942544/2934735716'
-      : Platform.isAndroid
-          ? 'ca-app-pub-1549146349472886/8359582968'
-          : 'ca-app-pub-1549146349472886/1227198405';
+  String get bannerAdUnitId => useTestAdUnit ? adUnitIds.bannerTestId : adUnitIds.bannerId;
 
   @override
   BannerAd createBannerAd({

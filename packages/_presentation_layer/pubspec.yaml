@@ -24,6 +24,7 @@ dependencies:
   hooks_riverpod: ^2.0.0-dev.7
   intl: ^0.17.0
   logging: ^1.0.2
+  meta: ^1.7.0
   qty: ^0.9.2
 
   syncfusion_flutter_charts: ^20.1.55
