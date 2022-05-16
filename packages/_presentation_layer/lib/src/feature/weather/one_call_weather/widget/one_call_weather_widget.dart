@@ -12,8 +12,9 @@ import 'hourly_snow_chart.dart';
 import 'hourly_temperature_chart.dart';
 import 'hourly_wind_chart.dart';
 import 'no_precipitation_chart.dart';
+import 'one_call_weather_refresh_mixin.dart';
 
-class OneCallWeatherWidget extends ConsumerWidget {
+class OneCallWeatherWidget extends ConsumerWidget with OneCallWeatherRefreshMixin {
   const OneCallWeatherWidget({super.key, required this.city, required this.oneCallWeather});
 
   final City city;
@@ -42,7 +43,7 @@ class OneCallWeatherWidget extends ConsumerWidget {
 
     final messenger = ScaffoldMessenger.of(context);
     return RefreshIndicator(
-      onRefresh: () => _refresh(ref, messenger),
+      onRefresh: () => refresh(ref, messenger, city.location!),
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: ListView(
@@ -81,18 +82,4 @@ class OneCallWeatherWidget extends ConsumerWidget {
           SizedBox(height: 20),
         ]),
       );
-
-  Future<void> _refresh(WidgetRef ref, ScaffoldMessengerState messenger) async {
-    const minRefreshInterval = WeatherUsecase.oneCallWeatherMinRefreshInterval;
-    final tuple = await ref.read(oneCallWeatherTupleByLocationProvider(city.location!).future);
-    if (DateTime.now().difference(tuple.item2) < minRefreshInterval) {
-      messenger.showSnackBar(SnackBar(
-          content: Text(
-              'Weather already refreshed in the last ${minRefreshInterval.inMinutes} minutes')));
-      return;
-    }
-
-    ref.invalidate(oneCallWeatherTupleByLocationProvider(city.location!));
-    ref.invalidate(oneCallWeatherByLocationAutoEvictProvider(city.location!));
-  }
 }

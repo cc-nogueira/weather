@@ -14,6 +14,7 @@ import '../../widget/time_hero.dart';
 import '../../widget/weather_conditions_hero.dart';
 import '../../widget/weather_mixin.dart';
 import '../../widget/weather_title_hero.dart';
+import 'one_call_weather_refresh_button.dart';
 
 class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const OneCallWeatherAppBar({
@@ -44,7 +45,7 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
   }
 }
 
-class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMixin {
+class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMixin {
   _WeatherAppBar({required this.city, required this.weather, required this.isRefreshing});
 
   final City city;
@@ -52,10 +53,13 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
   final bool isRefreshing;
 
   @override
-  Widget build(BuildContext context) => AppBar(
+  Widget build(BuildContext context, WidgetRef ref) => AppBar(
         foregroundColor: _foreColor(context),
         title: WeatherTitleHero(city: city, style: _titleStyle(context)),
-        actions: const [PreferencesButton()],
+        actions: [
+          if (!Platform.isAndroid && !Platform.isIOS) OneCallWeatherRefreshButton(city: city),
+          const PreferencesButton()
+        ],
         flexibleSpace: FlexibleSpaceBar(background: _background(context)),
       );
 
@@ -83,6 +87,7 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
           padding: EdgeInsets.only(top: topPadding, left: 8, right: 8, bottom: 8),
           child: Center(
             child: CutAndFlipAd(
+              startDistance: 65.0,
               child: _TimeAndWeatherBar(
                 city: city,
                 weather: weather,
