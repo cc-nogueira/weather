@@ -20,24 +20,28 @@ class AnimatedBorderPainter extends CustomPainter {
     this.strokeWidth = 2.0,
     this.strokeColor = Colors.black,
     this.radius = const Radius.circular(4.0),
-    this.startingPercentage = 0,
+    this.startDistancePercentage = 0,
+    this.startDistance = 0.0,
     this.animationDirection = AnimationDirection.clockwise,
     this.dissolveOnReverse = true,
-  }) : super(repaint: animation);
+  })  : assert(startDistancePercentage == 0 || startDistance == 0.0),
+        super(repaint: animation);
 
   final Animation<double> animation;
   final PathType pathType;
   final double strokeWidth;
   final Color strokeColor;
   final Radius radius;
-  final int startingPercentage;
+  final int startDistancePercentage;
+  final double startDistance;
   final AnimationDirection animationDirection;
   final bool dissolveOnReverse;
 
-  Path? _originalPath;
-  late final double _totalLength;
-  late final Paint _paint;
-  late final Paint _backPaint;
+  Size? _calculatedSize;
+  late Path _originalPath;
+  late double _totalLength;
+  late Paint _paint;
+  late Paint _backPaint;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -46,22 +50,23 @@ class AnimatedBorderPainter extends CustomPainter {
     }
     _init(size);
     if (animation.value == 1.0) {
-      canvas.drawPath(_originalPath!, _paint);
+      canvas.drawPath(_originalPath, _paint);
     } else if (animation.status == AnimationStatus.forward || !dissolveOnReverse) {
       final currentPath = _createAnimatedPath();
       canvas.drawPath(currentPath, _paint);
     } else if (animation.status == AnimationStatus.reverse && dissolveOnReverse) {
       _dissolveBackPaint();
-      canvas.drawPath(_originalPath!, _backPaint);
+      canvas.drawPath(_originalPath, _backPaint);
     }
   }
 
   void _init(Size size) {
-    if (_originalPath == null) {
+    if (_calculatedSize != size) {
+      _calculatedSize = size;
       _originalPath = _createOriginalPath(size);
 
       // ComputeMetrics can only be iterated once!
-      _totalLength = _originalPath!
+      _totalLength = _originalPath
           .computeMetrics()
           .fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
 
@@ -102,8 +107,11 @@ class AnimatedBorderPainter extends CustomPainter {
     final originalPath = Path()
       ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
       ..lineTo(0, -(strokeWidth / 2));
-    if (startingPercentage > 0 && startingPercentage < 100) {
+    if (startDistancePercentage > 0 && startDistancePercentage < 100) {
       return _createPathForStartingPercentage(originalPath, PathType.rect, size);
+    }
+    if (startDistance > 0) {
+      return _createPathForStartingLength(originalPath, PathType.rect, size);
     }
     return originalPath;
   }
@@ -111,16 +119,22 @@ class AnimatedBorderPainter extends CustomPainter {
   Path _createOriginalPathRRect(Size size) {
     final originalPath = Path()
       ..addRRect(RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), radius));
-    if (startingPercentage > 0 && startingPercentage < 100) {
+    if (startDistancePercentage > 0 && startDistancePercentage < 100) {
       return _createPathForStartingPercentage(originalPath, PathType.rRect);
+    }
+    if (startDistance > 0) {
+      return _createPathForStartingLength(originalPath, PathType.rRect);
     }
     return originalPath;
   }
 
   Path _createOriginalPathCircle(Size size) {
     final originalPath = Path()..addOval(Rect.fromLTWH(0, 0, size.width, size.height));
-    if (startingPercentage > 0 && startingPercentage < 100) {
+    if (startDistancePercentage > 0 && startDistancePercentage < 100) {
       return _createPathForStartingPercentage(originalPath, PathType.circle);
+    }
+    if (startDistance > 0) {
+      return _createPathForStartingLength(originalPath, PathType.circle);
     }
     return originalPath;
   }
@@ -128,15 +142,36 @@ class AnimatedBorderPainter extends CustomPainter {
   Path _createPathForStartingPercentage(Path originalPath, PathType pathType, [Size? size]) {
     // Assumes that original path consists of one subpath only
     final pathMetrics = originalPath.computeMetrics().first;
-    final pathCutoffPoint = (startingPercentage / 100) * pathMetrics.length;
+    final pathCutoffPoint = (startDistancePercentage / 100) * pathMetrics.length;
+
+    return _createPathForStartingFromCutoffPoint(pathMetrics, pathCutoffPoint, pathType, size);
+  }
+
+  Path _createPathForStartingLength(Path originalPath, PathType pathType, [Size? size]) {
+    // Assumes that original path consists of one subpath only
+    final pathMetrics = originalPath.computeMetrics().first;
+    if (startDistance >= pathMetrics.length) {
+      return originalPath;
+    }
+
+    return _createPathForStartingFromCutoffPoint(pathMetrics, startDistance, pathType, size);
+  }
+
+  Path _createPathForStartingFromCutoffPoint(
+      PathMetric pathMetrics, double pathCutoffPoint, PathType pathType,
+      [Size? size]) {
+    // Assumes that original path consists of one subpath only
     final firstSubPath = pathMetrics.extractPath(0, pathCutoffPoint);
     final secondSubPath = pathMetrics.extractPath(pathCutoffPoint, pathMetrics.length);
     if (pathType == PathType.rect) {
+      final percentage = startDistancePercentage > 0
+          ? startDistancePercentage
+          : (startDistance / pathMetrics.length * 100.0).round();
       final path = Path()
         ..addPath(secondSubPath, Offset.zero)
         ..lineTo(0, -(strokeWidth / 2))
         ..addPath(firstSubPath, Offset.zero);
-      switch (startingPercentage) {
+      switch (percentage) {
         case 25:
           path.lineTo(size!.width + strokeWidth / 2, 0);
           break;
@@ -166,8 +201,8 @@ class AnimatedBorderPainter extends CustomPainter {
     final path = Path();
 
     final metricsIterator = animationDirection == AnimationDirection.clockwise
-        ? _originalPath!.computeMetrics().iterator
-        : _originalPath!.computeMetrics().toList().reversed.iterator;
+        ? _originalPath.computeMetrics().iterator
+        : _originalPath.computeMetrics().toList().reversed.iterator;
 
     while (metricsIterator.moveNext()) {
       final metric = metricsIterator.current;

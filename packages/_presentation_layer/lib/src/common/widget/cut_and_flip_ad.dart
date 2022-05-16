@@ -12,10 +12,11 @@ class CutAndFlipAd extends ConsumerWidget {
     super.key,
     required this.child,
     this.adHeight,
-    this.adDelay = const Duration(seconds: 2),
+    this.adDelay = const Duration(seconds: 1),
     this.adDuration = const Duration(seconds: 5),
     this.cutDuration = const Duration(seconds: 2),
     this.flipDuration = const Duration(seconds: 2),
+    this.startDistance,
   });
 
   final Logger log = Logger('FlipAd');
@@ -25,6 +26,7 @@ class CutAndFlipAd extends ConsumerWidget {
   final Duration adDuration;
   final Duration cutDuration;
   final Duration flipDuration;
+  final double? startDistance;
   late final _flipProvider = StateProvider<Widget?>((_) => null);
 
   @override
@@ -38,6 +40,7 @@ class CutAndFlipAd extends ConsumerWidget {
       cutDuration: cutDuration,
       flipDuration: flipDuration,
       waitDuration: adDuration,
+      startDistance: startDistance,
       onFlipBackFinished: () => _onflipFinished(ref.read),
       perspectiveEffect: 0.002,
     );

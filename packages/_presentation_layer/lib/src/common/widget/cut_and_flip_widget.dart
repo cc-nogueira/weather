@@ -15,6 +15,7 @@ class CutAndFlipWidget extends ConsumerWidget {
     required this.cutDuration,
     required this.flipDuration,
     required this.waitDuration,
+    this.startDistance,
     this.onFlipBackFinished,
     this.cutCurve,
     this.flipCurve,
@@ -30,6 +31,7 @@ class CutAndFlipWidget extends ConsumerWidget {
   final Duration cutDuration;
   final Duration flipDuration;
   final Duration waitDuration;
+  final double? startDistance;
   final Curve? cutCurve;
   final Curve? flipCurve;
   final Color? cutColor;
@@ -49,6 +51,7 @@ class CutAndFlipWidget extends ConsumerWidget {
       cutDuration: cutDuration,
       flipDuration: flipDuration,
       waitDuration: waitDuration,
+      startDistance: startDistance,
       cutColor: cutColor ?? Theme.of(context).colorScheme.onSurface,
       onFlipBackFinished: onFlipBackFinished,
       cutCurve: cutCurve,
@@ -68,6 +71,7 @@ class _CutAndFlipWidget extends StatefulWidget {
     required this.flipDuration,
     required this.waitDuration,
     required this.cutColor,
+    this.startDistance,
     this.onFlipBackFinished,
     this.cutCurve,
     this.flipCurve,
@@ -82,6 +86,7 @@ class _CutAndFlipWidget extends StatefulWidget {
   final Duration flipDuration;
   final Duration waitDuration;
   final Color cutColor;
+  final double? startDistance;
   final VoidCallback? onFlipBackFinished;
   final Curve? cutCurve;
   final Curve? flipCurve;
@@ -180,6 +185,7 @@ class FlipWidgetState extends State<_CutAndFlipWidget> with SingleTickerProvider
           animation: Tween(begin: 0.0, end: 1.0).animate(curvedAnimation),
           pathType: PathType.rRect,
           strokeColor: color,
+          startDistance: widget.startDistance ?? 0.0,
         ),
         child: child,
       );
