@@ -124,8 +124,8 @@ class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, 
 
   @override
   double? get primaryYAxisMaximum {
-    if (stats.hourlyStats.maxRain > 1.5) return null;
-    return _precipitationInChartUnit(2.0);
+    if (stats.hourlyStats.maxRain > 0.7 * rainScaleMinReference) return null;
+    return _precipitationInChartUnit(rainScaleMinReference.ceilToDouble());
   }
 
   @override

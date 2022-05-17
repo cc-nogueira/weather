@@ -29,6 +29,7 @@ class HourlyStats {
   bool hasSnow;
   double maxRain = 0.0;
   double maxSnow = 0.0;
+  double maxWind = 0.0;
   Celcius get minTemp => Celcius(_minTemp);
   Celcius get maxTemp => Celcius(_maxTemp);
 
@@ -44,6 +45,7 @@ class HourlyStats {
         final conditions = hourly.conditions;
         _minTemp = min(_minTemp, conditions.temperatures.temperature.value);
         _maxTemp = max(_maxTemp, conditions.temperatures.temperature.value);
+        maxWind = max(maxWind, hourly.conditions.wind.speed);
         maxRain = max(maxRain, hourly.conditions.rain1h ?? 0.0);
         maxSnow = max(maxSnow, hourly.conditions.snow1h ?? 0.0);
         hasRain = hasRain || (hourly.conditions.rain1h ?? 0.0) > 0.0;

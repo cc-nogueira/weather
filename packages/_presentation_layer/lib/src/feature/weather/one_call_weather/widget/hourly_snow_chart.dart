@@ -126,8 +126,8 @@ class HourlySnowChartChart extends HourlyChart with ColorRangeMixin, SnowMixin, 
 
   @override
   double? get primaryYAxisMaximum {
-    if (stats.hourlyStats.maxSnow > 0.7) return null;
-    return _precipitationInChartUnit(1.0);
+    if (stats.hourlyStats.maxSnow > 0.7 * snowScaleMinReference) return null;
+    return _precipitationInChartUnit(snowScaleMinReference.ceilToDouble());
   }
 
   @override

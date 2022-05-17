@@ -18,6 +18,8 @@ mixin SnowMixin on ColorRangeMixin {
 
   List<double> get snowRangeStops => _rangeStops;
 
+  double get snowScaleMinReference => 2.0;
+
   List<Color> snowColors() => rangeColors(_rangeStops, _colorStops);
 
   Color snowColor(double mmPerHour) => rangeColor(_colorStops, mmPerHour);

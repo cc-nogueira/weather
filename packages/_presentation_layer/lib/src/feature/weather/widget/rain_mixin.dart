@@ -18,6 +18,8 @@ mixin RainMixin on ColorRangeMixin {
 
   List<double> get rainRangeStops => _rangeStops;
 
+  double get rainScaleMinReference => 4.0;
+
   List<Color> rainColors() => rangeColors(_rangeStops, _colorStops);
 
   Color rainColor(double mmPerHour) => rangeColor(_colorStops, mmPerHour);

@@ -22,6 +22,8 @@ mixin WindMixin on ColorRangeMixin {
 
   List<double> get windRangeStops => _rangeStops;
 
+  double get windScaleMinReference => 4.0;
+
   List<Color> windColors() => rangeColors(_rangeStops, _colorStops);
 
   Color windColor(Wind wind) => rangeColor(_colorStops, wind.speed);

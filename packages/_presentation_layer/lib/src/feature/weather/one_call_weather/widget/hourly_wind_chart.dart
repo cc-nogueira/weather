@@ -94,7 +94,7 @@ class _HourlyWindChart extends HourlyChart with ColorRangeMixin, WindMixin {
         gradient: colorGrad,
         dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
         xValueMapper: (item, idx) => item.localShiftedDateTime,
-        yValueMapper: (item, _) => _windInChartUnit(item).amount,
+        yValueMapper: (item, _) => _windInChartUnit(item.conditions.wind.speed),
       ),
       SplineSeries<HourlyWeather, DateTime>(
         name: 'Wind',
@@ -103,7 +103,7 @@ class _HourlyWindChart extends HourlyChart with ColorRangeMixin, WindMixin {
         width: 3.0,
         dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
         xValueMapper: (item, idx) => item.localShiftedDateTime,
-        yValueMapper: (item, _) => _windInChartUnit(item).amount,
+        yValueMapper: (item, _) => _windInChartUnit(item.conditions.wind.speed),
       ),
       ScatterSeries<HourlyWeather, DateTime>(
         dataSource: seriesDataForAxisIntervals(data),
@@ -119,6 +119,12 @@ class _HourlyWindChart extends HourlyChart with ColorRangeMixin, WindMixin {
         ),
       ),
     ];
+  }
+
+  @override
+  double? get primaryYAxisMaximum {
+    if (stats.hourlyStats.maxWind > 0.7 * windScaleMinReference) return null;
+    return _windInChartUnit(windScaleMinReference.ceilToDouble());
   }
 
   @override
@@ -139,18 +145,18 @@ class _HourlyWindChart extends HourlyChart with ColorRangeMixin, WindMixin {
 
   Tuple2<double, double> _windRangeInChartUnit(List<HourlyWeather> data) {
     if (data.isEmpty) return const Tuple2(0.0, 0.0);
-    var minT = _windInChartUnit(data[0]).amount;
+    var minT = _windInChartUnit(data.first.conditions.wind.speed);
     var maxT = minT;
     for (var i = 1; i < data.length; ++i) {
-      final value = _windInChartUnit(data[i]).amount;
+      final value = _windInChartUnit(data[i].conditions.wind.speed);
       minT = min(minT, value);
       maxT = max(maxT, value);
     }
     return Tuple2(minT, maxT);
   }
 
-  Quantity<Speed> _windInChartUnit(HourlyWeather hourly) =>
-      hourly.conditions.wind.speedQuantity.convertTo(unit);
+  double _windInChartUnit(double dataValue) =>
+      Speed.metersPerSecond(dataValue).convertTo(unit).amount;
 
   LinearGradient _windColorGradient(List<HourlyWeather> data, Tuple2<double, double> windRange) {
     final topWind = min(
