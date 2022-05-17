@@ -65,10 +65,11 @@ class AnimatedBorderPainter extends CustomPainter {
       _calculatedSize = size;
       _originalPath = _createOriginalPath(size);
 
-      // ComputeMetrics can only be iterated once!
-      _totalLength = _originalPath
-          .computeMetrics()
-          .fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
+      final pathMetrics = animationDirection == AnimationDirection.clockwise
+          ? _originalPath.computeMetrics().toList()
+          : _originalPath.computeMetrics().toList().reversed.toList();
+
+      _onOriginalPathCreated(pathMetrics);
 
       _paint = Paint()
         ..style = PaintingStyle.stroke
@@ -80,6 +81,10 @@ class AnimatedBorderPainter extends CustomPainter {
         ..strokeWidth = strokeWidth
         ..color = strokeColor;
     }
+  }
+
+  void _onOriginalPathCreated(List<PathMetric> pathMetrics) {
+    _totalLength = pathMetrics.fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
   }
 
   void _dissolveBackPaint() {
@@ -158,8 +163,11 @@ class AnimatedBorderPainter extends CustomPainter {
   }
 
   Path _createPathForStartingFromCutoffPoint(
-      PathMetric pathMetrics, double pathCutoffPoint, PathType pathType,
-      [Size? size]) {
+    PathMetric pathMetrics,
+    double pathCutoffPoint,
+    PathType pathType, [
+    Size? size,
+  ]) {
     // Assumes that original path consists of one subpath only
     final firstSubPath = pathMetrics.extractPath(0, pathCutoffPoint);
     final secondSubPath = pathMetrics.extractPath(pathCutoffPoint, pathMetrics.length);
@@ -196,14 +204,13 @@ class AnimatedBorderPainter extends CustomPainter {
   }
 
   Path _extractPathUntilLength(double length) {
-    var currentLength = 0.0;
-
     final path = Path();
 
     final metricsIterator = animationDirection == AnimationDirection.clockwise
         ? _originalPath.computeMetrics().iterator
         : _originalPath.computeMetrics().toList().reversed.iterator;
 
+    var currentLength = 0.0;
     while (metricsIterator.moveNext()) {
       final metric = metricsIterator.current;
       final nextLength = currentLength + metric.length;
@@ -231,4 +238,69 @@ class AnimatedBorderPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class AnimatedBorderPainterWithCachedMetrics extends AnimatedBorderPainter {
+  AnimatedBorderPainterWithCachedMetrics({
+    required super.animation,
+    super.pathType,
+    super.strokeWidth,
+    super.strokeColor,
+    super.radius,
+    super.startDistancePercentage,
+    super.startDistance,
+    super.animationDirection,
+    super.dissolveOnReverse,
+  });
+
+  late List<PathMetric> _originalPathMetrics;
+  late List<Path> _originalPathSegments;
+
+  @override
+  void _onOriginalPathCreated(List<PathMetric> pathMetrics) {
+    super._onOriginalPathCreated(pathMetrics);
+
+    // cache metrics
+    _originalPathMetrics = pathMetrics;
+
+    // cache path segments
+    _originalPathSegments = <Path>[];
+    for (final metric in _originalPathMetrics) {
+      _originalPathSegments.add(metric.extractPath(0, metric.length));
+    }
+  }
+
+  @override
+  Path _extractPathUntilLength(double length) {
+    final path = Path();
+
+    final metricsIterator = _originalPathMetrics.iterator;
+
+    int segmentIndex = 0;
+    var currentLength = 0.0;
+    while (metricsIterator.moveNext()) {
+      final metric = metricsIterator.current;
+      final nextLength = currentLength + metric.length;
+      final isLastSegment = nextLength > length;
+
+      if (isLastSegment) {
+        final remainingLength = length - currentLength;
+        final pathSegment = animationDirection == AnimationDirection.clockwise
+            ? metric.extractPath(0.0, remainingLength)
+            : metric.extractPath(metric.length - remainingLength, metric.length);
+
+        path.addPath(pathSegment, Offset.zero);
+        break;
+      } else {
+        // There might be a more efficient way of extracting an entire path
+        final pathSegment = _originalPathSegments[segmentIndex];
+        path.addPath(pathSegment, Offset.zero);
+      }
+
+      currentLength = nextLength;
+      ++segmentIndex;
+    }
+
+    return path;
+  }
 }

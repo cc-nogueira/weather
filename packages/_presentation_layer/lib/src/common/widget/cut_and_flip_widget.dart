@@ -93,12 +93,12 @@ class _CutAndFlipWidget extends StatefulWidget {
   final double? perspectiveEffect;
 
   @override
-  FlipWidgetState createState() => FlipWidgetState();
+  CutFlipWidgetState createState() => CutFlipWidgetState();
 
   Duration get totalAnimationDuration => flipDuration + cutDuration + delayDuration;
 }
 
-class FlipWidgetState extends State<_CutAndFlipWidget> with SingleTickerProviderStateMixin {
+class CutFlipWidgetState extends State<_CutAndFlipWidget> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late CurvedAnimation cutAnimation;
   late CurvedAnimation flipAnimation;
@@ -167,21 +167,19 @@ class FlipWidgetState extends State<_CutAndFlipWidget> with SingleTickerProvider
   }
 
   @override
-  Widget build(BuildContext context) {
-    return _AnimatedFlipWidget(
-      listenable: _controller,
-      face: _animatedCutBoxWithFace(cutAnimation, widget.cutColor, widget.face),
-      flipFace: widget.flipFace,
-      flipDirection: VerticalDirection.down,
-      curvedAnimation: flipAnimation,
-      perspectiveEffect: widget.perspectiveEffect,
-    );
-  }
+  Widget build(BuildContext context) => _AnimatedFlipWidget(
+        listenable: _controller,
+        face: _animatedCutBoxWithFace(cutAnimation, widget.cutColor, widget.face),
+        flipFace: widget.flipFace,
+        flipDirection: VerticalDirection.down,
+        curvedAnimation: flipAnimation,
+        perspectiveEffect: widget.perspectiveEffect,
+      );
 
   CustomPaint _animatedCutBoxWithFace(
           Animation<double> curvedAnimation, Color color, Widget child) =>
       CustomPaint(
-        foregroundPainter: AnimatedBorderPainter(
+        foregroundPainter: AnimatedBorderPainterWithCachedMetrics(
           animation: Tween(begin: 0.0, end: 1.0).animate(curvedAnimation),
           pathType: PathType.rRect,
           strokeColor: color,

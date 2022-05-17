@@ -54,7 +54,7 @@ class _CityForm extends HookConsumerWidget {
           ),
           const SizedBox(width: 4.0),
           SizedBox(
-            width: 80,
+            width: 85,
             child: _formField(
               context,
               'Country',

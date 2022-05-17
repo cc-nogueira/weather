@@ -53,15 +53,17 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
   final bool isRefreshing;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => AppBar(
-        foregroundColor: _foreColor(context),
-        title: WeatherTitleHero(city: city, style: _titleStyle(context)),
-        actions: [
-          if (!Platform.isAndroid && !Platform.isIOS) OneCallWeatherRefreshButton(city: city),
-          const PreferencesButton()
-        ],
-        flexibleSpace: FlexibleSpaceBar(background: _background(context)),
-      );
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AppBar(
+      foregroundColor: _foreColor(context),
+      title: WeatherTitleHero(city: city, style: _titleStyle(context)),
+      actions: [
+        if (!Platform.isAndroid && !Platform.isIOS) OneCallWeatherRefreshButton(city: city),
+        const PreferencesButton()
+      ],
+      flexibleSpace: FlexibleSpaceBar(background: _background(context)),
+    );
+  }
 
   TextStyle _titleStyle(BuildContext context) {
     final theme = Theme.of(context);
@@ -87,7 +89,7 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
           padding: EdgeInsets.only(top: topPadding, left: 8, right: 8, bottom: 8),
           child: Center(
             child: CutAndFlipAd(
-              startDistance: 65.0,
+              startingCutLength: 65.0,
               child: _TimeAndWeatherBar(
                 city: city,
                 weather: weather,
