@@ -6,5 +6,6 @@ import 'package:_core_layer/core_layer.dart';
 class ServiceLayer extends AppLayer {
   const ServiceLayer();
 
-  static const String openWeatherAppId = '348adf1405cf4576a74d457e03c79596';
+  // TODO: Configure your OpenWeather key
+  static const String openWeatherAppId = '<your-OpenWeather-key>';
 }
