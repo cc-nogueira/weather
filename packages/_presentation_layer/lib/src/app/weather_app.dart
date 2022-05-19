@@ -3,9 +3,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../common/page/message_page.dart';
-import '../locallizations.dart';
+import '../l10n/generated/l10n.dart';
 import '../provider/presentation_providers.dart';
 import '../routes/routes.dart';
+// import '../translations.dart';
 
 /// Weather App is this application MaterialApp.
 ///
@@ -28,12 +29,12 @@ class WeatherApp extends ConsumerWidget {
   Widget _app(WidgetRef ref) => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ref.watch(themeProvider),
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.weather_list_page_title,
+        onGenerateTitle: (context) => Translations.of(context).weather_list_page_title,
         localizationsDelegates: const [
-          AppLocalizations.delegate,
+          Translations.delegate,
           ...GlobalMaterialLocalizations.delegates,
         ],
-        supportedLocales: L10n.locales,
+        supportedLocales: Translations.delegate.supportedLocales,
         onGenerateRoute: _routes.onGenerateRoute,
         initialRoute: Routes.home,
       );
@@ -41,12 +42,12 @@ class WeatherApp extends ConsumerWidget {
   Widget get _errorApp => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.weather_list_page_title,
+        onGenerateTitle: (context) => Translations.of(context).weather_list_page_title,
         localizationsDelegates: const [
-          AppLocalizations.delegate,
+          Translations.delegate,
           ...GlobalMaterialLocalizations.delegates,
         ],
-        supportedLocales: L10n.locales,
+        supportedLocales: Translations.delegate.supportedLocales,
         home: MessagePage(title: 'Error', message: error!.toString()),
       );
 }

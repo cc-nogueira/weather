@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../common/page/loading_page.dart';
 import '../../../../common/page/message_page.dart';
-import '../../../../locallizations.dart';
+import '../../../../l10n/generated/l10n.dart';
 import '../../../../routes/routes.dart';
 import '../../../settings/widget/preferences_widget.dart';
 import '../widget/weather_list.dart';
@@ -15,18 +15,18 @@ class WeatherListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localizations = AppLocalizations.of(context)!;
+    final translations = Translations.of(context);
     return ref.watch(watchAllCitiesProvider).when(
-          loading: LoadingPage.builder(localizations.weather_list_page_title),
+          loading: LoadingPage.builder(translations.weather_list_page_title),
           error: MessagePage.errorBuilder,
-          data: (cities) => _scaffold(context, ref.read, localizations, cities),
+          data: (cities) => _scaffold(context, ref.read, translations, cities),
         );
   }
 
   Widget _scaffold(
-          BuildContext context, Reader read, AppLocalizations localizations, List<City> cities) =>
+          BuildContext context, Reader read, Translations translations, List<City> cities) =>
       Scaffold(
-        appBar: WeatherListAppBar(title: localizations.weather_list_page_title),
+        appBar: WeatherListAppBar(title: translations.weather_list_page_title),
         body: _bodyStack(read, cities),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _addCity(context),

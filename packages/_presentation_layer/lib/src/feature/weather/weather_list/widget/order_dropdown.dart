@@ -2,20 +2,20 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../locallizations.dart';
+import '../../../../l10n/generated/l10n.dart';
 
 class OrderDropdown extends ConsumerWidget {
   const OrderDropdown({super.key});
 
-  List<MapEntry<String, WeatherOrder>> _orderOptions(AppLocalizations localizations) => [
-        MapEntry(localizations.weather_list_sort_by_name_option, WeatherOrder.byName),
-        MapEntry(localizations.weather_list_sort_by_temp_option, WeatherOrder.byTemp),
+  List<MapEntry<String, WeatherOrder>> _orderOptions(Translations translations) => [
+        MapEntry(translations.weather_list_sort_by_name_option, WeatherOrder.byName),
+        MapEntry(translations.weather_list_sort_by_temp_option, WeatherOrder.byTemp),
       ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localizations = AppLocalizations.of(context)!;
-    final options = _orderOptions(localizations);
+    final translations = Translations.of(context);
+    final options = _orderOptions(translations);
     final colors = Theme.of(context).colorScheme;
     final dropBg = colors.brightness == Brightness.light ? colors.primary : colors.surface;
     final value = ref.watch(weatherOrderProvider);
