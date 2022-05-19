@@ -62,6 +62,7 @@ class OpenWeatherClient {
     final uri = Uri.https('api.openweathermap.org', '/data/2.5/onecall', {
       'lat': location.latitude.toString(),
       'lon': location.longitude.toString(),
+      'exclude': 'minutely',
       'units': 'metric',
       'lang': language,
       'appid': appId,
