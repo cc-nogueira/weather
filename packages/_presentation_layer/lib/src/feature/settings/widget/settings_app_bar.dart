@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'preferences_button.dart';
 
 class SettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
-  SettingsAppBar({super.key, String title = 'Weather', double? height})
+  SettingsAppBar({super.key, required String title, double? height})
       : preferredSize = Size.fromHeight(height ?? kToolbarHeight),
         _title = title;
 
@@ -14,12 +14,12 @@ class SettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) => AppBar(
-        title: title,
+        title: title(context),
         actions: actions,
         flexibleSpace: flexibleSpace(context),
       );
 
-  Widget get title => Text(_title);
+  Widget title(BuildContext context) => Text(_title);
 
   List<Widget> get actions => const [PreferencesButton()];
 

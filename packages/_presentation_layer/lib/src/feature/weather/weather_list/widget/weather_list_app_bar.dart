@@ -4,14 +4,14 @@ import '../../../settings/widget/settings_app_bar.dart';
 import 'order_dropdown.dart';
 
 class WeatherListAppBar extends SettingsAppBar {
-  WeatherListAppBar({super.key});
+  WeatherListAppBar({super.key, required super.title});
 
   @override
-  Widget get title => Row(
+  Widget title(BuildContext context) => Row(
         textBaseline: TextBaseline.alphabetic,
         crossAxisAlignment: CrossAxisAlignment.baseline,
         children: [
-          super.title,
+          super.title(context),
           const SizedBox(width: 25),
           const OrderDropdown(),
         ],

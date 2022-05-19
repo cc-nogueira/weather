@@ -2,16 +2,20 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../locallizations.dart';
+
 class OrderDropdown extends ConsumerWidget {
   const OrderDropdown({super.key});
 
-  final orderOptions = const [
-    MapEntry('by name', WeatherOrder.byName),
-    MapEntry('by temp', WeatherOrder.byTemp),
-  ];
+  List<MapEntry<String, WeatherOrder>> _orderOptions(AppLocalizations localizations) => [
+        MapEntry(localizations.weather_list_sort_by_name_option, WeatherOrder.byName),
+        MapEntry(localizations.weather_list_sort_by_temp_option, WeatherOrder.byTemp),
+      ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final localizations = AppLocalizations.of(context)!;
+    final options = _orderOptions(localizations);
     final colors = Theme.of(context).colorScheme;
     final dropBg = colors.brightness == Brightness.light ? colors.primary : colors.surface;
     final value = ref.watch(weatherOrderProvider);
@@ -20,16 +24,17 @@ class OrderDropdown extends ConsumerWidget {
         iconEnabledColor: Colors.white,
         dropdownColor: dropBg,
         value: value,
-        items: _orderItems(value),
-        selectedItemBuilder: _selectedOrderItems,
+        items: _orderItems(value, options),
+        selectedItemBuilder: (context) => _selectedOrderItems(context, options),
         onChanged: (selection) => _onOrderSelected(selection, ref.read),
       ),
     );
   }
 
-  List<DropdownMenuItem<WeatherOrder>> _orderItems(WeatherOrder value) {
+  List<DropdownMenuItem<WeatherOrder>> _orderItems(
+      WeatherOrder value, List<MapEntry<String, WeatherOrder>> options) {
     const style = TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
-    return orderOptions.map((e) {
+    return options.map((e) {
       final text = Text(e.key, style: style);
       final child = e.value == value
           ? Row(children: [
@@ -42,9 +47,10 @@ class OrderDropdown extends ConsumerWidget {
     }).toList();
   }
 
-  List<Widget> _selectedOrderItems(BuildContext context) {
+  List<Widget> _selectedOrderItems(
+      BuildContext context, List<MapEntry<String, WeatherOrder>> options) {
     const style = TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
-    return orderOptions
+    return options
         .map(
           (e) => Center(
             child: Row(

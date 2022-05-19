@@ -1,0 +1,19 @@
+{
+  "@@locale": "en",
+  "add_city_page_title": "City",
+  "@add_city_page_title": {
+    "description": "Add city dialog title "
+  },
+  "weather_list_page_title": "Weather List",
+  "@weather_list_page_title": {
+    "description": "Weather List page title"
+  },
+  "weather_list_sort_by_name_option": "by Temp",
+  "@weather_list_sort_by_name_option": {
+    "description": "Option to sort tiles by name"
+  },
+  "weather_list_sort_by_temp_option": "by Name",
+  "@weather_list_sort_by_temp_option": {
+    "description": "Option to sort tiles by temperature"
+  }
+}
