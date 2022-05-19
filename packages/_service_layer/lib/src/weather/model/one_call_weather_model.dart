@@ -17,6 +17,7 @@ class OneCallWeatherModel with _$OneCallWeatherModel {
     @Default(CurrentModel()) CurrentModel current,
     @Default([]) List<HourlyModel> hourly,
     @Default([]) List<DailyModel> daily,
+    @Default([]) List<AlertModel> alerts,
   }) = _OneCallWeatherModel;
 
   factory OneCallWeatherModel.fromJson(Map<String, dynamic> json) =>
@@ -134,4 +135,18 @@ class DailyFeelsLike with _$DailyFeelsLike {
   }) = _DailyFeelsLike;
 
   factory DailyFeelsLike.fromJson(Map<String, dynamic> json) => _$DailyFeelsLikeFromJson(json);
+}
+
+@freezed
+class AlertModel with _$AlertModel {
+  const factory AlertModel({
+    @Default('') @JsonKey(name: 'sender_name') String senderName,
+    @Default('') String event,
+    @Default(0) int start,
+    @Default(0) int end,
+    @Default('') String description,
+    @Default([]) List<String> tags,
+  }) = _AlertModel;
+
+  factory AlertModel.fromJson(Map<String, dynamic> json) => _$AlertModelFromJson(json);
 }

@@ -4,13 +4,10 @@ class PoweredByWidget extends StatelessWidget {
   const PoweredByWidget({super.key});
 
   @override
-  Widget build(BuildContext context) => DecoratedBox(
-        decoration: const BoxDecoration(color: Colors.black87),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [PoweredByOpenWeather(), PoweredBySyncFusion()],
-        ),
+  Widget build(BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [PoweredByOpenWeather(), PoweredBySyncFusion()],
       );
 }
 

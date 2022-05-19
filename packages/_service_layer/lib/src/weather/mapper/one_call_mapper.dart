@@ -50,6 +50,7 @@ class OneCallMapper {
       weather: weather,
       daily: _mapDaily(model.daily, geo),
       hourly: _mapHourly(model.hourly, geo),
+      alerts: _mapAlerts(model.alerts, geo),
     );
   }
 
@@ -136,5 +137,22 @@ class OneCallMapper {
       list.add(daily);
     }
     return list;
+  }
+
+  List<Alert> _mapAlerts(List<AlertModel> alertModels, Geo geo) {
+    final alerts = <Alert>[];
+    for (final model in alertModels) {
+      final alert = Alert(
+        senderName: model.senderName,
+        event: model.event,
+        startMillis: model.start * 1000,
+        endMillis: model.end * 1000,
+        description: model.description,
+        tags: model.tags,
+        geo: geo,
+      );
+      alerts.add(alert);
+    }
+    return alerts;
   }
 }

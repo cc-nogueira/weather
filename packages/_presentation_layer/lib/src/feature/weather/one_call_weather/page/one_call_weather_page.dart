@@ -35,7 +35,7 @@ class OneCallWeatherPage extends ConsumerWidget {
   Widget _scaffold(BuildContext context, WidgetRef ref, bool isRefreshing, Widget body) {
     final theme = ref.watch(darkThemeProvider);
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: Colors.black,
       appBar: OneCallWeatherAppBar(city: city, initialWeather: weather, isRefreshing: isRefreshing),
       body: Theme(
           data: theme,

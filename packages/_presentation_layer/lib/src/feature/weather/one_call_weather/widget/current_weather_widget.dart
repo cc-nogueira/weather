@@ -86,28 +86,33 @@ class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMix
     ];
     final gridWidth = MediaQuery.of(context).size.width;
     const desiredHeight = 140;
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: gridWidth,
-              child: GridView.count(
-                childAspectRatio: gridWidth / desiredHeight,
-                shrinkWrap: true,
-                crossAxisCount: 3,
-                primary: false,
-                children: elements,
+    return Container(
+      color: theme.scaffoldBackgroundColor,
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: gridWidth,
+                child: GridView.count(
+                  childAspectRatio: gridWidth / desiredHeight,
+                  shrinkWrap: true,
+                  crossAxisCount: 3,
+                  primary: false,
+                  children: elements,
+                ),
               ),
-            ),
-          ],
-        ),
-        Container(
-          height: 12.0,
-          color: Theme.of(context).brightness == Brightness.light ? Colors.white54 : Colors.black26,
-        ),
-      ],
+            ],
+          ),
+          Container(
+            height: 12.0,
+            color:
+                Theme.of(context).brightness == Brightness.light ? Colors.white54 : Colors.black26,
+          ),
+        ],
+      ),
     );
   }
 

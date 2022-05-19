@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../widget/powered_by_widget.dart';
 import '../helper/one_call_weather_stats.dart';
+import 'alerts_widget.dart';
 import 'current_weather_widget.dart';
 import 'hourly_rain_and_temperature_chart.dart';
 import 'hourly_rain_chart.dart';
@@ -44,42 +45,40 @@ class OneCallWeatherWidget extends ConsumerWidget with OneCallWeatherRefreshMixi
     final messenger = ScaffoldMessenger.of(context);
     return RefreshIndicator(
       onRefresh: () => refresh(ref, messenger, city.location!),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: ListView(
-          children: [
-            CurrentWeatherWidget(
-              city: city,
-              initialWeather: oneCallWeather.weather,
-            ),
-            Container(height: 20, color: Colors.black87),
-            //HourlyWeatherChart(weather: oneCallWeather),
-            HourlyTemperatureChart(weather: oneCallWeather, stats: stats),
-            if (!hideRain)
-              combineTempToRainAndSnow
-                  ? HourlyRainAndTemperatureChart(weather: oneCallWeather, stats: stats)
-                  : HourlyRainChart(weather: oneCallWeather, stats: stats),
-            if (!hideSnow)
-              combineTempToRainAndSnow
-                  ? HourlySnowAndTemperatureChart(weather: oneCallWeather, stats: stats)
-                  : HourlySnowChart(weather: oneCallWeather, stats: stats),
-            if (noPrecipitation) NoPrecipitationChart(weather: oneCallWeather, stats: stats),
-            HourlyWindChart(weather: oneCallWeather, stats: stats),
-            _poweredByWidget,
-          ],
-        ),
+      child: ListView(
+        children: [
+          CurrentWeatherWidget(
+            city: city,
+            initialWeather: oneCallWeather.weather,
+          ),
+          Container(height: 12, color: Colors.black87),
+          if (oneCallWeather.alerts.isNotEmpty) AlertsWidget(weather: oneCallWeather),
+          Container(height: 8, color: Colors.black87),
+
+          //HourlyWeatherChart(weather: oneCallWeather),
+          HourlyTemperatureChart(weather: oneCallWeather, stats: stats),
+          if (!hideRain)
+            combineTempToRainAndSnow
+                ? HourlyRainAndTemperatureChart(weather: oneCallWeather, stats: stats)
+                : HourlyRainChart(weather: oneCallWeather, stats: stats),
+          if (!hideSnow)
+            combineTempToRainAndSnow
+                ? HourlySnowAndTemperatureChart(weather: oneCallWeather, stats: stats)
+                : HourlySnowChart(weather: oneCallWeather, stats: stats),
+          if (noPrecipitation) NoPrecipitationChart(weather: oneCallWeather, stats: stats),
+          HourlyWindChart(weather: oneCallWeather, stats: stats),
+          _poweredByWidget,
+        ],
       ),
     );
   }
 
-  Widget get _poweredByWidget => DecoratedBox(
-        decoration: const BoxDecoration(color: Colors.black87),
-        child: Column(children: const [
-          SizedBox(height: 40),
-          Divider(),
-          SizedBox(height: 20),
-          PoweredByWidget(),
-          SizedBox(height: 20),
-        ]),
-      );
+  Widget get _poweredByWidget {
+    return Container(
+      margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0, top: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      color: const Color(0xFF050505),
+      child: const PoweredByWidget(),
+    );
+  }
 }
