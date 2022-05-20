@@ -2,7 +2,7 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../l10n/generated/l10n.dart';
+import '../../../../l10n/translations.dart';
 
 class OrderDropdown extends ConsumerWidget {
   const OrderDropdown({super.key});
@@ -14,7 +14,7 @@ class OrderDropdown extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final translations = Translations.of(context);
+    final translations = Translations.of(context)!;
     final options = _orderOptions(translations);
     final colors = Theme.of(context).colorScheme;
     final dropBg = colors.brightness == Brightness.light ? colors.primary : colors.surface;

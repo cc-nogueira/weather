@@ -4,6 +4,56 @@
   "@add_city_page_title": {
     "description": "Add city dialog title "
   },
+  "error_page_title": "Error",
+  "@error_page_title": {
+    "description": "Error page title"
+  },
+  "intensity_fem": "{intensity, select, light{light} moderate{moderate} strong{strong} storm{storm} other{}}",
+  "@intensity_fem": {
+    "type": "text",
+    "description": "Intensity label",
+    "placeholders": {
+      "intensity": {}
+    }
+  },
+  "intensity_masc": "{intensity, select, light{light} moderate{moderate} strong{strong} storm{storm} other{}}",
+  "@intensity_masc": {
+    "type": "text",
+    "description": "Intensity label",
+    "placeholders": {
+      "intensity": {}
+    }
+  },
+  "rain_chart_title": "Rain",
+  "@rain_chart_title": {
+    "description": "Rain chart title"
+  },
+  "scale_chart_header_message": "{chartName} scale is defined with four intensity categories:",
+  "@scale_chart_header_message": {
+    "description": "Scale chart header message",
+    "placeholders": {
+      "chartName": {}
+    }
+  },
+  "scale_chart_header_sample_message": "Below sample values painted to scale color.",
+  "@scale_chart_header_sample_message": {
+    "description": "Scale chart header message for sample values"
+  },
+  "scale_chart_title": "{chartName} scale",
+  "@scale_chart_title": {
+    "description": "Scale chart title",
+    "placeholders": {
+      "chartName": {}
+    }
+  },
+  "snow_chart_title": "Snow",
+  "@snow_chart_title": {
+    "description": "Snow chart title"
+  },
+  "temp_chart_title": "Temperature",
+  "@temp_chart_title": {
+    "description": "Temperature chart title"
+  },
   "weather_list_page_title": "Weather List",
   "@weather_list_page_title": {
     "description": "Weather List page title"
@@ -15,5 +65,9 @@
   "weather_list_sort_by_temp_option": "by Name",
   "@weather_list_sort_by_temp_option": {
     "description": "Option to sort tiles by temperature"
+  },
+  "wind_chart_title": "Wind",
+  "@wind_chart_title": {
+    "description": "Wind chart title"
   }
 }

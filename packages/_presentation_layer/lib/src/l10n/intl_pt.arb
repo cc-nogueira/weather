@@ -1,19 +1,17 @@
 {
   "@@locale": "pt",
   "add_city_page_title": "Localidade",
-  "@add_city_page_title": {
-    "description": "Add city dialog title "
-  },
+  "error_page_title": "Erro",
+  "intensity_fem": "{intensity, select, light{leve} moderate{moderada} strong{forte} storm{tempestade} other{}}",
+  "intensity_masc": "{intensity, select, light{leve} moderate{moderado} strong{forte} storm{tempestade} other{}}",
+  "rain_chart_title": "Chuva",
+  "scale_chart_header_message": "A escala de {chartName} é definida com quatro categorias:",
+  "scale_chart_header_sample_message": "Abaixo valores reproduzidos dentro da escala de cores.",
+  "scale_chart_title": "Escala de {chartName}",
+  "snow_chart_title": "Neve",
+  "temp_chart_title": "Temperatura",
   "weather_list_page_title": "Weather List",
-  "@weather_list_page_title": {
-    "description": "Weather List page title"
-  },
   "weather_list_sort_by_name_option": "por Temp",
-  "@weather_list_sort_by_name_option": {
-    "description": "Option to sort tiles by name"
-  },
   "weather_list_sort_by_temp_option": "por Nome",
-  "@weather_list_sort_by_temp_option": {
-    "description": "Option to sort tiles by temperature"
-  }
+  "wind_chart_title": "Vento"
 }

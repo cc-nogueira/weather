@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/translations.dart';
 import '../widget/message_widget.dart';
 
 /// Simple message page.
@@ -7,11 +8,6 @@ import '../widget/message_widget.dart';
 /// Presents a page with title and a centralized message.
 class MessagePage extends StatelessWidget {
   const MessagePage({super.key, required this.title, required this.message});
-
-  factory MessagePage.error(Object error) => MessagePage(title: 'Error', message: error.toString());
-
-  factory MessagePage.errorBuilder(Object error, StackTrace? stackTrace) =>
-      MessagePage.error(error);
 
   final String title;
   final String message;
@@ -21,6 +17,23 @@ class MessagePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: MessageWidget(message),
+    );
+  }
+}
+
+class ErrorMessagePage extends StatelessWidget {
+  const ErrorMessagePage(this.error, {super.key});
+
+  factory ErrorMessagePage.errorBuilder(Object error, StackTrace? stackTrace) =>
+      ErrorMessagePage(error);
+
+  final Object error;
+
+  @override
+  Widget build(BuildContext context) {
+    return MessagePage(
+      title: Translations.of(context)!.error_page_title,
+      message: error.toString(),
     );
   }
 }

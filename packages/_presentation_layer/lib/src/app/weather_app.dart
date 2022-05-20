@@ -3,10 +3,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../common/page/message_page.dart';
-import '../l10n/generated/l10n.dart';
+import '../l10n/translations.dart';
 import '../provider/presentation_providers.dart';
 import '../routes/routes.dart';
-// import '../translations.dart';
 
 /// Weather App is this application MaterialApp.
 ///
@@ -17,7 +16,6 @@ class WeatherApp extends ConsumerWidget {
 
   const WeatherApp.error(this.error, {super.key});
 
-  final title = 'Weather';
   final _routes = const Routes();
   final Object? error;
 
@@ -29,12 +27,9 @@ class WeatherApp extends ConsumerWidget {
   Widget _app(WidgetRef ref) => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ref.watch(themeProvider),
-        onGenerateTitle: (context) => Translations.of(context).weather_list_page_title,
-        localizationsDelegates: const [
-          Translations.delegate,
-          ...GlobalMaterialLocalizations.delegates,
-        ],
-        supportedLocales: Translations.delegate.supportedLocales,
+        onGenerateTitle: (context) => Translations.of(context)!.weather_list_page_title,
+        localizationsDelegates: Translations.localizationsDelegates,
+        supportedLocales: Translations.supportedLocales,
         onGenerateRoute: _routes.onGenerateRoute,
         initialRoute: Routes.home,
       );
@@ -42,12 +37,12 @@ class WeatherApp extends ConsumerWidget {
   Widget get _errorApp => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
-        onGenerateTitle: (context) => Translations.of(context).weather_list_page_title,
+        onGenerateTitle: (context) => Translations.of(context)!.weather_list_page_title,
         localizationsDelegates: const [
           Translations.delegate,
           ...GlobalMaterialLocalizations.delegates,
         ],
-        supportedLocales: Translations.delegate.supportedLocales,
-        home: MessagePage(title: 'Error', message: error!.toString()),
+        supportedLocales: Translations.supportedLocales,
+        home: ErrorMessagePage(error!),
       );
 }

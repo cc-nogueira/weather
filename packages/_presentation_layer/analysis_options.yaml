@@ -12,5 +12,5 @@ linter:
 analyzer:
   exclude:
     - lib/**.g.dart
-    - lib/src/l10n/generated/intl/messages_all.dart
+    - lib/src/l10n/translations*.dart
     - test/**.mocks.dart

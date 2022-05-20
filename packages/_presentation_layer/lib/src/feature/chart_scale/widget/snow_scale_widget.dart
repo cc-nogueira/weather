@@ -4,47 +4,68 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../common/translation/noum_gender.dart';
+import '../../../l10n/translations.dart';
 import '../../weather/widget/snow_mixin.dart';
 import 'scale_chart.dart';
+import 'scale_intensity.dart';
 import 'scale_widget.dart';
 
 class SnowScaleWidget extends ScaleWidget with SnowMixin {
   const SnowScaleWidget({super.key});
 
   @override
-  final chartName = 'Snow';
+  NoumGender get intensityGender => NoumGender.feminine;
+
+  @override
+  String chartName(BuildContext context) => Translations.of(context)!.snow_chart_title;
 
   @override
   List<Color> colors() => snowColors();
 
   @override
-  Widget chart() => const SnowScaleChart();
+  Widget chart(BuildContext context) => SnowScaleChart(
+        intensityGender: intensityGender,
+        chartName: chartName(context),
+      );
 }
 
 class SnowScaleChart extends ConsumerWidget {
-  const SnowScaleChart({Key? key, this.height}) : super(key: key);
+  const SnowScaleChart(
+      {super.key, required this.intensityGender, required this.chartName, this.height});
 
+  final NoumGender intensityGender;
+  final String chartName;
   final double? height;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final unit = ref.watch(precipitationUnitProvider);
-    return _SnowScaleChart(unit: unit, height: height);
+    return _SnowScaleChart(
+      unit: unit,
+      intensityGender: intensityGender,
+      chartName: chartName,
+      height: height,
+    );
   }
 }
 
 class _SnowScaleChart extends IntensityScaleChart<Speed> with SnowMixin {
-  const _SnowScaleChart({required super.unit, super.height});
+  const _SnowScaleChart(
+      {required super.unit,
+      required super.intensityGender,
+      required super.chartName,
+      super.height});
 
   @override
-  final chartName = 'Snow';
+  NoumGender get intensityGender => NoumGender.feminine;
 
   @override
-  final intensityMap = const <String, List<double>>{
-    'light': [0.17, 0.33, 0.5, 0.67, 0.83, 0.99],
-    'moderate': [1.25, 1.5, 1.75, 2.0, 2.25, 2.49],
-    'strong': [3.33, 4.17, 5.0, 5.83, 6.66, 7.49],
-    'storm': [8.75, 10.0, 11.25, 12.5, 13.75, 15.0],
+  final intensityMap = const <ScaleIntensity, List<double>>{
+    ScaleIntensity.light: [0.17, 0.33, 0.5, 0.67, 0.83, 0.99],
+    ScaleIntensity.moderate: [1.25, 1.5, 1.75, 2.0, 2.25, 2.49],
+    ScaleIntensity.strong: [3.33, 4.17, 5.0, 5.83, 6.66, 7.49],
+    ScaleIntensity.storm: [8.75, 10.0, 11.25, 12.5, 13.75, 15.0],
   };
 
   @override

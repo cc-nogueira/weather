@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../common/page/loading_page.dart';
 import '../../../../common/page/message_page.dart';
-import '../../../../l10n/generated/l10n.dart';
+import '../../../../l10n/translations.dart';
 import '../../../../routes/routes.dart';
 import '../../../settings/widget/preferences_widget.dart';
 import '../widget/weather_list.dart';
@@ -15,10 +15,10 @@ class WeatherListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final translations = Translations.of(context);
+    final translations = Translations.of(context)!;
     return ref.watch(watchAllCitiesProvider).when(
           loading: LoadingPage.builder(translations.weather_list_page_title),
-          error: MessagePage.errorBuilder,
+          error: ErrorMessagePage.errorBuilder,
           data: (cities) => _scaffold(context, ref.read, translations, cities),
         );
   }

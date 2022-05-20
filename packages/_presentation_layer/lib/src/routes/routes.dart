@@ -35,7 +35,7 @@ class Routes {
         return _route((_) => CityPage());
       default:
         return _route(
-          (_) => MessagePage.error('Unknown route "${settings.name}"'),
+          (_) => ErrorMessagePage('Unknown route "${settings.name}"'),
         );
     }
   }
@@ -51,5 +51,5 @@ class Routes {
 
   Widget _argumentBuilder<T>(
           BuildContext context, Object? arg, Widget Function(BuildContext, T) builder) =>
-      arg is T ? builder(context, arg) : MessagePage.error('Illegal argument for route');
+      arg is T ? builder(context, arg) : const ErrorMessagePage('Illegal argument for route');
 }

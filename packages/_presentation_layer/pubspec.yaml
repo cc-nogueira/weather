@@ -12,13 +12,13 @@ dependencies:
     path: ../_core_layer
   _domain_layer:
     path: ../_domain_layer
-    
+
   country_picker: ^2.0.15
   faker: ^2.0.0
 
   flutter:
     sdk: flutter
-  
+
   flutter_cupertino_localizations: ^1.0.1
   flutter_hooks: ^0.18.4
 
@@ -41,11 +41,11 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
-    
+
 flutter:
-  # generate: true
+  generate: true
   uses-material-design: true
-  
+
   assets:
     - assets/image/brazil-grunge-flag.jpg
     - assets/image/open_weather_logo.png
@@ -55,11 +55,9 @@ flutter:
     - assets/weather/
 
 flutter_intl:
-  enabled: true
-  class_name: Translations
+  enabled: false
   main_locale: en
   arb_dir: lib/src/l10n
   output_dir: lib/src/l10n/generated
-
   localizely:
     project_id: 942e7477-7f15-4bb1-813f-99e9c6f83a46

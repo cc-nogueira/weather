@@ -20,7 +20,7 @@ class OneCallWeatherPage extends ConsumerWidget {
     final asyncValue = ref.watch(oneCallWeatherByLocationAutoEvictProvider(city.location!));
     return asyncValue.when(
       loading: () => _loadingScaffold(context, ref),
-      error: MessagePage.errorBuilder,
+      error: ErrorMessagePage.errorBuilder,
       data: (data) => _dataScaffold(context, ref, asyncValue.isRefreshing, data),
     );
   }

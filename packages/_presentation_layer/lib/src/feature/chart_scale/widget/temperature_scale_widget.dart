@@ -5,6 +5,7 @@ import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../common/helper/theme_builder.dart';
+import '../../../l10n/translations.dart';
 import '../../weather/widget/temperature_mixin.dart';
 import 'scale_chart.dart';
 
@@ -31,12 +32,13 @@ class TemperatureScaleWidget extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                    child: Text('Below sample values painted to scale color.', style: txtSt),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                    child: Text(Translations.of(context)!.scale_chart_header_sample_message,
+                        style: txtSt),
                   ),
-                  TemperatureScaleChart(),
+                  const TemperatureScaleChart(),
                 ],
               ),
             ),
@@ -55,15 +57,13 @@ class TemperatureScaleChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final unit = ref.watch(temperatureUnitProvider);
-    return _TemperatureScaleChart(unit: unit, height: height);
+    final chartName = Translations.of(context)!.temp_chart_title;
+    return _TemperatureScaleChart(unit: unit, chartName: chartName, height: height);
   }
 }
 
 class _TemperatureScaleChart extends ScaleChart<Temperature> with TemperatureMixin {
-  const _TemperatureScaleChart({required super.unit, super.height});
-
-  @override
-  final chartName = 'Temperature';
+  const _TemperatureScaleChart({required super.unit, required super.chartName, super.height});
 
   @override
   List<double> get seriesData => [

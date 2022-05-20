@@ -1,0 +1,4 @@
+enum NoumGender {
+  feminine,
+  masculine,
+}
