@@ -4,6 +4,7 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../l10n/translations.dart';
 import 'weather_tile.dart';
 
 class WeatherList extends StatelessWidget {
@@ -14,10 +15,12 @@ class WeatherList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translations = Translations.of(context)!;
     final tiles = <WeatherTile>[];
     for (var i = 0; i < cities.length; ++i) {
       tiles.add(
         WeatherTile(
+          translations: translations,
           city: cities[i],
           onRemove: () => _removeCity(cities[i]),
         ),

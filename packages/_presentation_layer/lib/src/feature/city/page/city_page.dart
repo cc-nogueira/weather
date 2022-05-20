@@ -2,6 +2,7 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../l10n/translations.dart';
 import '../widget/city_form.dart';
 import '../widget/city_search.dart';
 
@@ -13,18 +14,21 @@ class CityPage extends ConsumerWidget {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: const Text('City')),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _cityForm(context, ref.read),
-            _searchButton(context, ref.read),
-            _citySearch(context, ref.read),
-          ],
-        ),
-      );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final translations = Translations.of(context)!;
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(title: Text(translations.add_city_page_title)),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _cityForm(context, ref.read),
+          _searchButton(context, ref.read, translations),
+          _citySearch(context, ref.read),
+        ],
+      ),
+    );
+  }
 
   Widget _cityForm(BuildContext context, Reader read) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -45,11 +49,11 @@ class CityPage extends ConsumerWidget {
         ),
       );
 
-  Widget _searchButton(BuildContext context, Reader read) => Padding(
+  Widget _searchButton(BuildContext context, Reader read, Translations translations) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: OutlinedButton(
           onPressed: () => _onSearchPressed(context, read),
-          child: const Text('Search'),
+          child: Text(translations.search_label),
         ),
       );
 

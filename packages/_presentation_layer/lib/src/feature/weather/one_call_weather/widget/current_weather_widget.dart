@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 
+import '../../../../l10n/translations.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/weather_icons.dart';
 import '../../widget/wind_mixin.dart';
@@ -30,6 +31,7 @@ class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMix
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final translations = Translations.of(context)!;
     final temperatureUnit = ref.watch(temperatureUnitProvider);
     final windSpeedUnit = ref.watch(windSpeedUnitProvider);
 
@@ -54,11 +56,11 @@ class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMix
           padding: const EdgeInsets.only(left: 16.0),
           child: WeatherIcons.instance.thermometer(28, iconColor),
         ),
-        title: 'feels like',
+        title: translations.word_feels_like,
         value: '${feelTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}',
       ),
-      _detailTile(context, title: 'min', value: minString),
-      _detailTile(context, title: 'max', value: maxString),
+      _detailTile(context, title: translations.word_min, value: minString),
+      _detailTile(context, title: translations.word_max, value: maxString),
       _detailTile(
         context,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -66,12 +68,12 @@ class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMix
           padding: EdgeInsets.only(left: 24.0, right: 4.0),
           child: Icon(Icons.air),
         ),
-        title: 'wind',
+        title: translations.word_wind,
         value: _windSpeed(weather.conditions.wind.speedQuantity, windSpeedUnit),
       ),
       _detailTile(
         context,
-        title: 'gust',
+        title: translations.word_gust,
         value: _windSpeed(weather.conditions.wind.gustQuantity, windSpeedUnit),
       ),
       _detailTile(

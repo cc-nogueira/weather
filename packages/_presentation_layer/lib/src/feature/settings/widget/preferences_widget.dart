@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../l10n/translations.dart';
 import '../../../provider/presentation_providers.dart';
 import 'combine_temperature_to_rain_and_snow_switch.dart';
 import 'dark_light_mode_switch.dart';
@@ -12,7 +13,7 @@ import 'temperature_unit_dropdown.dart';
 import 'wind_speed_unit_dropdown.dart';
 
 class PreferencesWidget extends HookConsumerWidget {
-  const PreferencesWidget({Key? key, this.top = 0.0}) : super(key: key);
+  const PreferencesWidget({super.key, this.top = 0.0});
 
   final double top;
 
@@ -100,12 +101,13 @@ class _SlidingSettingsPanel extends AnimatedWidget {
 }
 
 class _SettingsPanel extends StatelessWidget {
-  const _SettingsPanel({Key? key, required this.onDismiss}) : super(key: key);
+  const _SettingsPanel({required this.onDismiss});
 
   final VoidCallback onDismiss;
 
   @override
   Widget build(BuildContext context) {
+    final translations = Translations.of(context)!;
     final theme = Theme.of(context);
     final itemStyle = theme.textTheme.titleMedium;
     return Container(
@@ -117,7 +119,7 @@ class _SettingsPanel extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Dark/Light Theme', style: itemStyle),
+              Text(translations.dark_light_theme_label, style: itemStyle),
               DarkLightModeSwitch(changeCallback: _onChangePreference),
             ],
           ),
@@ -125,21 +127,21 @@ class _SettingsPanel extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Temperature unit', style: itemStyle),
+              Text(translations.temp_unit_label, style: itemStyle),
               TemperatureUnitDropdown(changeCallback: _onChangePreference),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Wind speed unit', style: itemStyle),
+              Text(translations.wind_speed_unit_label, style: itemStyle),
               WindSpeedUnitDropdown(changeCallback: _onChangePreference),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Precipitation unit', style: itemStyle),
+              Text(translations.precipitation_unit_label, style: itemStyle),
               PrecipitationUnitDropdown(changeCallback: _onChangePreference),
             ],
           ),
@@ -147,7 +149,9 @@ class _SettingsPanel extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: Text('Add Temp to Rain/Snow Charts', style: itemStyle)),
+              Expanded(
+                child: Text(translations.add_temp_to_rain_snow_charts_label, style: itemStyle),
+              ),
               CombineTemperatureToRainAndSnowSwitch(changeCallback: _onChangePreference),
             ],
           ),

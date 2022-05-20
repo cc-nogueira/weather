@@ -1,6 +1,9 @@
+import 'package:_core_layer/string_utils.dart';
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../l10n/translations.dart';
 
 class AlertsWidget extends StatelessWidget {
   const AlertsWidget({super.key, required this.weather});
@@ -47,6 +50,7 @@ class _AlertDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translations = Translations.of(context)!;
     final dtFormat = DateFormat.MEd().add_jm();
     const bold = TextStyle(fontWeight: FontWeight.w600);
     final titleStyle = bold.copyWith(color: Colors.black);
@@ -66,9 +70,9 @@ class _AlertDetails extends StatelessWidget {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text('Start:', style: bold),
-                  Text('End:', style: bold),
+                children: [
+                  Text('${translations.word_start.capitalized}:', style: bold),
+                  Text('${translations.word_end.capitalized}:', style: bold),
                 ],
               ),
               const SizedBox(width: 8.0),

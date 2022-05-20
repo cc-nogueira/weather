@@ -2,6 +2,8 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../l10n/translations.dart';
+
 typedef CityCallback = void Function(City city);
 
 class CitySearch extends ConsumerWidget {
@@ -27,33 +29,37 @@ class CitySearch extends ConsumerWidget {
         child: SizedBox(height: 100, width: 100, child: CircularProgressIndicator()),
       );
 
-  Widget _showResults(BuildContext context, List<City> results) => results.isEmpty
-      ? _noResults(context)
-      : ListView.builder(
-          shrinkWrap: true,
-          itemCount: results.length,
-          itemBuilder: (_, idx) => _itemBuilder(results[idx]),
-        );
+  Widget _showResults(BuildContext context, List<City> results) {
+    final translations = Translations.of(context)!;
+    return results.isEmpty
+        ? _noResults(context)
+        : ListView.builder(
+            shrinkWrap: true,
+            itemCount: results.length,
+            itemBuilder: (_, idx) => _itemBuilder(translations, results[idx]),
+          );
+  }
 
   Widget _noResults(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Text('No matches found.', style: textTheme.titleMedium);
+    return Text(Translations.of(context)!.no_matches_found_message, style: textTheme.titleMedium);
   }
 
-  Widget _itemBuilder(City city) {
+  Widget _itemBuilder(Translations translations, City city) {
     final subtitle = city.state.isEmpty ? city.country : '${city.state}, ${city.country}';
     return ListTile(
       title: Text(city.name),
       subtitle: Text(subtitle),
       trailing: OutlinedButton(
         onPressed: () => onCitySelected(city),
-        child: const Text('Add'),
+        child: Text(translations.add_label),
       ),
     );
   }
 
   Widget _showError(BuildContext context, Object error) {
-    final msg = error is ArgumentError ? error.message : 'Error searching...';
+    final msg =
+        error is ArgumentError ? error.message : Translations.of(context)!.error_searching_message;
     final textTheme = Theme.of(context).textTheme;
     return Text(msg, style: textTheme.headline6!.copyWith(color: Colors.red));
   }

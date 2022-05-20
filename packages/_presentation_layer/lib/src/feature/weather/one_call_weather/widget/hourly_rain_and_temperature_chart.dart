@@ -63,7 +63,7 @@ class _HourlyRainAndTemperatureChart extends HourlyRainChartChart {
       children: [
         Text(translations.rain_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
         Text(' (${unit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: rainC)),
-        Text(' and ', style: titleStyle(context), textScaleFactor: 1.2),
+        Text(' ${translations.word_and} ', style: titleStyle(context), textScaleFactor: 1.2),
         Text(translations.temp_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
         Text(' (${tempUnit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: tempC)),
         helpButton(context, (_) => const RainScaleWidget()),

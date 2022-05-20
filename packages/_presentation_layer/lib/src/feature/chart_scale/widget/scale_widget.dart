@@ -64,7 +64,7 @@ abstract class ScaleWidget extends StatelessWidget with ColorRangeMixin {
                                   text: ScaleIntensity.strong
                                       .translation(translations, intensityGender),
                                   style: stronSt),
-                              const TextSpan(text: '  and  '),
+                              TextSpan(text: '  ${translations.word_and}  '),
                               TextSpan(
                                   text: ScaleIntensity.storm
                                       .translation(translations, intensityGender),

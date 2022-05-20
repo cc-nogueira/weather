@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../l10n/translations.dart';
+
 class CityForm extends ConsumerWidget {
   const CityForm(this.cityProvider, {super.key, required this.onCountryChanged});
 
@@ -13,13 +15,15 @@ class CityForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(cityProvider.notifier);
-    return _CityForm(cityProvider, controller, onCountryChanged);
+    final translations = Translations.of(context)!;
+    return _CityForm(translations, cityProvider, controller, onCountryChanged);
   }
 }
 
 class _CityForm extends HookConsumerWidget {
-  const _CityForm(this.cityProvider, this.cityController, this.onCountryChanged);
+  const _CityForm(this.translations, this.cityProvider, this.cityController, this.onCountryChanged);
 
+  final Translations translations;
   final StateProvider<City> cityProvider;
   final StateController<City> cityController;
   final VoidCallback onCountryChanged;
@@ -44,7 +48,7 @@ class _CityForm extends HookConsumerWidget {
           Expanded(
             child: _formField(
               context,
-              'City',
+              translations.city_label,
               useTextEditingController(text: city.name),
               validator: _validateCity,
               onChanged: _onCityChanged,
@@ -57,7 +61,7 @@ class _CityForm extends HookConsumerWidget {
             width: 85,
             child: _formField(
               context,
-              'Country',
+              translations.country_label,
               countryTextController,
               readOnly: true,
               onTap: () => showCountryPicker(
@@ -83,9 +87,11 @@ class _CityForm extends HookConsumerWidget {
     onCountryChanged();
   }
 
-  String? _validateCity(String? text) => text == null || text.isEmpty ? '* required' : null;
+  String? _validateCity(String? text) =>
+      text == null || text.isEmpty ? '* ${translations.required_label}' : null;
 
-  String? _validateCountry(String? text) => text == null || text.length != 2 ? '* required' : null;
+  String? _validateCountry(String? text) =>
+      text == null || text.length != 2 ? '* ${translations.required_label}' : null;
 
   Widget _formField(
     BuildContext context,

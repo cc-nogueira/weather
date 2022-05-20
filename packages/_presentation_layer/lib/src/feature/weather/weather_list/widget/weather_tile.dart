@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../../../l10n/translations.dart';
 import '../../../../routes/routes.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_gradient_box_hero.dart';
@@ -29,8 +30,9 @@ class TemperatureNotifier extends StateNotifier<Celcius?> {
 }
 
 class WeatherTile extends ConsumerWidget {
-  WeatherTile({super.key, required this.city, required this.onRemove});
+  WeatherTile({super.key, required this.translations, required this.city, required this.onRemove});
 
+  final Translations translations;
   final City city;
   final VoidCallback onRemove;
   final temperatureNotifierProvider =
@@ -48,11 +50,13 @@ class WeatherTile extends ConsumerWidget {
     final asyncValue = ref.watch(currentWeatherByLocationAutoRefreshProvider(location));
     final tile = asyncValue.when(
       loading: () => _WeatherLoadingTile(
+        translations: translations,
         city: city,
         onRemove: onRemove,
         onTap: () => {},
       ),
       error: (_, __) => _WeatherErrorTile(
+        translations: translations,
         city: city,
         onRemove: onRemove,
         onTap: () {},
@@ -60,6 +64,7 @@ class WeatherTile extends ConsumerWidget {
       data: (data) {
         _updateTemperature(ref.read, data.weather);
         return _WeatherTile(
+          translations: translations,
           city: city,
           weather: data.weather,
           isRefreshing: asyncValue.isRefreshing,
@@ -91,7 +96,7 @@ class WeatherTile extends ConsumerWidget {
         backgroundColor: Colors.red,
         foregroundColor: Colors.white,
         icon: Icons.delete,
-        label: 'Excluir',
+        label: translations.label_remove,
       );
 
   void _updateTemperature(Reader read, Weather weather) {
@@ -107,11 +112,13 @@ class WeatherTile extends ConsumerWidget {
 
 abstract class _WeatherTileBase extends StatelessWidget {
   const _WeatherTileBase({
+    required this.translations,
     required this.city,
     required this.onRemove,
     required this.onTap,
   });
 
+  final Translations translations;
   final City city;
   final VoidCallback onRemove;
   final VoidCallback onTap;
@@ -164,28 +171,39 @@ abstract class _WeatherTileBase extends StatelessWidget {
 }
 
 class _WeatherLoadingTile extends _WeatherTileBase {
-  const _WeatherLoadingTile({required super.city, required super.onRemove, required super.onTap});
+  const _WeatherLoadingTile({
+    required super.translations,
+    required super.city,
+    required super.onRemove,
+    required super.onTap,
+  });
 
   @override
   Widget trailing(BuildContext context) => loadingIndicator;
 
   @override
-  Widget subtitle(BuildContext context) => const Text('Loading...');
+  Widget subtitle(BuildContext context) => Text(translations.message_loading);
 }
 
 class _WeatherErrorTile extends _WeatherTileBase {
-  const _WeatherErrorTile({required super.city, required super.onRemove, required super.onTap});
+  const _WeatherErrorTile({
+    required super.translations,
+    required super.city,
+    required super.onRemove,
+    required super.onTap,
+  });
 
   @override
   Widget trailing(BuildContext context) => WeatherIconHero(city: city, weatherCode: -1, size: 60);
 
   @override
-  Widget subtitle(BuildContext context) => const Text('No weather information');
+  Widget subtitle(BuildContext context) => Text(translations.message_no_weather_info);
 }
 
 class _WeatherTile extends _WeatherTileBase
     with ColorRangeMixin, WeatherMixin, WindMixin, TemperatureMixin {
   const _WeatherTile({
+    required super.translations,
     required super.city,
     required super.onRemove,
     required super.onTap,

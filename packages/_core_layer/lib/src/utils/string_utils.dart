@@ -7,9 +7,10 @@ extension StringUtils on String {
     return substring(0, cut);
   }
 
-  String toCapitalized() =>
-      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+  String get capitalized => length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
 
-  String toTitleCase() =>
-      replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
+  String get titleCase => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.length > 1 ? str.capitalized : str)
+      .join(' ');
 }
