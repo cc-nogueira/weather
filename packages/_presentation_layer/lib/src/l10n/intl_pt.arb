@@ -1,17 +1,133 @@
 {
   "@@locale": "pt",
   "add_city_page_title": "Localidade",
+  "@add_city_page_title": {
+    "description": "Add city dialog title "
+  },
+  "days_label": "{count, plural, zero{dias} one{dia} other{{count} dias}}",
+  "@days_label": {
+    "description": "Days label",
+    "placeholders": {
+      "count": {}
+    }
+  },
   "error_page_title": "Erro",
+  "@error_page_title": {
+    "description": "Error page title"
+  },
+  "hours_label": "{count, plural, zero{horas} one{hora} other{{count} horas}}",
+  "@hours_label": {
+    "description": "Hours label",
+    "placeholders": {
+      "count": {}
+    }
+  },
   "intensity_fem": "{intensity, select, light{leve} moderate{moderada} strong{forte} storm{tempestade} other{}}",
+  "@intensity_fem": {
+    "type": "text",
+    "description": "Intensity label",
+    "placeholders": {
+      "intensity": {}
+    }
+  },
   "intensity_masc": "{intensity, select, light{leve} moderate{moderado} strong{forte} storm{tempestade} other{}}",
+  "@intensity_masc": {
+    "type": "text",
+    "description": "Intensity label",
+    "placeholders": {
+      "intensity": {}
+    }
+  },
+  "no_rain_next_days": "{count, plural, zero{Sem chuva} one{Sem chuva esperada para as próximas 24 horas} other{Se chuva esperada para os próximos {count} dias}}",
+  "@no_rain_next_days": {
+    "description": "No rain expected for the next days message",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no_rain_next_hours": "{count, plural, zero{Sem chuva} one{Sem chuva para a próxima hora} other{Sem chuva para as próximas {count} horas}}",
+  "@no_rain_next_hours": {
+    "description": "No rain expected for the next hours message ",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no_rain_or_snow_next_days": "{count, plural, zero{Sem chuva ou neve} one{Sem chuva ou neve para as próximas 24 horas} other{Sem chuva ou neve para os próximos {count} dias}}",
+  "@no_rain_or_snow_next_days": {
+    "description": "No rain or snow expected for the next days",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no_rain_or_snow_next_hours": "{count, plural, zero{Sem chuva ou neve} one{Sem chuva ou neve para a próxima hora} other{Sem chuva ou neve para as próximas {count} horas}}",
+  "@no_rain_or_snow_next_hours": {
+    "description": "No rain or snow expected for the next hours",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no_snow_next_days": "{count, plural, zero{Se neve} one{Sem neve esperada para as próximas 24 horas} other{Se neve esperada para os próximos {count} dias}}",
+  "@no_snow_next_days": {
+    "description": "No now expected for the next days message",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no_snow_next_hours": "{count, plural, zero{Sem neve} one{Sem neve para a próxima hora} other{Sem neve para as próximas {count} horas}}",
+  "@no_snow_next_hours": {
+    "description": "No snow expected for the next hours message",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "precipitation_chart_title": "Precipitação",
+  "@precipitation_chart_title": {
+    "description": "No precipitation chart title"
+  },
   "rain_chart_title": "Chuva",
-  "scale_chart_header_message": "A escala de {chartName} é definida com quatro categorias:",
+  "@rain_chart_title": {
+    "description": "Rain chart title"
+  },
+  "scale_chart_header_message": "A Escala de {chartName} é definida com quatro categorias:",
+  "@scale_chart_header_message": {
+    "description": "Scale chart header message",
+    "placeholders": {
+      "chartName": {}
+    }
+  },
   "scale_chart_header_sample_message": "Abaixo valores reproduzidos dentro da escala de cores.",
+  "@scale_chart_header_sample_message": {
+    "description": "Scale chart header message for sample values"
+  },
   "scale_chart_title": "Escala de {chartName}",
+  "@scale_chart_title": {
+    "description": "Scale chart title",
+    "placeholders": {
+      "chartName": {}
+    }
+  },
   "snow_chart_title": "Neve",
+  "@snow_chart_title": {
+    "description": "Snow chart title"
+  },
   "temp_chart_title": "Temperatura",
+  "@temp_chart_title": {
+    "description": "Temperature chart title"
+  },
   "weather_list_page_title": "Weather List",
+  "@weather_list_page_title": {
+    "description": "Weather List page title"
+  },
   "weather_list_sort_by_name_option": "por Temp",
+  "@weather_list_sort_by_name_option": {
+    "description": "Option to sort tiles by name"
+  },
   "weather_list_sort_by_temp_option": "por Nome",
-  "wind_chart_title": "Vento"
+  "@weather_list_sort_by_temp_option": {
+    "description": "Option to sort tiles by temperature"
+  },
+  "wind_chart_title": "Vento",
+  "@wind_chart_title": {
+    "description": "Wind chart title"
+  }
 }

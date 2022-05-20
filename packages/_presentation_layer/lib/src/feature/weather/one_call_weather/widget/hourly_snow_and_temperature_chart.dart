@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/snow_scale_widget.dart';
 import '../helper/one_call_weather_stats.dart';
 import 'hourly_snow_chart.dart';
@@ -55,14 +56,16 @@ class _HourlySnowAndTemperatureChart extends HourlySnowChartChart {
 
   @override
   Widget? chartTitle(BuildContext context) {
+    final translations = Translations.of(context)!;
     final snowC = snowColor(weather.weather.conditions.snow1h ?? 0);
     final tempC = temperatureColor(weather.weather.conditions.temperatures.temperature);
     return Row(
       children: [
-        Text('Snow ', style: titleStyle(context), textScaleFactor: 1.2),
-        Text('(${unit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: snowC)),
-        Text(' and Temperature ', style: titleStyle(context), textScaleFactor: 1.2),
-        Text('(${tempUnit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: tempC)),
+        Text(translations.snow_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(' (${unit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: snowC)),
+        Text(' and ', style: titleStyle(context), textScaleFactor: 1.2),
+        Text(translations.temp_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(' (${tempUnit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: tempC)),
         helpButton(context, (_) => const SnowScaleWidget()),
       ],
     );

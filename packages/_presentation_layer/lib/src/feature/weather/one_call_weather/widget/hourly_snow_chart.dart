@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/snow_scale_widget.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/snow_mixin.dart';
@@ -55,10 +56,11 @@ class HourlySnowChartChart extends HourlyChart with ColorRangeMixin, SnowMixin, 
 
   @override
   Widget? chartTitle(BuildContext context) {
+    final translations = Translations.of(context)!;
     return Row(
       children: [
-        Text('Snow ', style: titleStyle(context), textScaleFactor: 1.2),
-        Text('(${unit.symbol})', style: titleUnitsStyle(context)),
+        Text(translations.snow_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
         helpButton(context, (_) => const SnowScaleWidget()),
       ],
     );
@@ -79,6 +81,7 @@ class HourlySnowChartChart extends HourlyChart with ColorRangeMixin, SnowMixin, 
   }
 
   Widget _noSnowMessage(BuildContext context, List<HourlyWeather> data) {
+    final translations = Translations.of(context)!;
     var lastNoSnowTime = data.last.localShiftedDateTime;
     const hrsToDayEnd = Duration(hours: 23);
     for (final daily in weather.daily) {
@@ -92,21 +95,19 @@ class HourlySnowChartChart extends HourlyChart with ColorRangeMixin, SnowMixin, 
       }
     }
 
-    late final String periodMsg;
+    late final String msg;
     final noSnowPeriod = lastNoSnowTime.difference(data[0].localShiftedDateTime);
     final inHours = noSnowPeriod.inHours;
-    if (noSnowPeriod.inHours < 2) {
-      periodMsg = 'hour';
-    } else if (inHours < 48) {
-      periodMsg = '$inHours hours';
+    if (noSnowPeriod.inHours < 48) {
+      msg = translations.no_snow_next_hours(inHours);
     } else {
-      periodMsg = '${noSnowPeriod.inDays} days';
+      msg = translations.no_snow_next_days(noSnowPeriod.inDays);
     }
 
     final color = temperatureColor(data[0].conditions.temperatures.temperature);
     return Padding(
       padding: EdgeInsets.only(left: padding.left, right: padding.right, top: 10.0, bottom: 20.0),
-      child: Text('No snow expected in the next $periodMsg', style: TextStyle(color: color)),
+      child: Text(msg, style: TextStyle(color: color)),
     );
   }
 

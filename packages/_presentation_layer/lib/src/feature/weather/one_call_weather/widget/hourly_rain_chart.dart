@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/rain_scale_widget.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/rain_mixin.dart';
@@ -55,10 +56,11 @@ class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, 
 
   @override
   Widget? chartTitle(BuildContext context) {
+    final translations = Translations.of(context)!;
     return Row(
       children: [
-        Text('Rain ', style: titleStyle(context), textScaleFactor: 1.2),
-        Text('(${unit.symbol})', style: titleUnitsStyle(context)),
+        Text(translations.rain_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
         helpButton(context, (_) => const RainScaleWidget()),
       ],
     );
@@ -79,6 +81,7 @@ class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, 
   }
 
   Widget _noRainMessage(BuildContext context, List<HourlyWeather> data) {
+    final translations = Translations.of(context)!;
     var lastDryTime = data.last.localShiftedDateTime;
     const hrsToDayEnd = Duration(hours: 23);
     for (final daily in weather.daily) {
@@ -92,21 +95,19 @@ class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, 
       }
     }
 
-    late final String periodMsg;
+    late final String msg;
     final dryPeriod = lastDryTime.difference(data[0].localShiftedDateTime);
     final inHours = dryPeriod.inHours;
-    if (dryPeriod.inHours < 2) {
-      periodMsg = 'hour';
-    } else if (inHours < 48) {
-      periodMsg = '$inHours hours';
+    if (dryPeriod.inHours < 48) {
+      msg = translations.no_rain_next_hours(inHours);
     } else {
-      periodMsg = '${dryPeriod.inDays} days';
+      msg = translations.no_rain_next_days(dryPeriod.inDays);
     }
 
     final color = temperatureColor(data[0].conditions.temperatures.temperature);
     return Padding(
       padding: EdgeInsets.only(left: padding.left, right: padding.right, top: 10.0, bottom: 20.0),
-      child: Text('No rain expected in the next $periodMsg', style: TextStyle(color: color)),
+      child: Text(msg, style: TextStyle(color: color)),
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/temperature_scale_widget.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_mixin.dart';
@@ -55,10 +56,11 @@ class _HourlyTemperatureChart extends HourlyChart
 
   @override
   Widget? chartTitle(BuildContext context) {
+    final translations = Translations.of(context)!;
     return Row(
       children: [
-        Text('Temperature ', style: titleStyle(context), textScaleFactor: 1.2),
-        Text('(${unit.symbol})', style: titleUnitsStyle(context)),
+        Text(translations.temp_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
         helpButton(context, (_) => const TemperatureScaleWidget())
       ],
     );

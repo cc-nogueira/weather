@@ -4,9 +4,23 @@
   "@add_city_page_title": {
     "description": "Add city dialog title "
   },
+  "days_label": "{count, plural, zero{days} one{day} other{{count} days}}",
+  "@days_label": {
+    "description": "Days label",
+    "placeholders": {
+      "count": {}
+    }
+  },
   "error_page_title": "Error",
   "@error_page_title": {
     "description": "Error page title"
+  },
+  "hours_label": "{count, plural, zero{hours} one{hour} other{{count} hours}}",
+  "@hours_label": {
+    "description": "Hours label",
+    "placeholders": {
+      "count": {}
+    }
   },
   "intensity_fem": "{intensity, select, light{light} moderate{moderate} strong{strong} storm{storm} other{}}",
   "@intensity_fem": {
@@ -23,6 +37,52 @@
     "placeholders": {
       "intensity": {}
     }
+  },
+  "no_rain_next_days": "{count, plural, zero{No rain} one{No rain expected for the next 24 hours} other{No rain expected for the next {count} days}}",
+  "@no_rain_next_days": {
+    "description": "No rain expected for the next days message",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no_rain_next_hours": "{count, plural, zero{No rain} one{No rain expected in the next hour} other{No rain expected in the next {count} hours}}",
+  "@no_rain_next_hours": {
+    "description": "No rain expected for the next hours message ",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no_rain_or_snow_next_days": "{count, plural, zero{No rain or snow} one{No rain or snow expected for the next 24 hours} other{No rain or snow expected for the next {count} days}}",
+  "@no_rain_or_snow_next_days": {
+    "description": "No rain or snow expected for the next days",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no_rain_or_snow_next_hours": "{count, plural, zero{No rain or snow} one{No rain or snow expected for the next hour} other{No rain or snow expected for the next {count} hours}}",
+  "@no_rain_or_snow_next_hours": {
+    "description": "No rain or snow expected for the next hours",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no_snow_next_days": "{count, plural, zero{No snow} one{No snow expected for the next 24 hours} other{No snow expected for the next {count} days}}",
+  "@no_snow_next_days": {
+    "description": "No now expected for the next days message",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "no_snow_next_hours": "{count, plural, zero{No snow} one{No snow expected for the next hour} other{No snow expected for the next {count} hours}}",
+  "@no_snow_next_hours": {
+    "description": "No snow expected for the next hours message",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "precipitation_chart_title": "Precipitation",
+  "@precipitation_chart_title": {
+    "description": "No precipitation chart title"
   },
   "rain_chart_title": "Rain",
   "@rain_chart_title": {

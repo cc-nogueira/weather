@@ -7,6 +7,7 @@ import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/wind_scale_widget.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/wind_mixin.dart';
@@ -56,10 +57,11 @@ class _HourlyWindChart extends HourlyChart with ColorRangeMixin, WindMixin {
 
   @override
   Widget? chartTitle(BuildContext context) {
+    final translations = Translations.of(context)!;
     return Row(
       children: [
-        Text('Wind ', style: titleStyle(context), textScaleFactor: 1.2),
-        Text('(${unit.symbol})', style: titleUnitsStyle(context)),
+        Text(translations.wind_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: InkWell(

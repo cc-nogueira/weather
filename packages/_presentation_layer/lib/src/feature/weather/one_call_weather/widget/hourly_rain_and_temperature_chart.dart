@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/rain_scale_widget.dart';
 import '../helper/one_call_weather_stats.dart';
 import 'hourly_rain_chart.dart';
@@ -55,14 +56,16 @@ class _HourlyRainAndTemperatureChart extends HourlyRainChartChart {
 
   @override
   Widget? chartTitle(BuildContext context) {
+    final translations = Translations.of(context)!;
     final rainC = rainColor(weather.weather.conditions.rain1h ?? 0);
     final tempC = temperatureColor(weather.weather.conditions.temperatures.temperature);
     return Row(
       children: [
-        Text('Rain ', style: titleStyle(context), textScaleFactor: 1.2),
-        Text('(${unit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: rainC)),
-        Text(' and Temperature ', style: titleStyle(context), textScaleFactor: 1.2),
-        Text('(${tempUnit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: tempC)),
+        Text(translations.rain_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(' (${unit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: rainC)),
+        Text(' and ', style: titleStyle(context), textScaleFactor: 1.2),
+        Text(translations.temp_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(' (${tempUnit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: tempC)),
         helpButton(context, (_) => const RainScaleWidget()),
       ],
     );
