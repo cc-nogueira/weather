@@ -1,3 +1,4 @@
+import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -30,6 +31,7 @@ class WeatherApp extends ConsumerWidget {
         onGenerateTitle: (context) => Translations.of(context)!.weather_list_page_title,
         localizationsDelegates: Translations.localizationsDelegates,
         supportedLocales: Translations.supportedLocales,
+        locale: ref.watch(languageOptionProvider).locale,
         onGenerateRoute: _routes.onGenerateRoute,
         initialRoute: Routes.home,
       );

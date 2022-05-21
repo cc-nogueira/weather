@@ -17,16 +17,16 @@ abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidge
     return DropdownButtonHideUnderline(
       child: DropdownButton<Unit<T>>(
         value: value,
-        items: _items(value, options),
-        selectedItemBuilder: (context) => _selectedItems(context, options),
+        items: _items(options, value),
+        selectedItemBuilder: (context) => _selectedItems(options),
         alignment: AlignmentDirectional.centerEnd,
         onChanged: (selection) => _onChanged(selection, ref.read),
       ),
     );
   }
 
-  List<DropdownMenuItem<Unit<T>>> _items(Unit value, List<Unit<T>> options) {
-    final list = options.map((unit) {
+  List<DropdownMenuItem<Unit<T>>> _items(List<Unit<T>> options, Unit value) {
+    return options.map((unit) {
       final child = unit == value
           ? Row(children: [
               _unitLabel(unit),
@@ -36,18 +36,12 @@ abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidge
           : _unitLabel(unit);
       return DropdownMenuItem(value: unit, child: child);
     }).toList();
-    return list;
   }
 
-  List<Widget> _selectedItems(BuildContext context, List<Unit<T>> options) {
-    final list = options
-        .map(
-          (unit) => Row(
-            children: [_unitLabel(unit), const SizedBox(width: 10)],
-          ),
-        )
+  List<Widget> _selectedItems(List<Unit<T>> options) {
+    return options
+        .map((unit) => Row(children: [_unitLabel(unit), const SizedBox(width: 10)]))
         .toList();
-    return list;
   }
 
   void _onChanged(Unit<T>? selection, Reader read) {

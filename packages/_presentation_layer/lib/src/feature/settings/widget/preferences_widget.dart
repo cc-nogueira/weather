@@ -8,6 +8,7 @@ import '../../../l10n/translations.dart';
 import '../../../provider/presentation_providers.dart';
 import 'combine_temperature_to_rain_and_snow_switch.dart';
 import 'dark_light_mode_switch.dart';
+import 'language_dropdown.dart';
 import 'precipitation_unit_dropdown.dart';
 import 'temperature_unit_dropdown.dart';
 import 'wind_speed_unit_dropdown.dart';
@@ -121,6 +122,14 @@ class _SettingsPanel extends StatelessWidget {
             children: [
               Text(translations.dark_light_theme_label, style: itemStyle),
               DarkLightModeSwitch(changeCallback: _onChangePreference),
+            ],
+          ),
+          const Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(translations.label_language_selector, style: itemStyle),
+              LanguageDropdown(changeCallback: _onChangePreference),
             ],
           ),
           const Divider(),

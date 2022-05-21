@@ -127,7 +127,8 @@ class _CurrentWeatherWidget extends ConsumerWidget
             children: [
               windIcon(weather.conditions.wind, size: 24, color: iconColor),
               const SizedBox(width: 4.0),
-              Text('${windDirectionLabel(weather.conditions.wind)}  '),
+              Text(windDirectionLabel(weather.conditions.wind)),
+              const SizedBox(width: 24.0),
             ],
           ),
         ),

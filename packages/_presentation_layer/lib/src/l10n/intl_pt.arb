@@ -62,6 +62,10 @@
       "intensity": {}
     }
   },
+  "label_language_selector": "Idioma",
+  "@label_language_selector": {
+    "description": "Label for language selector"
+  },
   "label_remove": "Excluir",
   "@label_remove": {
     "description": "Label for remove"

@@ -1,4 +1,5 @@
 export 'src/entity/common/entity.dart';
+export 'src/entity/common/language_option.dart';
 export 'src/entity/common/location.dart';
 export 'src/entity/common/preference.dart';
 export 'src/entity/time_zone/time_zone.dart';

@@ -5,6 +5,7 @@ import 'package:quiver/time.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:tuple/tuple.dart';
 
+import '../entity/common/language_option.dart';
 import '../entity/common/location.dart';
 import '../entity/time_zone/time_zone.dart';
 import '../entity/weather/city.dart';
@@ -34,6 +35,11 @@ final appLifecycleUsecaseProvider =
 
 final preferencesUsecaseProvider =
     Provider<PreferencesUsecase>((ref) => ref.watch(domainLayerProvider).preferencesUsecase);
+
+final languageOptionProvider = Provider<LanguageOption>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase.languageOptionProvider);
+});
 
 final themeModeProvider = Provider<ThemeMode>((ref) {
   final usecase = ref.watch(preferencesUsecaseProvider);
