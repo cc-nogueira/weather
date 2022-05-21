@@ -5,6 +5,7 @@ import 'package:qty/qty.dart';
 
 import '../../../../l10n/translations.dart';
 import '../../widget/color_range_mixin.dart';
+import '../../widget/temperature_mixin.dart';
 import '../../widget/weather_icons.dart';
 import '../../widget/wind_mixin.dart';
 
@@ -24,7 +25,8 @@ class CurrentWeatherWidget extends ConsumerWidget {
   }
 }
 
-class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMixin {
+class _CurrentWeatherWidget extends ConsumerWidget
+    with ColorRangeMixin, WindMixin, TemperatureMixin {
   const _CurrentWeatherWidget({required this.weather});
 
   final Weather weather;
@@ -43,63 +45,124 @@ class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMix
     final iconTheme = theme.iconTheme;
     final iconColor = iconTheme.color ?? theme.colorScheme.onSurface;
 
+    final bold = theme.textTheme.headlineSmall!;
+
+    final feelString = '${feelTemp.amount.round()} ${temperatureUnit.symbol}';
+    final feelStyle =
+        bold.copyWith(color: temperatureColor(weather.conditions.temperatures.feelsLike));
+
     final minString =
         minTemp == null ? '---' : '${minTemp.amount.round()} ${temperatureUnit.symbol}';
+    final minStyle = minTemp == null
+        ? bold
+        : bold.copyWith(color: temperatureColor(weather.conditions.temperatures.min!));
+
     final maxString =
         maxTemp == null ? '---' : '${maxTemp.amount.round()} ${temperatureUnit.symbol}';
+    final maxStyle = maxTemp == null
+        ? bold
+        : bold.copyWith(color: temperatureColor(weather.conditions.temperatures.max!));
+
+    final windString = _windSpeed(weather.conditions.wind.speedQuantity, windSpeedUnit);
+    final windStyle = bold.copyWith(color: windColor(weather.conditions.wind));
+
+    final gustString = _windSpeed(weather.conditions.wind.gustQuantity, windSpeedUnit);
+    final gustStyle = weather.conditions.wind.gust == null
+        ? bold
+        : bold.copyWith(color: windColor(weather.conditions.wind));
 
     final elements = [
       _detailTile(
         context,
-        mainAxisAlignment: MainAxisAlignment.start,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: WeatherIcons.instance.thermometer(28, iconColor),
+        title: Container(
+          height: 24,
+          alignment: Alignment.center,
+          child: Text(translations.word_feels_like),
         ),
-        title: translations.word_feels_like,
-        value: '${feelTemp.amount.toStringAsFixed(1)} ${temperatureUnit.symbol}',
-      ),
-      _detailTile(context, title: translations.word_min, value: minString),
-      _detailTile(context, title: translations.word_max, value: maxString),
-      _detailTile(
-        context,
-        mainAxisAlignment: MainAxisAlignment.start,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 24.0, right: 4.0),
-          child: Icon(Icons.air),
-        ),
-        title: translations.word_wind,
-        value: _windSpeed(weather.conditions.wind.speedQuantity, windSpeedUnit),
+        value: Text(feelString, style: feelStyle),
       ),
       _detailTile(
         context,
-        title: translations.word_gust,
-        value: _windSpeed(weather.conditions.wind.gustQuantity, windSpeedUnit),
+        title: Container(
+          height: 24,
+          alignment: Alignment.center,
+          child: Text(translations.word_min),
+        ),
+        value: Text(minString, style: minStyle),
       ),
       _detailTile(
         context,
-        leading: Padding(
-          padding: const EdgeInsets.only(right: 2.0),
-          child: windIcon(weather.conditions.wind, size: 26, color: iconColor),
+        title: Container(
+          height: 24,
+          alignment: Alignment.center,
+          child: Text(translations.word_max),
         ),
-        title: '${windDirectionLabel(weather.conditions.wind)}  ',
-        value: '${weather.conditions.wind.directionFrom} °',
+        value: Text(maxString, style: maxStyle),
       ),
-    ];
-    final gridWidth = MediaQuery.of(context).size.width;
-    const desiredHeight = 140;
-    return Container(
-      color: theme.scaffoldBackgroundColor,
-      padding: const EdgeInsets.only(top: 8.0),
-      child: Column(
-        children: [
-          Row(
+      _detailTile(
+        context,
+        title: Container(
+          height: 24,
+          alignment: Alignment.center,
+          child: Text(translations.word_wind),
+        ),
+        value: Text(windString, style: windStyle),
+      ),
+      _detailTile(
+        context,
+        title: Container(
+          height: 24,
+          alignment: Alignment.center,
+          child: Text(translations.word_gust),
+        ),
+        value: Text(gustString, style: gustStyle),
+      ),
+      _detailTile(
+        context,
+        title: Container(
+          height: 24,
+          alignment: Alignment.center,
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              windIcon(weather.conditions.wind, size: 24, color: iconColor),
+              const SizedBox(width: 4.0),
+              Text('${windDirectionLabel(weather.conditions.wind)}  '),
+            ],
+          ),
+        ),
+        value: Text('${weather.conditions.wind.directionFrom} °', style: bold),
+      ),
+    ];
+    final bgColor = theme.brightness == Brightness.light ? Colors.white54 : Colors.black26;
+    final gridWidth = MediaQuery.of(context).size.width - 44;
+    final tileWidth = gridWidth / 3;
+    const desiredTileHeight = 80;
+    return Container(
+      height: desiredTileHeight * 2 + 10,
+      color: theme.scaffoldBackgroundColor,
+      padding: const EdgeInsets.only(top: 8.0),
+      child: DecoratedBox(
+        decoration: BoxDecoration(color: bgColor),
+        child: IntrinsicHeight(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: 40,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    WeatherIcons.instance.thermometer(38, iconColor),
+                    const Icon(Icons.air, size: 32),
+                  ],
+                ),
+              ),
               SizedBox(
                 width: gridWidth,
                 child: GridView.count(
-                  childAspectRatio: gridWidth / desiredHeight,
+                  childAspectRatio: tileWidth / desiredTileHeight,
                   shrinkWrap: true,
                   crossAxisCount: 3,
                   primary: false,
@@ -108,40 +171,18 @@ class _CurrentWeatherWidget extends ConsumerWidget with ColorRangeMixin, WindMix
               ),
             ],
           ),
-          Container(
-            height: 12.0,
-            color:
-                Theme.of(context).brightness == Brightness.light ? Colors.white54 : Colors.black26,
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _detailTile(
-    BuildContext context, {
-    Widget? leading,
-    String? title,
-    required String value,
-    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-  }) {
-    const bold = TextStyle(fontWeight: FontWeight.bold);
-    final textTile = Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (title != null) Text(title),
-        Text(value, style: bold),
-      ],
-    );
-    final child = (leading == null)
-        ? textTile
-        : Row(
-            mainAxisAlignment: mainAxisAlignment,
-            children: [leading, textTile],
-          );
+  Widget _detailTile(BuildContext context, {required Widget title, required Widget value}) {
     return Container(
-      color: Theme.of(context).brightness == Brightness.light ? Colors.white54 : Colors.black26,
-      child: child,
+      decoration: BoxDecoration(border: Border.all(color: Colors.black38)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [title, const SizedBox(height: 2.0), value],
+      ),
     );
   }
 

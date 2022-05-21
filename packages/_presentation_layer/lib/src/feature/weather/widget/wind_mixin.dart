@@ -28,6 +28,8 @@ mixin WindMixin on ColorRangeMixin {
 
   Color windColor(Wind wind) => rangeColor(_colorStops, wind.speed);
 
+  Color? gustColor(Wind wind) => wind.gust == null ? null : rangeColor(_colorStops, wind.gust!);
+
   Widget hourlyWindIcon(Wind wind, double size, [Color? color]) => Transform.rotate(
         angle: wind.directionTo * pi / 180,
         alignment: Alignment.center,
