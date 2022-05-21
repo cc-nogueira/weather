@@ -69,7 +69,7 @@ class _CurrentWeatherWidget extends ConsumerWidget
     final gustString = _windSpeed(weather.conditions.wind.gustQuantity, windSpeedUnit);
     final gustStyle = weather.conditions.wind.gust == null
         ? bold
-        : bold.copyWith(color: windColor(weather.conditions.wind));
+        : bold.copyWith(color: gustColor(weather.conditions.wind));
 
     final elements = [
       _detailTile(
