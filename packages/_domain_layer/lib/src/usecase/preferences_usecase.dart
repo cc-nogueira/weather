@@ -35,7 +35,6 @@ class PreferencesUsecase {
   static const _windSpeedUnitKey = 'windSpeedUnit';
   static const _precipitationUnitKey = 'precipitationUnit';
 
-  static const _initialLanguageOption = LanguageOption.none;
   static const _initialTheme = ThemeMode.dark;
   static const _initialCombineTemperatureToRainAndSnow = false;
   static const _initialWeatherOrder = WeatherOrder.byTemp;
@@ -75,14 +74,11 @@ class PreferencesUsecase {
 
   LanguageOption get _languageOption {
     final pref = repository.getByKey(_languageOptionKey);
-    if (pref == null) return _initialLanguageOption;
+    if (pref == null) return LanguageOption.none;
     final split = pref.value.split('_');
     final languageCode = split[0];
-    if (languageCode.length == 2) {
-      final countryCode = (split.length == 2 && split[1].length == 2) ? split[1] : null;
-      return LanguageOption.from(languageCode, country: countryCode);
-    }
-    return _initialLanguageOption;
+    final countryCode = (split.length == 2) ? split[1] : null;
+    return LanguageOption.matching(languageCode, countryCode);
   }
 
   /// Save the theme preference and updates this usecase [themeProvider].

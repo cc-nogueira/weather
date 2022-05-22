@@ -10,7 +10,8 @@ class LanguageDropdown extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentOption = ref.watch(languageOptionProvider);
-    final options = LanguageOption.languagesForThisSystemCurrentlyUsing(currentOption);
+    final locales = ref.watch(systemLocalesProvider);
+    final options = LanguageOption.languageOptions(locales, currentOption);
     return DropdownButtonHideUnderline(
       child: DropdownButton(
         value: currentOption,
@@ -44,10 +45,10 @@ class LanguageDropdown extends ConsumerWidget {
   }
 
   Widget _optionLabel(LanguageOption option) {
-    if (option == LanguageOption.none) {
+    if (option.isNone) {
       return const Text('auto', style: TextStyle(fontWeight: FontWeight.bold));
     }
-    return Text(option.flag, textAlign: TextAlign.right);
+    return Text(option.country.flag, textAlign: TextAlign.right);
   }
 
   void _onChanged(LanguageOption? selection, Reader read) {

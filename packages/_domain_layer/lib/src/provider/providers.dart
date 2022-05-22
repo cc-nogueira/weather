@@ -33,6 +33,9 @@ final appLifecycleUsecaseProvider =
 
 // -- Preferences:
 
+/// System locales obtained on main()
+final systemLocalesProvider = StateProvider<List<Locale>>((ref) => []);
+
 final preferencesUsecaseProvider =
     Provider<PreferencesUsecase>((ref) => ref.watch(domainLayerProvider).preferencesUsecase);
 
