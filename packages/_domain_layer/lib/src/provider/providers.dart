@@ -144,6 +144,7 @@ final hourMetronomeProvider = Provider<DateTime>((ref) {
 });
 
 final currentWeatherMetronomeProvider = Provider<DateTime>((ref) {
+  ref.watch(languageOptionProvider);
   final subscription = Metronome.periodic(WeatherUsecase.currentWeatherRefreshInterval)
       .listen((dt) => ref.state = dt);
   ref.onDispose(() => subscription.cancel());

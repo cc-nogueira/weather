@@ -1,3 +1,4 @@
+import 'package:_core_layer/string_utils.dart';
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 
@@ -11,13 +12,10 @@ class WeatherConditionsHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme.bodyText2;
+    final style = Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.normal);
     return Hero(
         tag: '${city.id}_weatherConditions',
         flightShuttleBuilder: heroTextFlightShuttleBuilder,
-        child: Text(
-          '${weather.conditions.title} (${weather.conditions.description})',
-          style: style,
-        ));
+        child: Text(weather.conditions.description.capitalized, style: style));
   }
 }

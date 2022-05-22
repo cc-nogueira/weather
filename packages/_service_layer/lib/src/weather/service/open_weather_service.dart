@@ -1,4 +1,5 @@
 import 'package:_domain_layer/domain_layer.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../mapper/city_mapper.dart';
 import '../mapper/location_mapper.dart';
@@ -15,10 +16,11 @@ import 'open_weather_client.dart';
 class OpenWeatherService implements WeatherService {
   OpenWeatherService({
     required String appId,
-    required String language,
-  }) : client = OpenWeatherClient(appId: appId, language: language);
+    required this.read,
+  }) : client = OpenWeatherClient(appId: appId);
 
   final OpenWeatherClient client;
+  final Reader read;
   final _weatherMapper = const WeatherMapper();
   final _oneCallMapper = const OneCallMapper();
   final _cityMapper = const CityMapper();
@@ -68,7 +70,8 @@ class OpenWeatherService implements WeatherService {
   /// Throws ArgumentError if can't find weather info for this location.
   @override
   Future<CurrentWeather> getCurrentWeatherByLocation(Location location) async {
-    final jsonMap = await client.getCurrentWeatherJson(location);
+    final jsonMap =
+        await client.getCurrentWeatherJson(location, read(languageOptionProvider).languageCode);
     if (jsonMap['cod'] != 200) {
       throw ArgumentError('Did not find weather info for location.');
     }
@@ -83,7 +86,8 @@ class OpenWeatherService implements WeatherService {
   /// Throws ArgumentError if can't find weather info for this location.
   @override
   Future<OneCallWeather> getOneCallByLocation(Location location) async {
-    final jsonMap = await client.getOneCallJson(location);
+    final jsonMap =
+        await client.getOneCallJson(location, read(languageOptionProvider).languageCode);
     final model = OneCallWeatherModel.fromJson(jsonMap);
     return _oneCallMapper.mapEntity(model);
   }

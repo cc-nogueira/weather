@@ -8,10 +8,9 @@ import 'package:http/http.dart' as http;
 ///
 /// Remote invocations to OpenWeather API.
 class OpenWeatherClient {
-  const OpenWeatherClient({required this.appId, required this.language});
+  const OpenWeatherClient({required this.appId});
 
   final String appId;
-  final String language;
 
   /// Fetches a list with one or zero Geo Locations JSON from OpenWeather API.
   ///
@@ -43,12 +42,12 @@ class OpenWeatherClient {
   /// Fetches current weather JSON from OpenWeather API.
   ///
   /// Returns currentweather JSON for the given location.
-  Future<Map<String, dynamic>> getCurrentWeatherJson(Location location) async {
+  Future<Map<String, dynamic>> getCurrentWeatherJson(Location location, String languageCode) async {
     final uri = Uri.https('api.openweathermap.org', '/data/2.5/weather', {
       'lat': location.latitude.toString(),
       'lon': location.longitude.toString(),
       'units': 'metric',
-      'lang': language,
+      'lang': languageCode,
       'appid': appId,
     });
 
@@ -58,13 +57,13 @@ class OpenWeatherClient {
   /// Fetches oneCall JSON from OpenWeather API.
   ///
   /// Returns oneCall JSON for the given location.
-  Future<Map<String, dynamic>> getOneCallJson(Location location) async {
+  Future<Map<String, dynamic>> getOneCallJson(Location location, String languageCode) async {
     final uri = Uri.https('api.openweathermap.org', '/data/2.5/onecall', {
       'lat': location.latitude.toString(),
       'lon': location.longitude.toString(),
       'exclude': 'minutely',
       'units': 'metric',
-      'lang': language,
+      'lang': languageCode,
       'appid': appId,
     });
 

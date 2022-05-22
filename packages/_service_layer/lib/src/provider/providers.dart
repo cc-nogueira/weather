@@ -9,7 +9,5 @@ final serviceLayerProvider = Provider((_) => const ServiceLayer());
 
 final timeApiServiceProvider = Provider((_) => const TimeApiService());
 
-final weatherServiceProvider = Provider((_) => OpenWeatherService(
-      appId: ServiceLayer.openWeatherAppId,
-      language: 'en',
-    ));
+final weatherServiceProvider =
+    Provider((ref) => OpenWeatherService(appId: ServiceLayer.openWeatherAppId, read: ref.read));
