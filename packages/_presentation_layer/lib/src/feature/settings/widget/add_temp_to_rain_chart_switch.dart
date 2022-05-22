@@ -2,8 +2,10 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CombineTemperatureToRainAndSnowSwitch extends ConsumerWidget {
-  const CombineTemperatureToRainAndSnowSwitch({
+import '../../weather/widget/weather_icons.dart';
+
+class AddTemperatureToRainChartSwitch extends ConsumerWidget {
+  const AddTemperatureToRainChartSwitch({
     super.key,
     this.padding,
     this.iconSize,
@@ -16,12 +18,14 @@ class CombineTemperatureToRainAndSnowSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final combine = ref.watch(combineTemperatureToRainAndSnowProvider);
-    final spacer = SizedBox(width: iconSize ?? IconTheme.of(context).size ?? 24.0);
+    final add = ref.watch(addTempToRainChartProvider);
     final widget = Row(
       children: [
-        Switch(value: combine, onChanged: (value) => _onChange(ref.read, value)),
-        spacer,
+        Switch(
+          value: add,
+          onChanged: (value) => _onChange(ref.read, value),
+        ),
+        WeatherIcons.instance.thermometer(28, Colors.white),
       ],
     );
     if (padding == null) {
@@ -30,8 +34,6 @@ class CombineTemperatureToRainAndSnowSwitch extends ConsumerWidget {
     return Padding(padding: padding!, child: widget);
   }
 
-  void _onChange(Reader read, bool option) {
-    read(preferencesUsecaseProvider).combineTemperatureToRainAndSnow = option;
-    changeCallback?.call();
-  }
+  void _onChange(Reader read, bool option) =>
+      read(preferencesUsecaseProvider).addTempToRainChart = option;
 }

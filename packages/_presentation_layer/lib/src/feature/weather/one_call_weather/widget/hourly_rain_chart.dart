@@ -6,6 +6,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/rain_scale_widget.dart';
+import '../../../chart_scale/widget/temperature_scale_widget.dart';
+import '../../../settings/widget/add_temp_to_rain_chart_switch.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/rain_mixin.dart';
 import '../../widget/temperature_mixin.dart';
@@ -34,6 +36,8 @@ class HourlyRainChart extends ConsumerWidget {
       weather: weather,
       stats: stats,
       unit: ref.watch(precipitationUnitProvider),
+      tempUnit: ref.watch(temperatureUnitProvider),
+      showTemperature: ref.watch(addTempToRainChartProvider),
       height: height,
       margin: margin,
       padding: padding,
@@ -47,21 +51,44 @@ class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, 
     required super.weather,
     required super.stats,
     required this.unit,
+    required this.tempUnit,
+    required this.showTemperature,
     super.height,
     super.margin,
     super.padding,
   });
 
   final Unit<Speed> unit;
+  final Unit<Temperature> tempUnit;
+  final bool showTemperature;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(addTempToRainChartProvider);
+    return super.build(context, ref);
+  }
 
   @override
   Widget? chartTitle(BuildContext context) {
     final translations = Translations.of(context)!;
+    final tempC = temperatureColor(weather.weather.conditions.temperatures.temperature);
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(translations.rain_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
-        Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
-        helpButton(context, (_) => const RainScaleWidget()),
+        Row(
+          children: [
+            Text(translations.rain_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+            Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
+            helpButton(context, (_) => const RainScaleWidget()),
+            if (showTemperature)
+              Text(' ${translations.word_and} ', style: titleStyle(context), textScaleFactor: 1.2),
+            if (showTemperature)
+              Text(' (${tempUnit.symbol})',
+                  style: titleUnitsStyle(context)!.copyWith(color: tempC)),
+            if (showTemperature) helpButton(context, (_) => const TemperatureScaleWidget()),
+          ],
+        ),
+        const AddTemperatureToRainChartSwitch(),
       ],
     );
   }
@@ -111,6 +138,26 @@ class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, 
     );
   }
 
+  ChartLabelFormatterCallback? get _temperatureYAxisLabelFormatter =>
+      (AxisLabelRenderDetails details) => ChartAxisLabel(
+            details.text,
+            details.textStyle.copyWith(color: temperatureColor(Celcius(details.value.toDouble()))),
+          );
+
+  Color _temperatureColor(HourlyWeather hourly, int index) =>
+      temperatureColor(hourly.conditions.temperatures.temperature);
+
+  @override
+  String? get primaryYAxisName => 'rain';
+
+  String get _temperatureYAxisName => 'temp';
+
+  @override
+  double? get primaryYAxisMaximum {
+    if (stats.hourlyStats.maxRain > 0.7 * rainScaleMinReference) return null;
+    return _precipitationInChartUnit(rainScaleMinReference.ceilToDouble());
+  }
+
   @override
   List<ChartSeries> series(List<HourlyWeather> data) => [
         ColumnSeries<HourlyWeather, DateTime>(
@@ -121,13 +168,31 @@ class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, 
           yAxisName: primaryYAxisName,
           pointColorMapper: (hourly, idx) => rainColor(hourly.conditions.rain1h ?? 0.0),
         ),
+        if (showTemperature)
+          LineSeries<HourlyWeather, DateTime>(
+            name: 'Temperature',
+            dataSource: data,
+            xValueMapper: (data, _) => data.localShiftedDateTime,
+            yValueMapper: (data, _) => _temperature(data, tempUnit).amount,
+            yAxisName: _temperatureYAxisName,
+            pointColorMapper: _temperatureColor,
+          ),
       ];
 
   @override
-  double? get primaryYAxisMaximum {
-    if (stats.hourlyStats.maxRain > 0.7 * rainScaleMinReference) return null;
-    return _precipitationInChartUnit(rainScaleMinReference.ceilToDouble());
-  }
+  List<ChartAxis> get axes => [
+        if (showTemperature)
+          NumericAxis(
+            name: _temperatureYAxisName,
+            opposedPosition: true,
+            majorGridLines: const MajorGridLines(width: 0),
+            anchorRangeToVisiblePoints: anchorRangeToVisiblePoints,
+            rangePadding: ChartRangePadding.additional,
+            decimalPlaces: 0,
+            labelStyle: TextStyle(color: palette[1]),
+            axisLabelFormatter: _temperatureYAxisLabelFormatter,
+          ),
+      ];
 
   @override
   ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => (AxisLabelRenderDetails details) {
@@ -147,4 +212,9 @@ class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, 
 
   double _precipitationInChartUnit(double dataValue) =>
       Speed.millimetersPerHour(dataValue).convertTo(unit).amount;
+
+  Quantity<Temperature> _temperature(HourlyWeather hourly, Unit<Temperature> unit) {
+    final celcius = hourly.conditions.temperatures.temperature;
+    return celcius.quantity.convertTo(unit);
+  }
 }

@@ -6,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../l10n/translations.dart';
 import '../../../provider/presentation_providers.dart';
-import 'combine_temperature_to_rain_and_snow_switch.dart';
 import 'dark_light_mode_switch.dart';
 import 'language_dropdown.dart';
 import 'precipitation_unit_dropdown.dart';
@@ -152,16 +151,6 @@ class _SettingsPanel extends StatelessWidget {
             children: [
               Text(translations.precipitation_unit_label, style: itemStyle),
               PrecipitationUnitDropdown(changeCallback: _onChangePreference),
-            ],
-          ),
-          const Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(translations.add_temp_to_rain_snow_charts_label, style: itemStyle),
-              ),
-              CombineTemperatureToRainAndSnowSwitch(changeCallback: _onChangePreference),
             ],
           ),
         ],
