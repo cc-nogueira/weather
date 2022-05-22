@@ -50,8 +50,8 @@ abstract class HourlyChart extends ChartWidget {
             series: series(data),
             margin: padding,
             palette: palette,
-            primaryXAxis: primaryXAxis(data),
-            primaryYAxis: primaryYAxis(data),
+            primaryXAxis: primaryXAxis(context, data),
+            primaryYAxis: primaryYAxis(context, data),
             axes: axes,
             zoomPanBehavior: ZoomPanBehavior(
               enablePanning: true,
@@ -67,7 +67,7 @@ abstract class HourlyChart extends ChartWidget {
 
   List<ChartAxis> get axes => [];
 
-  ChartAxis? primaryYAxis(List<HourlyWeather> data) => NumericAxis(
+  ChartAxis? primaryYAxis(BuildContext context, List<HourlyWeather> data) => NumericAxis(
         isVisible: primaryYAxisIsVisible,
         name: primaryYAxisName,
         anchorRangeToVisiblePoints: anchorRangeToVisiblePoints,
@@ -91,12 +91,12 @@ abstract class HourlyChart extends ChartWidget {
 
   double? get primaryYAxisMaximum => null;
 
-  ChartAxis? primaryXAxis(List<HourlyWeather> data) => DateTimeAxis(
+  ChartAxis? primaryXAxis(BuildContext context, List<HourlyWeather> data) => DateTimeAxis(
         interval: primaryXAxisInterval,
         desiredIntervals: 8,
         intervalType: DateTimeIntervalType.hours,
         plotBands: plotBands(data),
-        multiLevelLabels: multiLevelLabels(data),
+        multiLevelLabels: multiLevelLabels(context, data),
         multiLevelLabelStyle: multiLevelLabelStyle,
         autoScrollingMode: AutoScrollingMode.start,
         autoScrollingDelta: autoScrollingDelta,
@@ -139,8 +139,8 @@ abstract class HourlyChart extends ChartWidget {
     ));
   }
 
-  List<DateTimeMultiLevelLabel>? multiLevelLabels(List<HourlyWeather> data) {
-    final dowFormat = DateFormat('EEEE');
+  List<DateTimeMultiLevelLabel>? multiLevelLabels(BuildContext context, List<HourlyWeather> data) {
+    final dowFormat = DateFormat('EEEE', Localizations.localeOf(context).languageCode);
     final labels = <DateTimeMultiLevelLabel>[];
     if (data.isNotEmpty) {
       late DateTime end;
