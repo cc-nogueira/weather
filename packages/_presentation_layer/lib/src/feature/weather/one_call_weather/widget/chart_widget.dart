@@ -17,33 +17,6 @@ abstract class ChartWidget extends ConsumerWidget {
   final EdgeInsets padding;
   final Color backgroundColor;
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final title = chartTitle(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(color: backgroundColor),
-      child: Padding(
-        padding: margin,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (title != null)
-              Padding(
-                padding:
-                    EdgeInsets.only(left: padding.left, right: padding.right, top: padding.top),
-                child: title,
-              ),
-            chart(context),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget chart(BuildContext context);
-
-  Widget? chartTitle(BuildContext context) => null;
-
   TextStyle? titleStyle(BuildContext context) => const TextStyle(
         fontSize: 15.0,
         fontFamily: 'Segoe UI',

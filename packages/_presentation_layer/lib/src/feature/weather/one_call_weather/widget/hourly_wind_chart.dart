@@ -56,7 +56,7 @@ class _HourlyWindChart extends HourlyChart with ColorRangeMixin, WindMixin {
   final Unit<Speed> unit;
 
   @override
-  Widget? chartTitle(BuildContext context) {
+  Widget? chartTitle(BuildContext context, List<HourlyWeather> data) {
     final translations = Translations.of(context)!;
     return Row(
       children: [

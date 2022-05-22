@@ -55,7 +55,7 @@ class _HourlyTemperatureChart extends HourlyChart
   final Unit<Temperature> unit;
 
   @override
-  Widget? chartTitle(BuildContext context) {
+  Widget? chartTitle(BuildContext context, List<HourlyWeather> data) {
     final translations = Translations.of(context)!;
     return Row(
       children: [

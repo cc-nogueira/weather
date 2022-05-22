@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -15,6 +16,28 @@ abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget wit
   final String chartName;
 
   @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final title = chartTitle(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(color: backgroundColor),
+      child: Padding(
+        padding: margin,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (title != null)
+              Padding(
+                padding:
+                    EdgeInsets.only(left: padding.left, right: padding.right, top: padding.top),
+                child: title,
+              ),
+            chart(context),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget chart(BuildContext context) {
     final data = seriesData;
     return SizedBox(
@@ -28,7 +51,6 @@ abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget wit
     );
   }
 
-  @override
   Widget? chartTitle(BuildContext context) {
     return Row(
       children: [

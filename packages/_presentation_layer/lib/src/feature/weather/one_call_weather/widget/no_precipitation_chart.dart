@@ -53,7 +53,7 @@ class _NoPrecipitationChart extends HourlyChart with ColorRangeMixin, RainMixin,
   final Unit<Speed> unit;
 
   @override
-  Widget? chartTitle(BuildContext context) {
+  Widget? chartTitle(BuildContext context, List<HourlyWeather> data) {
     final translations = Translations.of(context)!;
     return Row(
       children: [

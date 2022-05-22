@@ -63,9 +63,10 @@ class HourlySnowChartChart extends HourlyChart with ColorRangeMixin, SnowMixin, 
   final bool showTemperature;
 
   @override
-  Widget? chartTitle(BuildContext context) {
+  Widget? chartTitle(BuildContext context, List<HourlyWeather> data) {
     final translations = Translations.of(context)!;
     final tempC = temperatureColor(weather.weather.conditions.temperatures.temperature);
+    final showTempTitle = showTemperature && !checkNoSnowInHourlyForecast(data);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -74,15 +75,15 @@ class HourlySnowChartChart extends HourlyChart with ColorRangeMixin, SnowMixin, 
             Text(translations.snow_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
             Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
             helpButton(context, (_) => const SnowScaleWidget()),
-            if (showTemperature)
+            if (showTempTitle)
               Text(' ${translations.word_and} ', style: titleStyle(context), textScaleFactor: 1.2),
-            if (showTemperature)
+            if (showTempTitle)
               Text(' (${tempUnit.symbol})',
                   style: titleUnitsStyle(context)!.copyWith(color: tempC)),
-            if (showTemperature) helpButton(context, (_) => const TemperatureScaleWidget()),
+            if (showTempTitle) helpButton(context, (_) => const TemperatureScaleWidget()),
           ],
         ),
-        const AddTemperatureToSnowChartSwitch(),
+        if (showTempTitle) const AddTemperatureToSnowChartSwitch(),
       ],
     );
   }

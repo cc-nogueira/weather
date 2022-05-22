@@ -36,12 +36,31 @@ abstract class HourlyChart extends ChartWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(hourMetronomeProvider);
-    return super.build(context, ref);
+    final data = seriesData;
+    final title = chartTitle(context, data);
+    return DecoratedBox(
+      decoration: BoxDecoration(color: backgroundColor),
+      child: Padding(
+        padding: margin,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (title != null)
+              Padding(
+                padding:
+                    EdgeInsets.only(left: padding.left, right: padding.right, top: padding.top),
+                child: title,
+              ),
+            chart(context, data),
+          ],
+        ),
+      ),
+    );
   }
 
-  @override
-  Widget chart(BuildContext context) {
-    final data = seriesData;
+  Widget? chartTitle(BuildContext context, List<HourlyWeather> data) => null;
+
+  Widget chart(BuildContext context, List<HourlyWeather> data) {
     final replacement = chartReplacement(context, data);
     return replacement ??
         SizedBox(

@@ -15,7 +15,7 @@ class HourlyWeatherChart extends HourlyChart with WeatherMixin {
   }) : super(height: 120);
 
   @override
-  Widget? chartTitle(BuildContext context) =>
+  Widget? chartTitle(BuildContext context, List<HourlyWeather> data) =>
       Text('Hourly Weather', style: titleStyle(context), textScaleFactor: 1.2);
 
   @override
