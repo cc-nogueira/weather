@@ -72,7 +72,7 @@ class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, 
   Widget? chartTitle(BuildContext context, List<HourlyWeather> data) {
     final translations = Translations.of(context)!;
     final tempC = temperatureColor(weather.weather.conditions.temperatures.temperature);
-    final showTempTitle = showTemperature && !checkNoRainInHourlyForecast(data);
+    final hasRain = !checkNoRainInHourlyForecast(data);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -81,15 +81,16 @@ class HourlyRainChartChart extends HourlyChart with ColorRangeMixin, RainMixin, 
             Text(translations.rain_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
             Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
             helpButton(context, (_) => const RainScaleWidget()),
-            if (showTempTitle)
+            if (showTemperature && hasRain)
               Text(' ${translations.word_and} ', style: titleStyle(context), textScaleFactor: 1.2),
-            if (showTempTitle)
+            if (showTemperature && hasRain)
               Text(' (${tempUnit.symbol})',
                   style: titleUnitsStyle(context)!.copyWith(color: tempC)),
-            if (showTempTitle) helpButton(context, (_) => const TemperatureScaleWidget()),
+            if (showTemperature && hasRain)
+              helpButton(context, (_) => const TemperatureScaleWidget()),
           ],
         ),
-        if (showTempTitle) const AddTemperatureToRainChartSwitch(),
+        if (hasRain) const AddTemperatureToRainChartSwitch(),
       ],
     );
   }
