@@ -7,7 +7,9 @@ class ThemeBuilder {
   ThemeData get lightTheme => _theme(ThemeMode.light);
 
   ThemeData _theme(ThemeMode mode) {
-    final base = mode == ThemeMode.dark ? ThemeData.dark() : ThemeData.light();
+    final base = mode == ThemeMode.dark
+        ? ThemeData(brightness: Brightness.dark, useMaterial3: true)
+        : ThemeData(brightness: Brightness.light, useMaterial3: true);
     return base.copyWith(
       colorScheme: _colorScheme(mode, base.colorScheme),
       textTheme: _textTheme(mode, base.textTheme),
