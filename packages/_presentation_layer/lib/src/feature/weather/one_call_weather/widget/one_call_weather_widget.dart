@@ -44,10 +44,7 @@ class OneCallWeatherWidget extends ConsumerWidget with OneCallWeatherRefreshMixi
       onRefresh: () => refresh(ref, messenger, city.location!),
       child: ListView(
         children: [
-          CurrentWeatherWidget(
-            city: city,
-            initialWeather: oneCallWeather.weather,
-          ),
+          CurrentWeatherWidget(city: city, initialWeather: oneCallWeather.weather, stats: stats),
           Container(height: 12, color: Colors.black87),
           if (oneCallWeather.alerts.isNotEmpty) AlertsWidget(weather: oneCallWeather),
           Container(height: 8, color: Colors.black87),

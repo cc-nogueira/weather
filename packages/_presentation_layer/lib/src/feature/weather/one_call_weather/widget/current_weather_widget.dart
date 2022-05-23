@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -8,28 +10,36 @@ import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_mixin.dart';
 import '../../widget/weather_icons.dart';
 import '../../widget/wind_mixin.dart';
+import '../helper/one_call_weather_stats.dart';
 
 class CurrentWeatherWidget extends ConsumerWidget {
-  const CurrentWeatherWidget({super.key, required this.city, required this.initialWeather});
+  const CurrentWeatherWidget({
+    super.key,
+    required this.city,
+    required this.initialWeather,
+    required this.stats,
+  });
 
   final City city;
   final Weather initialWeather;
+  final OneCallWeatherStats stats;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentWeather = ref.watch(currentWeatherByLocationAutoRefreshProvider(city.location!));
     return currentWeather.maybeWhen(
-      data: (data) => _CurrentWeatherWidget(weather: data.weather),
-      orElse: () => _CurrentWeatherWidget(weather: initialWeather),
+      data: (data) => _CurrentWeatherWidget(weather: data.weather, stats: stats),
+      orElse: () => _CurrentWeatherWidget(weather: initialWeather, stats: stats),
     );
   }
 }
 
 class _CurrentWeatherWidget extends ConsumerWidget
     with ColorRangeMixin, WindMixin, TemperatureMixin {
-  const _CurrentWeatherWidget({required this.weather});
+  const _CurrentWeatherWidget({required this.weather, required this.stats});
 
   final Weather weather;
+  final OneCallWeatherStats stats;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,9 +47,16 @@ class _CurrentWeatherWidget extends ConsumerWidget
     final temperatureUnit = ref.watch(temperatureUnitProvider);
     final windSpeedUnit = ref.watch(windSpeedUnitProvider);
 
+    var minTempV = weather.conditions.temperatures.min?.value;
+    var maxTempV = weather.conditions.temperatures.max?.value;
+    final todayStats = stats.todayStats;
+    if (todayStats.hasStats) {
+      minTempV = min(minTempV ?? double.infinity, todayStats.minTemp.value);
+      maxTempV = max(maxTempV ?? double.negativeInfinity, todayStats.maxTemp.value);
+    }
+    final minTemp = minTempV == null ? null : Celcius(minTempV).quantity.convertTo(temperatureUnit);
+    final maxTemp = maxTempV == null ? null : Celcius(maxTempV).quantity.convertTo(temperatureUnit);
     final feelTemp = weather.conditions.temperatures.feelsLike.quantity.convertTo(temperatureUnit);
-    final minTemp = weather.conditions.temperatures.min?.quantity.convertTo(temperatureUnit);
-    final maxTemp = weather.conditions.temperatures.max?.quantity.convertTo(temperatureUnit);
 
     final theme = Theme.of(context);
     final iconTheme = theme.iconTheme;
