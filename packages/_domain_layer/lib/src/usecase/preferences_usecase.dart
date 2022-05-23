@@ -31,14 +31,14 @@ class PreferencesUsecase {
   static const _themeKey = 'theme';
   static const _addTempToRainChartKey = 'addTempToRainChart';
   static const _addTempToSnowChartKey = 'addTempToSnowChart';
+  static const _addTempToWindChartKey = 'addTempToWindChart';
   static const _weatherOrderKey = 'weatherOrder';
   static const _temperatureUnitKey = 'temperatureUnit';
   static const _windSpeedUnitKey = 'windSpeedUnit';
   static const _precipitationUnitKey = 'precipitationUnit';
 
   static const _initialTheme = ThemeMode.dark;
-  static const _initialAddTempToRainChart = false;
-  static const _initialCombineTemperatureToRainAndSnow = false;
+  static const _initialAddTempToCharts = false;
   static const _initialWeatherOrder = WeatherOrder.byTemp;
   static get _initialTemperatureUnit => Temperature().celcius;
   static get _initialWindSpeedUnit => Speed().knot;
@@ -60,6 +60,7 @@ class PreferencesUsecase {
   late final themeProvider = StateProvider((_) => _theme);
   late final addTempToRainChartProvider = StateProvider((_) => _addTempToRainChart);
   late final addTempToSnowChartProvider = StateProvider((_) => _addTempToSnowChart);
+  late final addTempToWindChartProvider = StateProvider((_) => _addTempToWindChart);
   late final weatherOrderProvider = StateProvider((_) => _weatherOrder);
   late final temperatureUnitProvider = StateProvider<Unit<Temperature>>((ref) => _temperatureUnit);
   late final windSpeedUnitProvider = StateProvider<Unit<Speed>>((ref) => _windSpeedUnit);
@@ -108,7 +109,7 @@ class PreferencesUsecase {
     final pref = repository.getByKey(_addTempToRainChartKey);
     if (pref?.value == "true") return true;
     if (pref?.value == "false") return false;
-    return _initialAddTempToRainChart;
+    return _initialAddTempToCharts;
   }
 
   /// Save the combineTemperatureToRainAndSnow preference and updates this usecase [addTempToSnowChartProvider].
@@ -122,7 +123,21 @@ class PreferencesUsecase {
     final pref = repository.getByKey(_addTempToSnowChartKey);
     if (pref?.value == "true") return true;
     if (pref?.value == "false") return false;
-    return _initialCombineTemperatureToRainAndSnow;
+    return _initialAddTempToCharts;
+  }
+
+  /// Save the combineTemperatureToRainAndSnow preference and updates this usecase [addTempToSnowChartProvider].
+  set addTempToWindChart(bool option) {
+    repository.saveByKey(Preference(key: _addTempToWindChartKey, value: option.toString()));
+    read(addTempToWindChartProvider.notifier).state = option;
+  }
+
+  /// Read the combineTemperatureToRainAndSnow option from storage using a default initial value
+  bool get _addTempToWindChart {
+    final pref = repository.getByKey(_addTempToWindChartKey);
+    if (pref?.value == "true") return true;
+    if (pref?.value == "false") return false;
+    return _initialAddTempToCharts;
   }
 
   /// Save the weather order preference and update this usecase [weatherOrderProvider].

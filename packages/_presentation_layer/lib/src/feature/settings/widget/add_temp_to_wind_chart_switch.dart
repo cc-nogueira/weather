@@ -4,17 +4,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'add_temperature_switch.dart';
 
-class AddTemperatureToSnowChartSwitch extends AddTemperatureSwitch {
-  AddTemperatureToSnowChartSwitch({
+class AddTemperatureToWindChartSwitch extends AddTemperatureSwitch {
+  AddTemperatureToWindChartSwitch({
     super.key,
     super.padding,
     super.iconSize,
     this.changeCallback,
-  }) : super(addTempProvider: addTempToSnowChartProvider);
+  }) : super(addTempProvider: addTempToWindChartProvider);
 
   final VoidCallback? changeCallback;
 
   @override
   void onChange(Reader read, bool option) =>
-      read(preferencesUsecaseProvider).addTempToSnowChart = option;
+      read(preferencesUsecaseProvider).addTempToWindChart = option;
 }

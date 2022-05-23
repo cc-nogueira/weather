@@ -49,14 +49,19 @@ final themeModeProvider = Provider<ThemeMode>((ref) {
   return ref.watch(usecase.themeProvider);
 });
 
+final addTempToRainChartProvider = Provider<bool>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase.addTempToRainChartProvider);
+});
+
 final addTempToSnowChartProvider = Provider<bool>((ref) {
   final usecase = ref.watch(preferencesUsecaseProvider);
   return ref.watch(usecase.addTempToSnowChartProvider);
 });
 
-final addTempToRainChartProvider = Provider<bool>((ref) {
+final addTempToWindChartProvider = Provider<bool>((ref) {
   final usecase = ref.watch(preferencesUsecaseProvider);
-  return ref.watch(usecase.addTempToRainChartProvider);
+  return ref.watch(usecase.addTempToWindChartProvider);
 });
 
 final weatherOrderProvider = Provider<WeatherOrder>((ref) {
