@@ -56,7 +56,7 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
       foregroundColor: _foreColor(context),
-      title: WeatherTitleHero(city: city, style: _titleStyle(context)),
+      title: WeatherTitleHero(city: city, showCountry: false, style: _titleStyle(context)),
       actions: [
         if (!Platform.isAndroid && !Platform.isIOS) OneCallWeatherRefreshButton(city: city),
         const PreferencesButton()

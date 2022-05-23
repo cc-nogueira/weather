@@ -24,7 +24,11 @@ class WeatherListPage extends ConsumerWidget {
   }
 
   Widget _scaffold(
-          BuildContext context, Reader read, Translations translations, List<City> cities) =>
+    BuildContext context,
+    Reader read,
+    Translations translations,
+    List<City> cities,
+  ) =>
       Scaffold(
         appBar: WeatherListAppBar(title: translations.weather_list_page_title),
         body: _bodyStack(read, cities),

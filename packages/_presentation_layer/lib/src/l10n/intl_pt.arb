@@ -178,11 +178,15 @@
   "@weather_list_page_title": {
     "description": "Weather List page title"
   },
-  "weather_list_sort_by_name_option": "por Temp",
+  "weather_list_sort_by_country_option": "por País",
+  "@weather_list_sort_by_country_option": {
+    "description": "Option to sort tiles by country name then city name"
+  },
+  "weather_list_sort_by_name_option": "por Nome",
   "@weather_list_sort_by_name_option": {
     "description": "Option to sort tiles by name"
   },
-  "weather_list_sort_by_temp_option": "por Nome",
+  "weather_list_sort_by_temp_option": "por Temp",
   "@weather_list_sort_by_temp_option": {
     "description": "Option to sort tiles by temperature"
   },

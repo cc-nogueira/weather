@@ -8,6 +8,7 @@ class OrderDropdown extends ConsumerWidget {
   const OrderDropdown({super.key});
 
   List<MapEntry<String, WeatherOrder>> _orderOptions(Translations translations) => [
+        MapEntry(translations.weather_list_sort_by_country_option, WeatherOrder.byCountry),
         MapEntry(translations.weather_list_sort_by_name_option, WeatherOrder.byName),
         MapEntry(translations.weather_list_sort_by_temp_option, WeatherOrder.byTemp),
       ];

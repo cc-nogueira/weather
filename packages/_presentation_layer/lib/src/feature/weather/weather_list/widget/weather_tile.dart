@@ -30,10 +30,17 @@ class TemperatureNotifier extends StateNotifier<Celcius?> {
 }
 
 class WeatherTile extends ConsumerWidget {
-  WeatherTile({super.key, required this.translations, required this.city, required this.onRemove});
+  WeatherTile({
+    super.key,
+    required this.translations,
+    required this.city,
+    required this.onRemove,
+    required this.showCountry,
+  });
 
   final Translations translations;
   final City city;
+  final bool showCountry;
   final VoidCallback onRemove;
   final temperatureNotifierProvider =
       StateNotifierProvider<TemperatureNotifier, Celcius?>((_) => TemperatureNotifier());
@@ -52,12 +59,14 @@ class WeatherTile extends ConsumerWidget {
       loading: () => _WeatherLoadingTile(
         translations: translations,
         city: city,
+        showCountry: showCountry,
         onRemove: onRemove,
         onTap: () => {},
       ),
       error: (_, __) => _WeatherErrorTile(
         translations: translations,
         city: city,
+        showCountry: showCountry,
         onRemove: onRemove,
         onTap: () {},
       ),
@@ -66,6 +75,7 @@ class WeatherTile extends ConsumerWidget {
         return _WeatherTile(
           translations: translations,
           city: city,
+          showCountry: showCountry,
           weather: data.weather,
           isRefreshing: asyncValue.isRefreshing,
           temperatureUnit: temperatureUnit,
@@ -114,12 +124,14 @@ abstract class _WeatherTileBase extends StatelessWidget {
   const _WeatherTileBase({
     required this.translations,
     required this.city,
+    required this.showCountry,
     required this.onRemove,
     required this.onTap,
   });
 
   final Translations translations;
   final City city;
+  final bool showCountry;
   final VoidCallback onRemove;
   final VoidCallback onTap;
 
@@ -157,6 +169,7 @@ abstract class _WeatherTileBase extends StatelessWidget {
 
   Widget title(BuildContext context) => WeatherTitleHero(
         city: city,
+        showCountry: showCountry,
         style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.w500),
       );
 
@@ -174,6 +187,7 @@ class _WeatherLoadingTile extends _WeatherTileBase {
   const _WeatherLoadingTile({
     required super.translations,
     required super.city,
+    required super.showCountry,
     required super.onRemove,
     required super.onTap,
   });
@@ -189,6 +203,7 @@ class _WeatherErrorTile extends _WeatherTileBase {
   const _WeatherErrorTile({
     required super.translations,
     required super.city,
+    required super.showCountry,
     required super.onRemove,
     required super.onTap,
   });
@@ -205,6 +220,7 @@ class _WeatherTile extends _WeatherTileBase
   const _WeatherTile({
     required super.translations,
     required super.city,
+    required super.showCountry,
     required super.onRemove,
     required super.onTap,
     required this.weather,

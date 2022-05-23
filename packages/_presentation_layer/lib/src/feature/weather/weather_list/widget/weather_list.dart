@@ -7,14 +7,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../l10n/translations.dart';
 import 'weather_tile.dart';
 
-class WeatherList extends StatelessWidget {
+class WeatherList extends ConsumerWidget {
   const WeatherList({super.key, required this.read, required this.cities});
 
   final Reader read;
   final List<City> cities;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isByCountry =
+        ref.watch(weatherOrderProvider.select((value) => value == WeatherOrder.byCountry));
+
     final translations = Translations.of(context)!;
     final tiles = <WeatherTile>[];
     for (var i = 0; i < cities.length; ++i) {
@@ -22,6 +25,7 @@ class WeatherList extends StatelessWidget {
         WeatherTile(
           translations: translations,
           city: cities[i],
+          showCountry: isByCountry,
           onRemove: () => _removeCity(cities[i]),
         ),
       );
@@ -51,6 +55,9 @@ class _SortedWeatherList extends ConsumerWidget {
   List<WeatherTile> _sortTiles(Reader read, WeatherOrder order) {
     final list = tiles.toList();
     list.sort((a, b) {
+      if (order == WeatherOrder.byCountry) {
+        return a.city.alphabeticalOrderByCountryKey.compareTo(b.city.alphabeticalOrderByCountryKey);
+      }
       if (order == WeatherOrder.byName) {
         return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
       }

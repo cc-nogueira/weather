@@ -5,18 +5,30 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../common/helper/hero_flight_shuttle_builder.dart';
 
 class WeatherTitleHero extends ConsumerWidget {
-  const WeatherTitleHero({super.key, required this.city, required this.style});
+  const WeatherTitleHero(
+      {super.key, required this.city, required this.style, required this.showCountry});
 
   final City city;
+  final bool showCountry;
   final TextStyle style;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Hero(
-        tag: '${city.id}_weatherTitle',
-        flightShuttleBuilder: heroTextFlightShuttleBuilder,
-        child: FittedBox(
-          alignment: Alignment.topLeft,
-          child: Text(city.name, style: style),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final countrySize = (style.fontSize ?? 24) * 0.8;
+    final countryStyle = style.copyWith(fontSize: countrySize);
+    return Hero(
+      tag: '${city.id}_weatherTitle',
+      flightShuttleBuilder: heroTextFlightShuttleBuilder,
+      child: FittedBox(
+        alignment: Alignment.topLeft,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(city.name, style: style),
+            if (showCountry) Text(', ${city.country}', style: countryStyle),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }

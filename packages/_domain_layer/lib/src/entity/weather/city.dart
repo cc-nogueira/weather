@@ -18,4 +18,5 @@ class City with _$City implements Entity {
   }) = _City;
 
   String get alphabeticalOrderKey => name + state + country;
+  String get alphabeticalOrderByCountryKey => country + name + state;
 }
