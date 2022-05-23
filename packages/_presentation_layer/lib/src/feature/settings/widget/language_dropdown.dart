@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -48,7 +50,17 @@ class LanguageDropdown extends ConsumerWidget {
     if (option.isNone) {
       return const Text('auto', style: TextStyle(fontWeight: FontWeight.bold));
     }
-    return Text(option.country.flag, textAlign: TextAlign.right);
+    if (Platform.isWindows) {
+      return Row(children: [
+        Text(option.languageCode),
+        const SizedBox(width: 10),
+      ]);
+    }
+    return Row(children: [
+      Text(option.country.flag, textAlign: TextAlign.right),
+      const SizedBox(width: 10),
+      Text(option.languageCode),
+    ]);
   }
 
   void _onChanged(LanguageOption? selection, Reader read) {
