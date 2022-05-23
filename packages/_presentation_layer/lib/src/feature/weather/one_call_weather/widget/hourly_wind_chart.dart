@@ -9,10 +9,10 @@ import 'package:tuple/tuple.dart';
 
 import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/wind_scale_widget.dart';
-import '../../widget/color_range_mixin.dart';
 import '../../widget/wind_mixin.dart';
 import '../helper/one_call_weather_stats.dart';
-import 'hourly_chart.dart';
+import 'add_temp_to_wind_chart_switch.dart';
+import 'hourly_chart_with_temperature.dart';
 
 class HourlyWindChart extends ConsumerWidget {
   const HourlyWindChart({
@@ -36,6 +36,8 @@ class HourlyWindChart extends ConsumerWidget {
       weather: weather,
       stats: stats,
       unit: ref.watch(windSpeedUnitProvider),
+      tempUnit: ref.watch(temperatureUnitProvider),
+      showTemperature: ref.watch(addTempToWindChartProvider),
       height: height,
       margin: margin,
       padding: padding,
@@ -43,44 +45,51 @@ class HourlyWindChart extends ConsumerWidget {
   }
 }
 
-class _HourlyWindChart extends HourlyChart with ColorRangeMixin, WindMixin {
+class _HourlyWindChart extends HourlyChartWithTemperature<Speed> with WindMixin {
   const _HourlyWindChart({
     required super.weather,
     required super.stats,
-    required this.unit,
+    required super.unit,
+    required super.tempUnit,
+    required super.showTemperature,
     super.height,
     super.margin,
     super.padding,
   });
 
-  final Unit<Speed> unit;
+  @override
+  Widget basicChartTitle(BuildContext context, Translations translations) {
+    return Row(children: [
+      Text(translations.wind_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+      Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
+      helpButton(context, (_) => const WindScaleWidget()),
+    ]);
+  }
 
   @override
-  Widget? chartTitle(BuildContext context, List<HourlyWeather> data) {
-    final translations = Translations.of(context)!;
-    return Row(
-      children: [
-        Text(translations.wind_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
-        Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: InkWell(
-            child: const Icon(Icons.help, size: 20),
-            onTap: () {
-              showGeneralDialog(
-                context: context,
-                barrierColor: const Color(0x80FFFFFF),
-                barrierLabel: 'Label',
-                barrierDismissible: true,
-                transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (_, __, ___) => const WindScaleWidget(),
-              );
-            },
-          ),
-        ),
-      ],
-    );
+  Widget get addTemperatureSwitch => AddTemperatureToWindChartSwitch();
+
+  @override
+  double? get primaryYAxisMaximum {
+    if (stats.hourlyStats.maxWind > 0.7 * windScaleMinReference) return null;
+    return _windInChartUnit(windScaleMinReference.ceilToDouble());
   }
+
+  @override
+  ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => (AxisLabelRenderDetails details) {
+        late final double value;
+        if (unit == Speed().meterPerSecond) {
+          value = details.value.toDouble();
+        } else {
+          value = Quantity(amount: details.value.toDouble(), unit: unit)
+              .convertTo(Speed().meterPerSecond)
+              .amount;
+        }
+        return ChartAxisLabel(
+          details.text,
+          details.textStyle.copyWith(color: windColor(Wind(speed: value))),
+        );
+      };
 
   @override
   List<XyDataSeries> series(List<HourlyWeather> data) {
@@ -120,30 +129,9 @@ class _HourlyWindChart extends HourlyChart with ColorRangeMixin, WindMixin {
           labelAlignment: ChartDataLabelAlignment.middle,
         ),
       ),
+      if (showTemperature) temperatureSeries(data),
     ];
   }
-
-  @override
-  double? get primaryYAxisMaximum {
-    if (stats.hourlyStats.maxWind > 0.7 * windScaleMinReference) return null;
-    return _windInChartUnit(windScaleMinReference.ceilToDouble());
-  }
-
-  @override
-  ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => (AxisLabelRenderDetails details) {
-        late final double value;
-        if (unit == Speed().meterPerSecond) {
-          value = details.value.toDouble();
-        } else {
-          value = Quantity(amount: details.value.toDouble(), unit: unit)
-              .convertTo(Speed().meterPerSecond)
-              .amount;
-        }
-        return ChartAxisLabel(
-          details.text,
-          details.textStyle.copyWith(color: windColor(Wind(speed: value))),
-        );
-      };
 
   Tuple2<double, double> _windRangeInChartUnit(List<HourlyWeather> data) {
     if (data.isEmpty) return const Tuple2(0.0, 0.0);

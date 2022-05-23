@@ -5,7 +5,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/temperature_scale_widget.dart';
-import '../../../settings/widget/add_temp_to_rain_chart_switch.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_mixin.dart';
 import 'hourly_chart.dart';
@@ -48,12 +47,14 @@ abstract class HourlyChartWithTemperature<T extends PhysicalProperty<T>> extends
               helpButton(context, (_) => const TemperatureScaleWidget()),
           ],
         ),
-        if (hasChart) AddTemperatureToRainChartSwitch(),
+        if (hasChart) addTemperatureSwitch,
       ],
     );
   }
 
   Widget basicChartTitle(BuildContext context, Translations translations);
+
+  Widget get addTemperatureSwitch;
 
   String get _temperatureYAxisName => 'temp';
 

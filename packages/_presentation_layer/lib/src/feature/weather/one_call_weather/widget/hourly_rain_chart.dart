@@ -8,6 +8,7 @@ import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/rain_scale_widget.dart';
 import '../../widget/rain_mixin.dart';
 import '../helper/one_call_weather_stats.dart';
+import 'add_temp_to_rain_chart_switch.dart';
 import 'hourly_chart_with_temperature.dart';
 
 class HourlyRainChart extends ConsumerWidget {
@@ -61,6 +62,9 @@ class _HourlyRainChart extends HourlyChartWithTemperature<Speed> with RainMixin 
       helpButton(context, (_) => const RainScaleWidget()),
     ]);
   }
+
+  @override
+  Widget get addTemperatureSwitch => AddTemperatureToRainChartSwitch();
 
   @override
   bool shouldReplaceChart(List<HourlyWeather> data) {

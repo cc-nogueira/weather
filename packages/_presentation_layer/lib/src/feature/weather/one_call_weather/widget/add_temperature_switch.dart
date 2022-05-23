@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
 
-import '../../weather/widget/weather_icons.dart';
+import '../../widget/weather_icons.dart';
 
 abstract class AddTemperatureSwitch extends ConsumerWidget {
   const AddTemperatureSwitch({

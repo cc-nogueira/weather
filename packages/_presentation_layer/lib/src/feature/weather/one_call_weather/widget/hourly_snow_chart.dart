@@ -8,6 +8,7 @@ import '../../../../l10n/translations.dart';
 import '../../../chart_scale/widget/snow_scale_widget.dart';
 import '../../widget/snow_mixin.dart';
 import '../helper/one_call_weather_stats.dart';
+import 'add_temp_to_snow_chart_switch.dart';
 import 'hourly_chart_with_temperature.dart';
 
 class HourlySnowChart extends ConsumerWidget {
@@ -61,6 +62,9 @@ class _HourlySnowChart extends HourlyChartWithTemperature<Speed> with SnowMixin 
       helpButton(context, (_) => const SnowScaleWidget()),
     ]);
   }
+
+  @override
+  Widget get addTemperatureSwitch => AddTemperatureToSnowChartSwitch();
 
   @override
   bool shouldReplaceChart(List<HourlyWeather> data) {
