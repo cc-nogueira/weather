@@ -20,6 +20,10 @@
   "@country_label": {
     "description": "Country label"
   },
+  "daily_chart_title": "Daily Forecast",
+  "@daily_chart_title": {
+    "description": "Daily Chart title"
+  },
   "dark_light_theme_label": "Dark/Light theme",
   "@dark_light_theme_label": {
     "description": "Dark/Light theme label"

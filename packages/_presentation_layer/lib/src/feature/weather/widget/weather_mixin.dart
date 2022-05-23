@@ -22,6 +22,18 @@ mixin WeatherMixin {
         isDayTime: isDayTime(weather),
       );
 
+  Widget weatherIcon(
+    int conditionsCode, {
+    required double size,
+    required Color color,
+  }) =>
+      WeatherIcons.forOpenWeather(
+        openWeatherCode: conditionsCode,
+        size: size,
+        color: color,
+        isDayTime: null,
+      );
+
   bool? isDayTime(Localtime weather) {
     final time = weather.localShiftedDateTime;
     final sunrise = weather.geo.localSunrise;

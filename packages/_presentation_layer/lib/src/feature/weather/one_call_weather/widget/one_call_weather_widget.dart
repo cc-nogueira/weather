@@ -6,6 +6,7 @@ import '../../widget/powered_by_widget.dart';
 import '../helper/one_call_weather_stats.dart';
 import 'alerts_widget.dart';
 import 'current_weather_widget.dart';
+import 'daily_weather_chart.dart';
 import 'hourly_rain_chart.dart';
 import 'hourly_snow_chart.dart';
 import 'hourly_temperature_chart.dart';
@@ -48,7 +49,7 @@ class OneCallWeatherWidget extends ConsumerWidget with OneCallWeatherRefreshMixi
           Container(height: 12, color: Colors.black87),
           if (oneCallWeather.alerts.isNotEmpty) AlertsWidget(weather: oneCallWeather),
           Container(height: 8, color: Colors.black87),
-          //HourlyWeatherChart(weather: oneCallWeather),
+          DailyWeatherChart(weather: oneCallWeather),
           HourlyTemperatureChart(weather: oneCallWeather, stats: stats),
           if (!hideRain) HourlyRainChart(weather: oneCallWeather, stats: stats),
           if (!hideSnow) HourlySnowChart(weather: oneCallWeather, stats: stats),

@@ -20,6 +20,10 @@
   "@country_label": {
     "description": "Country label"
   },
+  "daily_chart_title": "Previsão Diária",
+  "@daily_chart_title": {
+    "description": "Daily Chart title"
+  },
   "dark_light_theme_label": "Tema Claro/Escuro",
   "@dark_light_theme_label": {
     "description": "Dark/Light theme label"
