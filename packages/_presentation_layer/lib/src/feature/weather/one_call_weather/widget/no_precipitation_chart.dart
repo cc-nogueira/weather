@@ -65,7 +65,10 @@ class _NoPrecipitationChart extends HourlyChart with ColorRangeMixin, RainMixin,
   }
 
   @override
-  Widget? chartReplacement(BuildContext context, List<HourlyWeather> data) {
+  bool shouldReplaceChart(List<HourlyWeather> data) => true;
+
+  @override
+  Widget chartReplacement(BuildContext context, List<HourlyWeather> data) {
     final translations = Translations.of(context)!;
     var lastDryTime = data.last.localShiftedDateTime;
     const hrsToDayEnd = Duration(hours: 23);

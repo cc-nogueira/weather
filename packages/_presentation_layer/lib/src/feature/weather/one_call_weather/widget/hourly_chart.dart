@@ -61,26 +61,28 @@ abstract class HourlyChart extends ChartWidget {
   Widget? chartTitle(BuildContext context, List<HourlyWeather> data) => null;
 
   Widget chart(BuildContext context, List<HourlyWeather> data) {
-    final replacement = chartReplacement(context, data);
-    return replacement ??
-        SizedBox(
-          height: height,
-          child: SfCartesianChart(
-            series: series(data),
-            margin: padding,
-            palette: palette,
-            primaryXAxis: primaryXAxis(context, data),
-            primaryYAxis: primaryYAxis(context, data),
-            axes: axes,
-            zoomPanBehavior: ZoomPanBehavior(
-              enablePanning: true,
-              zoomMode: ZoomMode.x,
+    return shouldReplaceChart(data)
+        ? chartReplacement(context, data)
+        : SizedBox(
+            height: height,
+            child: SfCartesianChart(
+              series: series(data),
+              margin: padding,
+              palette: palette,
+              primaryXAxis: primaryXAxis(context, data),
+              primaryYAxis: primaryYAxis(context, data),
+              axes: axes,
+              zoomPanBehavior: ZoomPanBehavior(
+                enablePanning: true,
+                zoomMode: ZoomMode.x,
+              ),
             ),
-          ),
-        );
+          );
   }
 
-  Widget? chartReplacement(BuildContext context, List<HourlyWeather> data) => null;
+  bool shouldReplaceChart(List<HourlyWeather> data) => false;
+
+  Widget chartReplacement(BuildContext context, List<HourlyWeather> data) => Container();
 
   List<ChartSeries> series(List<HourlyWeather> data);
 

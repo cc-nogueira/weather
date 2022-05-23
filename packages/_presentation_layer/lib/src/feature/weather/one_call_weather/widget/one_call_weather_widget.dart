@@ -29,9 +29,9 @@ class OneCallWeatherWidget extends ConsumerWidget with OneCallWeatherRefreshMixi
     hideSnow = !stats.hasSnow;
     hideRain = !stats.hasRain;
     if (!hideRain && !hideSnow) {
-      if (stats.minTemp.value > 0.5) {
+      if (stats.minTemp.value > 7.0) {
         hideSnow = true;
-      } else if (stats.maxTemp.value < -0.5) {
+      } else if (stats.maxTemp.value < -2.0) {
         hideRain = true;
       }
     }
