@@ -13,7 +13,10 @@ dependencies:
   _domain_layer:
     path: ../_domain_layer
 
-  country_picker: ^2.0.15
+  country_picker: # ^2.0.15-dev.1
+    git:
+      url: https://github.com/cc-nogueira/flutter_country_picker.git
+
   faker: ^2.0.0
 
   flutter:
