@@ -49,7 +49,10 @@ class OneCallWeatherWidget extends ConsumerWidget with OneCallWeatherRefreshMixi
           Container(height: 12, color: Colors.black87),
           if (oneCallWeather.alerts.isNotEmpty) AlertsWidget(weather: oneCallWeather),
           Container(height: 8, color: Colors.black87),
-          DailyWeatherChart(weather: oneCallWeather),
+          DailyWeatherChart(
+            weather: oneCallWeather,
+            margin: const EdgeInsets.only(bottom: 10.0),
+          ),
           HourlyTemperatureChart(weather: oneCallWeather, stats: stats),
           if (!hideRain) HourlyRainChart(weather: oneCallWeather, stats: stats),
           if (!hideSnow) HourlySnowChart(weather: oneCallWeather, stats: stats),

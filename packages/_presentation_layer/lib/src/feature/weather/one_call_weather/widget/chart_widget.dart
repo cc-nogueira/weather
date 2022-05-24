@@ -8,8 +8,8 @@ abstract class ChartWidget extends ConsumerWidget {
     EdgeInsets? margin,
     EdgeInsets? padding,
   })  : height = height ?? 200,
-        margin = const EdgeInsets.symmetric(vertical: 4.0),
-        padding = const EdgeInsets.all(10.0),
+        margin = margin ?? const EdgeInsets.symmetric(vertical: 4.0),
+        padding = padding ?? const EdgeInsets.all(10.0),
         backgroundColor = Colors.black87;
 
   final double height;
