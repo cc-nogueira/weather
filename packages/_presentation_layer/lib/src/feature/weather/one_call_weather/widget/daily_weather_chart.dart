@@ -19,7 +19,7 @@ class DailyWeatherChart extends ChartWidget with ColorRangeMixin, TemperatureMix
     super.padding,
   }) : super(height: chartHeight);
 
-  static const chartHeight = 140.0;
+  static const chartHeight = 150.0;
 
   final OneCallWeather weather;
 
@@ -73,6 +73,12 @@ class DailyWeatherChart extends ChartWidget with ColorRangeMixin, TemperatureMix
 
   List<XyDataSeries> _series(List<DailyWeather> data, Unit<Temperature> unit) {
     return [
+      ColumnSeries<DailyWeather, DateTime>(
+        dataSource: data,
+        isVisible: false,
+        xValueMapper: (data, idx) => data.localShiftedDateTime,
+        yValueMapper: (data, idx) => 0,
+      ),
       ScatterSeries<DailyWeather, DateTime>(
         dataSource: data,
         xValueMapper: (data, idx) => data.localShiftedDateTime,
@@ -80,41 +86,31 @@ class DailyWeatherChart extends ChartWidget with ColorRangeMixin, TemperatureMix
         color: Colors.transparent,
         dataLabelSettings: DataLabelSettings(
           isVisible: true,
-          builder: (dynamic item, dynamic point, dynamic series, int pointIndex, int seriesIndex) {
-            final daily = item as DailyWeather;
-            final min = daily.conditions.dailyMin.quantity.convertTo(unit).amount.round();
-            final max = daily.conditions.dailyMax.quantity.convertTo(unit).amount.round();
-            final minTextStyle =
-                tempUnitStyle.copyWith(color: temperatureColor(daily.conditions.dailyMin));
-            final maxTextStyle =
-                tempUnitStyle.copyWith(color: temperatureColor(daily.conditions.dailyMax));
-            return SizedBox(
-              height: 70,
-              width: 30,
-              child: Column(
-                children: [
-                  weatherIcon(daily.conditions.code, size: 32, color: Colors.white),
-                  FittedBox(child: Text('$max ${unit.symbol}', style: maxTextStyle)),
-                  FittedBox(child: Text('$min ${unit.symbol}', style: minTextStyle)),
-                ],
-              ),
-            );
-          },
           labelAlignment: ChartDataLabelAlignment.middle,
+          builder: (dynamic item, dynamic point, dynamic series, int pointIndex, int seriesIndex) =>
+              _dataLabel(item, unit),
         ),
       ),
     ];
   }
 
-  ChartAxis? _primaryXAxis(BuildContext context, List<DailyWeather> data) => DateTimeAxis(
-        interval: 1.0,
-        desiredIntervals: data.length,
-        intervalType: DateTimeIntervalType.days,
-        rangePadding: ChartRangePadding.round,
-        labelAlignment: LabelAlignment.center,
-        autoScrollingMode: AutoScrollingMode.start,
-        dateFormat: DateFormat.d(),
-      );
+  Widget _dataLabel(DailyWeather daily, Unit<Temperature> unit) {
+    final min = daily.conditions.dailyMin.quantity.convertTo(unit).amount.round();
+    final max = daily.conditions.dailyMax.quantity.convertTo(unit).amount.round();
+    final minTextStyle = tempUnitStyle.copyWith(color: temperatureColor(daily.conditions.dailyMin));
+    final maxTextStyle = tempUnitStyle.copyWith(color: temperatureColor(daily.conditions.dailyMax));
+    return SizedBox(
+      height: 70,
+      width: 30,
+      child: Column(
+        children: [
+          weatherIcon(daily.conditions.code, size: 32, color: Colors.white),
+          FittedBox(child: Text('$max ${unit.symbol}', style: maxTextStyle)),
+          FittedBox(child: Text('$min ${unit.symbol}', style: minTextStyle)),
+        ],
+      ),
+    );
+  }
 
   ChartAxis? _primaryYAxis(BuildContext context, List<DailyWeather> data) => NumericAxis(
         isVisible: false,
@@ -122,4 +118,37 @@ class DailyWeatherChart extends ChartWidget with ColorRangeMixin, TemperatureMix
         maximum: 10.0,
         anchorRangeToVisiblePoints: false,
       );
+
+  ChartAxis? _primaryXAxis(BuildContext context, List<DailyWeather> data) => DateTimeAxis(
+        interval: 1.0,
+        desiredIntervals: data.length,
+        intervalType: DateTimeIntervalType.days,
+        majorTickLines: const MajorTickLines(size: 0),
+        rangePadding: ChartRangePadding.round,
+        labelAlignment: LabelAlignment.center,
+        // labelPosition: ChartDataLabelPosition.inside,
+        multiLevelLabels: _multiLevelLabels(context, data),
+        multiLevelLabelStyle:
+            const MultiLevelLabelStyle(borderType: MultiLevelBorderType.rectangle),
+        autoScrollingMode: AutoScrollingMode.start,
+        dateFormat: DateFormat.d(),
+        axisLabelFormatter: (_) => ChartAxisLabel('', const TextStyle(fontSize: 1)),
+        //borderWidth: 0,
+      );
+
+  List<DateTimeMultiLevelLabel> _multiLevelLabels(BuildContext context, List<DailyWeather> data) {
+    final dowFormat = DateFormat('EEE', Localizations.localeOf(context).languageCode);
+    final dayFormat = DateFormat.d();
+    final labels = <DateTimeMultiLevelLabel>[];
+    const halfDay = Duration(hours: 12);
+    const lastHalfDay = Duration(hours: 11, minutes: 30);
+    for (final daily in data) {
+      final day = daily.localShiftedDateTime;
+      final start = day.subtract(halfDay);
+      final end = labels.length == data.length - 1 ? day.add(lastHalfDay) : day.add(halfDay);
+      final text = '${dowFormat.format(day).toUpperCase()}\n${dayFormat.format(day)}';
+      labels.add(DateTimeMultiLevelLabel(start: start, end: end, text: text));
+    }
+    return labels;
+  }
 }
