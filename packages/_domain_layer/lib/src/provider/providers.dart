@@ -102,7 +102,7 @@ final watchAllCitiesProvider = StreamProvider((ref) => ref.watch(citiesUsecasePr
 final timeUsecaseProvider =
     Provider<TimeZoneUsecase>((ref) => ref.watch(domainLayerProvider).timeUsecase);
 
-final timeZoneProvider = FutureProvider.autoDispose.family<TimeZone, Location>(
+final timeZoneProvider = FutureProvider.family<TimeZone, Location>(
   (ref, location) {
     ref.watch(currentWeatherMetronomeProvider);
     return ref.watch(
@@ -117,7 +117,7 @@ final weatherUsecaseProvider =
     Provider<WeatherUsecase>((ref) => ref.watch(domainLayerProvider).weatherUsecase);
 
 final currentWeatherByLocationAutoRefreshProvider =
-    FutureProvider.autoDispose.family<CurrentWeather, Location>((ref, location) {
+    FutureProvider.family<CurrentWeather, Location>((ref, location) {
   ref.watch(currentWeatherMetronomeProvider);
   return ref.watch(weatherUsecaseProvider).getCurrentWeatherByLocation(location);
 });
@@ -157,6 +157,8 @@ final currentWeatherMetronomeProvider = Provider<DateTime>((ref) {
   ref.watch(languageOptionProvider);
   final subscription = Metronome.periodic(WeatherUsecase.currentWeatherRefreshInterval)
       .listen((dt) => ref.state = dt);
-  ref.onDispose(() => subscription.cancel());
+  ref.onDispose(() {
+    subscription.cancel();
+  });
   return DateTime.now();
 });
