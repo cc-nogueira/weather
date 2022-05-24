@@ -4,9 +4,9 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../mapper/city_mapper.dart';
+import '../mapper/current_weather_mapper.dart';
 import '../mapper/location_mapper.dart';
 import '../mapper/one_call_mapper.dart';
-import '../mapper/weather_mapper.dart';
 import '../model/city_location_model.dart';
 import '../model/current_weather_model.dart';
 import '../model/one_call_weather_model.dart';
@@ -23,7 +23,7 @@ class OpenWeatherService implements WeatherService {
 
   final OpenWeatherClient client;
   final Reader read;
-  final _weatherMapper = const WeatherMapper();
+  final _weatherMapper = const CurrentWeatherMapper();
   final _oneCallMapper = const OneCallMapper();
   final _cityMapper = const CityMapper();
   final _locationMapper = const LocationMapper();

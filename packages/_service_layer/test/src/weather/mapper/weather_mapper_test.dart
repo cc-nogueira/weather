@@ -5,7 +5,7 @@ import 'package:_service_layer/_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const mapper = WeatherMapper();
+  const mapper = CurrentWeatherMapper();
 
   const emptySrc = '{"main": {}, "weather": [{}]}';
 

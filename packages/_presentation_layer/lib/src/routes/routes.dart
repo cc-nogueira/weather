@@ -26,10 +26,10 @@ class Routes {
       case weather:
         return PageRouteBuilderWithFadeTransition(
           settings: settings,
-          pageBuilder: (context, _, __) => _argumentBuilder<Tuple2<City, Weather>>(
+          pageBuilder: (context, _, __) => _argumentBuilder<Tuple2<City, CurrentWeather>>(
               context,
               settings.arguments,
-              (context, args) => OneCallWeatherPage(city: args.item1, weather: args.item2)),
+              (context, args) => OneCallWeatherPage(city: args.item1, currentWeather: args.item2)),
         );
       case city:
         return _route((_) => CityPage());

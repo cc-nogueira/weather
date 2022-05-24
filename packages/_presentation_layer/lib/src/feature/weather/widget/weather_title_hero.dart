@@ -5,10 +5,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../common/helper/hero_flight_shuttle_builder.dart';
 
 class WeatherTitleHero extends ConsumerWidget {
-  const WeatherTitleHero(
-      {super.key, required this.city, required this.style, required this.showCountry});
+  const WeatherTitleHero({
+    super.key,
+    required this.city,
+    required this.cityName,
+    required this.style,
+    required this.showCountry,
+  });
 
   final City city;
+  final String cityName;
   final bool showCountry;
   final TextStyle style;
 
@@ -24,7 +30,7 @@ class WeatherTitleHero extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(city.name, style: style),
+            Text(cityName, style: style),
             if (showCountry) Text(', ${city.country}', style: countryStyle),
           ],
         ),

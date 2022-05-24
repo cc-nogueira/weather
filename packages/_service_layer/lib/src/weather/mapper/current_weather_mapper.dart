@@ -2,8 +2,8 @@ import 'package:_domain_layer/domain_layer.dart';
 
 import '../model/current_weather_model.dart';
 
-class WeatherMapper {
-  const WeatherMapper();
+class CurrentWeatherMapper {
+  const CurrentWeatherMapper();
 
   CurrentWeather mapEntity(CurrentWeatherModel model) {
     final weatherModel = model.weather.first;
@@ -37,6 +37,6 @@ class WeatherMapper {
       conditions: conditions,
     );
 
-    return CurrentWeather(weather: weather);
+    return CurrentWeather(name: model.name, weather: weather);
   }
 }

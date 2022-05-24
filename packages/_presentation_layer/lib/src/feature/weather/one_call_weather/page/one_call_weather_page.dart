@@ -10,10 +10,10 @@ import '../widget/one_call_weather_app_bar.dart';
 import '../widget/one_call_weather_widget.dart';
 
 class OneCallWeatherPage extends ConsumerWidget {
-  const OneCallWeatherPage({super.key, required this.city, required this.weather});
+  const OneCallWeatherPage({super.key, required this.city, required this.currentWeather});
 
   final City city;
-  final Weather weather;
+  final CurrentWeather currentWeather;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,7 +36,8 @@ class OneCallWeatherPage extends ConsumerWidget {
     final theme = ref.watch(darkThemeProvider);
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: OneCallWeatherAppBar(city: city, initialWeather: weather, isRefreshing: isRefreshing),
+      appBar: OneCallWeatherAppBar(
+          city: city, initialWeather: currentWeather, isRefreshing: isRefreshing),
       body: Theme(
           data: theme,
           child:

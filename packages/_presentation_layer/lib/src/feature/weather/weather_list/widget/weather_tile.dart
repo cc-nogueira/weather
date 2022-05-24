@@ -75,13 +75,14 @@ class WeatherTile extends ConsumerWidget {
         return _WeatherTile(
           translations: translations,
           city: city,
+          cityName: data.name,
           showCountry: showCountry,
           weather: data.weather,
           isRefreshing: asyncValue.isRefreshing,
           temperatureUnit: temperatureUnit,
           windSpeedUnit: windSpeedUnit,
           onRemove: onRemove,
-          onTap: () => _onTap(context, data.weather),
+          onTap: () => _onTap(context, data),
         );
       },
     );
@@ -115,7 +116,7 @@ class WeatherTile extends ConsumerWidget {
     });
   }
 
-  void _onTap(BuildContext context, Weather weather) {
+  void _onTap(BuildContext context, CurrentWeather weather) {
     Navigator.pushNamed(context, Routes.weather, arguments: Tuple2(city, weather));
   }
 }
@@ -124,12 +125,14 @@ abstract class _WeatherTileBase extends StatelessWidget {
   const _WeatherTileBase({
     required this.translations,
     required this.city,
+    required this.cityName,
     required this.showCountry,
     required this.onRemove,
     required this.onTap,
   });
 
   final Translations translations;
+  final String cityName;
   final City city;
   final bool showCountry;
   final VoidCallback onRemove;
@@ -169,6 +172,7 @@ abstract class _WeatherTileBase extends StatelessWidget {
 
   Widget title(BuildContext context) => WeatherTitleHero(
         city: city,
+        cityName: cityName,
         showCountry: showCountry,
         style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.w500),
       );
@@ -184,13 +188,13 @@ abstract class _WeatherTileBase extends StatelessWidget {
 }
 
 class _WeatherLoadingTile extends _WeatherTileBase {
-  const _WeatherLoadingTile({
+  _WeatherLoadingTile({
     required super.translations,
     required super.city,
     required super.showCountry,
     required super.onRemove,
     required super.onTap,
-  });
+  }) : super(cityName: city.name);
 
   @override
   Widget trailing(BuildContext context) => loadingIndicator;
@@ -200,13 +204,13 @@ class _WeatherLoadingTile extends _WeatherTileBase {
 }
 
 class _WeatherErrorTile extends _WeatherTileBase {
-  const _WeatherErrorTile({
+  _WeatherErrorTile({
     required super.translations,
     required super.city,
     required super.showCountry,
     required super.onRemove,
     required super.onTap,
-  });
+  }) : super(cityName: city.name);
 
   @override
   Widget trailing(BuildContext context) => WeatherIconHero(city: city, weatherCode: -1, size: 60);
@@ -220,6 +224,7 @@ class _WeatherTile extends _WeatherTileBase
   const _WeatherTile({
     required super.translations,
     required super.city,
+    required super.cityName,
     required super.showCountry,
     required super.onRemove,
     required super.onTap,
