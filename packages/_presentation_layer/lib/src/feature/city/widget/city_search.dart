@@ -1,6 +1,7 @@
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:latinize/latinize.dart';
 
 import '../../../l10n/translations.dart';
 
@@ -15,7 +16,7 @@ class CitySearch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final city = ref.watch(cityProvider);
-    if (city.name.isEmpty || city.country.isEmpty) {
+    if (city.name.isEmpty) {
       return const SizedBox();
     }
     return ref.watch(citiesSearchProvider(city)).when(
@@ -31,12 +32,13 @@ class CitySearch extends ConsumerWidget {
 
   Widget _showResults(BuildContext context, List<City> results) {
     final translations = Translations.of(context)!;
+    final locale = Localizations.localeOf(context);
     return results.isEmpty
         ? _noResults(context)
         : ListView.builder(
             shrinkWrap: true,
             itemCount: results.length,
-            itemBuilder: (_, idx) => _itemBuilder(translations, results[idx]),
+            itemBuilder: (_, idx) => _itemBuilder(translations, locale, results[idx]),
           );
   }
 
@@ -45,10 +47,13 @@ class CitySearch extends ConsumerWidget {
     return Text(Translations.of(context)!.no_matches_found_message, style: textTheme.titleMedium);
   }
 
-  Widget _itemBuilder(Translations translations, City city) {
+  Widget _itemBuilder(Translations translations, Locale locale, City city) {
+    final localName = city.translation(locale.languageCode);
+    final same = latinize(localName.toLowerCase()) == latinize(city.name.toLowerCase());
+    final showName = same ? localName : '$localName (${city.name})';
     final subtitle = city.state.isEmpty ? city.country : '${city.state}, ${city.country}';
     return ListTile(
-      title: Text(city.name),
+      title: Text(showName),
       subtitle: Text(subtitle),
       trailing: OutlinedButton(
         onPressed: () => onCitySelected(city),
