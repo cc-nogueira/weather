@@ -58,7 +58,10 @@
 			"packages": true,
 			"project.dart": true,
 			"web": true,
-			"windows": true
+			"windows": true,
+			"PRIVACY_POLICY.md": true,
+			"flutter_native_splash.yaml": true,
+			"flutter_01.sksl.json": true
 		},
 		"explorerExclude.backup": null,
 		"workbench.colorCustomizations": {
