@@ -15,6 +15,36 @@ class CitySearch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(watchAllCitiesProvider).when(
+          loading: () => _CitySearch(
+            cityProvider: cityProvider,
+            onCitySelected: onCitySelected,
+          ),
+          error: (_, __) => Container(),
+          data: (data) => _CitySearch(
+            cityProvider: cityProvider,
+            onCitySelected: onCitySelected,
+            currentCities: data,
+          ),
+        );
+  }
+}
+
+class _CitySearch extends ConsumerWidget {
+  _CitySearch({
+    required this.cityProvider,
+    required this.onCitySelected,
+    List<City>? currentCities,
+  }) : currentCitiesKeys = currentCities == null
+            ? {}
+            : currentCities.map((each) => each.alphabeticalOrderByCountryKey).toSet();
+
+  final StateProvider<City> cityProvider;
+  final CityCallback onCitySelected;
+  final Set<String> currentCitiesKeys;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final city = ref.watch(cityProvider);
     if (city.name.isEmpty) {
       return const SizedBox();
@@ -33,12 +63,19 @@ class CitySearch extends ConsumerWidget {
   Widget _showResults(BuildContext context, List<City> results) {
     final translations = Translations.of(context)!;
     final locale = Localizations.localeOf(context);
+    final colors = Theme.of(context).colorScheme;
     return results.isEmpty
         ? _noResults(context)
         : ListView.builder(
             shrinkWrap: true,
             itemCount: results.length,
-            itemBuilder: (_, idx) => _itemBuilder(translations, locale, results[idx]),
+            itemBuilder: (_, idx) => _itemBuilder(
+              context,
+              translations,
+              locale,
+              colors,
+              results[idx],
+            ),
           );
   }
 
@@ -47,7 +84,8 @@ class CitySearch extends ConsumerWidget {
     return Text(Translations.of(context)!.no_matches_found_message, style: textTheme.titleMedium);
   }
 
-  Widget _itemBuilder(Translations translations, Locale locale, City city) {
+  Widget _itemBuilder(BuildContext context, Translations translations, Locale locale,
+      ColorScheme colors, City city) {
     final localName = city.translation(locale.languageCode);
     final same = latinize(localName.toLowerCase()) == latinize(city.name.toLowerCase());
     final showName = same ? localName : '$localName (${city.name})';
@@ -55,10 +93,38 @@ class CitySearch extends ConsumerWidget {
     return ListTile(
       title: Text(showName),
       subtitle: Text(subtitle),
-      trailing: OutlinedButton(
-        onPressed: () => onCitySelected(city),
-        child: Text(translations.add_label),
-      ),
+      trailing: _alreadyContains(city)
+          ? OutlinedButton(
+              onPressed: () => _onCityAlreadyExistis(context, translations, showName),
+              child: Text(translations.add_label),
+            )
+          : ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                onPrimary: colors.onPrimary,
+                primary: colors.primary,
+              ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+              onPressed: () => onCitySelected(city),
+              child: Text(translations.add_label),
+            ),
+    );
+  }
+
+  bool _alreadyContains(City city) =>
+      currentCitiesKeys.contains(city.alphabeticalOrderByCountryKey);
+
+  void _onCityAlreadyExistis(BuildContext context, Translations translations, String showName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(translations.title_city_already_in_your_list),
+          content: Text(translations.message_city_already_in_your_list(showName)),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK')),
+          ],
+          elevation: 5,
+        );
+      },
     );
   }
 

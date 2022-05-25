@@ -10,26 +10,35 @@ class CityForm extends ConsumerWidget {
     this.cityProvider, {
     super.key,
     required this.onCountryChanged,
+    required this.onCityNameCleared,
   });
 
   final StateProvider<City> cityProvider;
   final VoidCallback onCountryChanged;
+  final VoidCallback onCityNameCleared;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final translations = Translations.of(context)!;
     final controller = ref.watch(cityProvider.notifier);
-    return _CityForm(translations, cityProvider, controller, onCountryChanged);
+    return _CityForm(translations, cityProvider, controller, onCountryChanged, onCityNameCleared);
   }
 }
 
 class _CityForm extends StatefulWidget {
-  const _CityForm(this.translations, this.cityProvider, this.cityController, this.onCountryChanged);
+  const _CityForm(
+    this.translations,
+    this.cityProvider,
+    this.cityController,
+    this.onCountryChanged,
+    this.onCityNameCleared,
+  );
 
   final Translations translations;
   final StateProvider<City> cityProvider;
   final StateController<City> cityController;
   final VoidCallback onCountryChanged;
+  final VoidCallback onCityNameCleared;
 
   @override
   State<_CityForm> createState() => _CityFormState();
@@ -106,10 +115,12 @@ class _CityFormState extends State<_CityForm> {
     );
   }
 
-  void _onFormChanged() => setState(
-        () =>
-            widget.city = City(name: cityTextController.text, country: countryTextController.text),
-      );
+  void _onFormChanged() => setState(() {
+        widget.city = City(name: cityTextController.text, country: countryTextController.text);
+        if (widget.city.name.isEmpty) {
+          widget.onCityNameCleared();
+        }
+      });
 
   void _onCountryChanged(Country country, TextEditingController controller) {
     controller.text = country.countryCode;

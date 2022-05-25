@@ -37,6 +37,7 @@ class CityPage extends ConsumerWidget {
           child: CityForm(
             _formCityProvider,
             onCountryChanged: () => _onCountryChanged(context, read),
+            onCityNameCleared: () => _onCityNameCleared(read),
           ),
         ),
       );
@@ -56,6 +57,11 @@ class CityPage extends ConsumerWidget {
           child: Text(translations.search_label),
         ),
       );
+
+  void _onCityNameCleared(Reader read) {
+    final city = read(_formCityProvider);
+    read(_searchCityProvider.notifier).state = city;
+  }
 
   void _onCountryChanged(BuildContext context, Reader read) {
     final city = read(_formCityProvider);

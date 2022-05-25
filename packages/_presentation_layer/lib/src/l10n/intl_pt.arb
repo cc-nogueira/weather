@@ -74,6 +74,13 @@
   "@label_remove": {
     "description": "Label for remove"
   },
+  "message_city_already_in_your_list": "{name} já está na sua lista de cidades.",
+  "@message_city_already_in_your_list": {
+    "description": "Message for City already in your list dialog",
+    "placeholders": {
+      "name": {}
+    }
+  },
   "message_loading": "Carregando...",
   "@message_loading": {
     "description": "Message for loading"
@@ -177,6 +184,10 @@
   "temp_unit_label": "Unidade para temperatura",
   "@temp_unit_label": {
     "description": "Temperature unit label"
+  },
+  "title_city_already_in_your_list": "Localidade já cadastrada",
+  "@title_city_already_in_your_list": {
+    "description": "Title for City already in your list dialog"
   },
   "weather_list_page_title": "Weather List",
   "@weather_list_page_title": {
