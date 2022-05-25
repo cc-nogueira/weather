@@ -185,7 +185,7 @@
   "@temp_unit_label": {
     "description": "Temperature unit label"
   },
-  "title_city_already_in_your_list": "Localidade já cadastrada",
+  "title_city_already_in_your_list": "Cidade já cadastrada",
   "@title_city_already_in_your_list": {
     "description": "Title for City already in your list dialog"
   },
