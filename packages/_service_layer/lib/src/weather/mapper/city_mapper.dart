@@ -13,5 +13,6 @@ class CityMapper {
         state: model.state,
         country: model.country,
         location: _locationMapper.mapEntity(model),
+        nameTranslations: model.nameTranslations,
       );
 }

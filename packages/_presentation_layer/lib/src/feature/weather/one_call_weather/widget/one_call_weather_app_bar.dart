@@ -37,15 +37,11 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
     return asyncValue.maybeWhen(
       data: (data) => _WeatherAppBar(
         city: city,
-        cityName: data.name,
         weather: data.weather,
         isRefreshing: asyncValue.isRefreshing || isRefreshing,
       ),
-      orElse: () => _WeatherAppBar(
-          city: city,
-          cityName: initialWeather.name,
-          weather: initialWeather.weather,
-          isRefreshing: isRefreshing),
+      orElse: () =>
+          _WeatherAppBar(city: city, weather: initialWeather.weather, isRefreshing: isRefreshing),
     );
   }
 }
@@ -53,13 +49,11 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
 class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMixin {
   _WeatherAppBar({
     required this.city,
-    required this.cityName,
     required this.weather,
     required this.isRefreshing,
   });
 
   final City city;
-  final String cityName;
   final Weather weather;
   final bool isRefreshing;
 
@@ -69,7 +63,6 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
       foregroundColor: _foreColor(context),
       title: WeatherTitleHero(
         city: city,
-        cityName: cityName,
         showCountry: false,
         style: _titleStyle(context),
       ),

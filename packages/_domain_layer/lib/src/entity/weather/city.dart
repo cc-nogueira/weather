@@ -14,8 +14,11 @@ class City with _$City implements Entity {
     @Default('') String name,
     @Default('') String state,
     @Default('') String country,
+    @Default(<String, String>{}) Map<String, String> nameTranslations,
     Location? location,
   }) = _City;
+
+  String translation(String language) => nameTranslations[language] ?? name;
 
   String get alphabeticalOrderKey => name + state + country;
   String get alphabeticalOrderByCountryKey => country + name + state;

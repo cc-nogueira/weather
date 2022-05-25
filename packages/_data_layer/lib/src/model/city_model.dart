@@ -6,12 +6,13 @@ import 'model.dart';
 class CityModel implements Model {
   CityModel({
     this.id = 0,
-    this.order = 0,
+    this.order = -1,
     this.name = '',
     this.state = '',
     this.country = '',
     this.latitude = 0.0,
     this.longitude = 0.0,
+    this.nameTranslations = '{}',
   });
 
   @override
@@ -23,6 +24,7 @@ class CityModel implements Model {
   String country;
   double latitude;
   double longitude;
+  String nameTranslations;
 
   @override
   bool operator ==(Object other) =>
@@ -34,12 +36,14 @@ class CityModel implements Model {
           other.state == state &&
           other.country == country &&
           other.latitude == latitude &&
-          other.longitude == longitude;
+          other.longitude == longitude &&
+          other.nameTranslations == nameTranslations;
 
   @override
-  int get hashCode => Object.hash(id, order, name, state, country, latitude, longitude);
+  int get hashCode =>
+      Object.hash(id, order, name, state, country, latitude, longitude, nameTranslations);
 
   @override
   String toString() =>
-      'CityModel(id: $id, order: $order, "$name, $state / $country", coord: ($latitude, $longitude))';
+      'CityModel(id: $id, order: $order, "$name, $state / $country", location: ($latitude, $longitude), translations: $nameTranslations)';
 }

@@ -172,7 +172,6 @@ abstract class _WeatherTileBase extends StatelessWidget {
 
   Widget title(BuildContext context) => WeatherTitleHero(
         city: city,
-        cityName: cityName,
         showCountry: showCountry,
         style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.w500),
       );

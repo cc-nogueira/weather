@@ -22,11 +22,14 @@ class OpenWeatherClient {
   Future<List> getGeoJson(City city, {int limit = 1}) async {
     final name = city.name.trim();
     final country = city.country.trim();
-    if (name.trim().isEmpty || country.trim().isEmpty) {
+    if (name.trim().isEmpty) {
       throw ArgumentError('city and country needed for weather info');
     }
 
-    final search = [name, country];
+    final search = [
+      name,
+      if (country.isNotEmpty) country,
+    ];
     final state = city.state.trim();
     if (state.isNotEmpty) search.insert(1, state);
 

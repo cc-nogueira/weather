@@ -1,3 +1,4 @@
+// ignore_for_file: invalid_annotation_target
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'city_location_model.freezed.dart';
@@ -11,6 +12,7 @@ class CityLocationModel with _$CityLocationModel {
     @Default(0) double lon,
     @Default('') String state,
     @Default('') String country,
+    @Default(<String, String>{}) @JsonKey(name: 'local_names') Map<String, String> nameTranslations,
   }) = _CityLocationModel;
 
   factory CityLocationModel.fromJson(Map<String, dynamic> json) =>

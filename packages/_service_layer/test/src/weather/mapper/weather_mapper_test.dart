@@ -24,36 +24,39 @@ void main() {
       '"name":"Otsuki",'
       '"cod":200}';
 
-  const weather = Weather(
-    dateTimeMillis: 1647524296000,
-    geo: Geo(
-      location: Location(latitude: 35.5, longitude: 139.0),
-      timeShiftMillis: 32400000,
-      sunriseMillis: 1647463968000,
-      sunsetMillis: 1647507137000,
-    ),
-    conditions: Conditions(
-      code: 500,
-      title: 'Rain',
-      description: 'chuva fraca',
-      pressure: 1017,
-      humidity: 98,
-      clouds: 100,
-      temperatures: Temperatures(
-        feelsLike: Celcius(4.95),
-        temperature: Celcius(6.33),
-        min: Celcius(5.59),
-        max: Celcius(6.95),
+  const currentWeather = CurrentWeather(
+    name: 'Otsuki',
+    weather: Weather(
+      dateTimeMillis: 1647524296000,
+      geo: Geo(
+        location: Location(latitude: 35.5, longitude: 139.0),
+        timeShiftMillis: 32400000,
+        sunriseMillis: 1647463968000,
+        sunsetMillis: 1647507137000,
       ),
-      wind: Wind(speed: 1.97, gust: 3.31, directionFrom: 64),
-      rain1h: 0.36,
+      conditions: Conditions(
+        code: 500,
+        title: 'Rain',
+        description: 'chuva fraca',
+        pressure: 1017,
+        humidity: 98,
+        clouds: 100,
+        temperatures: Temperatures(
+          feelsLike: Celcius(4.95),
+          temperature: Celcius(6.33),
+          min: Celcius(5.59),
+          max: Celcius(6.95),
+        ),
+        wind: Wind(speed: 1.97, gust: 3.31, directionFrom: 64),
+        rain1h: 0.36,
+      ),
     ),
   );
 
   test('should return a empty entity when receiveing empty JSON', () {
     final model = CurrentWeatherModel.fromJson(json.decode(emptySrc));
 
-    final currentWeather = mapper.mapEntity(model);
+    final mappedEntity = mapper.mapEntity(model);
 
     var emptyWeather = const Weather();
     final temperatures = emptyWeather.conditions.temperatures.copyWith(
@@ -62,14 +65,16 @@ void main() {
     );
     final conditions = emptyWeather.conditions.copyWith(temperatures: temperatures);
     emptyWeather = emptyWeather.copyWith(conditions: conditions);
-    expect(currentWeather, emptyWeather);
+    final emptyCurrentWeather = CurrentWeather(weather: emptyWeather);
+
+    expect(mappedEntity, emptyCurrentWeather);
   });
 
   test('shoud map JSON to Entity', () {
     final model = CurrentWeatherModel.fromJson(json.decode(weatherSrc));
 
-    final currentWeather = mapper.mapEntity(model);
+    final mappedEntity = mapper.mapEntity(model);
 
-    expect(currentWeather, weather);
+    expect(mappedEntity, currentWeather);
   });
 }

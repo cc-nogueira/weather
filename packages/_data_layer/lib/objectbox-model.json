@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:7087833527141829159",
-      "lastPropertyId": "7:6755117612504196283",
+      "lastPropertyId": "8:7534184825247689481",
       "name": "CityModel",
       "properties": [
         {
@@ -43,6 +43,11 @@
           "id": "7:6755117612504196283",
           "name": "longitude",
           "type": 8
+        },
+        {
+          "id": "8:7534184825247689481",
+          "name": "nameTranslations",
+          "type": 9
         }
       ],
       "relations": []

@@ -8,18 +8,17 @@ class WeatherTitleHero extends ConsumerWidget {
   const WeatherTitleHero({
     super.key,
     required this.city,
-    required this.cityName,
     required this.style,
     required this.showCountry,
   });
 
   final City city;
-  final String cityName;
   final bool showCountry;
   final TextStyle style;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = Localizations.localeOf(context);
     final countrySize = (style.fontSize ?? 24) * 0.8;
     final countryStyle = style.copyWith(fontSize: countrySize);
     return Hero(
@@ -30,7 +29,7 @@ class WeatherTitleHero extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(cityName, style: style),
+            Text(city.translation(locale.languageCode), style: style),
             if (showCountry) Text(', ${city.country}', style: countryStyle),
           ],
         ),
