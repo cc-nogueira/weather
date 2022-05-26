@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../settings/widget/settings_app_bar.dart';
+import '../../../settings/widget/preferences_app_bar.dart';
 import 'order_dropdown.dart';
 
-class WeatherListAppBar extends SettingsAppBar {
+class WeatherListAppBar extends PreferencesAppBar {
   WeatherListAppBar({super.key, required super.title});
 
   @override
