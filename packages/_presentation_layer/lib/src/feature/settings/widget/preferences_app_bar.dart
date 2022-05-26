@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'preferences_button.dart';
+import 'open_end_drawer_button.dart';
 
 class PreferencesAppBar extends StatelessWidget implements PreferredSizeWidget {
   PreferencesAppBar({super.key, required String title, double? height})
@@ -15,13 +15,13 @@ class PreferencesAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) => AppBar(
         title: title(context),
-        actions: actions,
+        actions: actions(context),
         flexibleSpace: flexibleSpace(context),
       );
 
   Widget title(BuildContext context) => Text(_title);
 
-  List<Widget> get actions => const [PreferencesButton()];
+  List<Widget> actions(BuildContext context) => [const OpenEndDrawerButton()];
 
   Widget? flexibleSpace(BuildContext context) => null;
 }

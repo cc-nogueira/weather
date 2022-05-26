@@ -14,12 +14,16 @@ class LanguageDropdown extends ConsumerWidget {
     final currentOption = ref.watch(languageOptionProvider);
     final locales = ref.watch(systemLocalesProvider);
     final options = LanguageOption.languageOptions(locales, currentOption);
-    return DropdownButtonHideUnderline(
-      child: DropdownButton(
-        value: currentOption,
-        items: _items(options, currentOption),
-        selectedItemBuilder: (context) => _selectedItems(options),
-        onChanged: (LanguageOption? selection) => _onChanged(selection, ref.read),
+    return Align(
+      alignment: Alignment.centerRight,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          value: currentOption,
+          items: _items(options, currentOption),
+          selectedItemBuilder: (context) => _selectedItems(options),
+          alignment: AlignmentDirectional.centerEnd,
+          onChanged: (LanguageOption? selection) => _onChanged(selection, ref.read),
+        ),
       ),
     );
   }
@@ -48,13 +52,10 @@ class LanguageDropdown extends ConsumerWidget {
 
   Widget _optionLabel(LanguageOption option) {
     if (option.isNone) {
-      return const Text('auto', style: TextStyle(fontWeight: FontWeight.bold));
+      return const Text('auto');
     }
     if (Platform.isWindows) {
-      return Row(children: [
-        Text(option.languageCode),
-        const SizedBox(width: 10),
-      ]);
+      return Text(option.languageCode);
     }
     return Row(children: [
       Text(option.country.flag, textAlign: TextAlign.right),

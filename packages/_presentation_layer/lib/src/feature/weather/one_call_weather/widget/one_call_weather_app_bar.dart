@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../common/widget/cut_and_flip_ad.dart';
-import '../../../settings/widget/preferences_button.dart';
+import '../../../settings/widget/open_end_drawer_button.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_gradient_box_hero.dart';
 import '../../widget/temperature_hero.dart';
@@ -60,6 +60,7 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
+      leading: const BackButton(),
       foregroundColor: _foreColor(context),
       title: WeatherTitleHero(
         city: city,
@@ -68,7 +69,7 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
       ),
       actions: [
         if (!Platform.isAndroid && !Platform.isIOS) OneCallWeatherRefreshButton(city: city),
-        const PreferencesButton()
+        const OpenEndDrawerButton(),
       ],
       flexibleSpace: FlexibleSpaceBar(background: _background(context)),
     );

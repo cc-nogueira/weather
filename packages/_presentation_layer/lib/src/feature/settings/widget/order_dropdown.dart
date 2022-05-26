@@ -2,7 +2,7 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../l10n/translations.dart';
+import '../../../l10n/translations.dart';
 
 class OrderDropdown extends ConsumerWidget {
   const OrderDropdown({super.key});
@@ -17,48 +17,37 @@ class OrderDropdown extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final translations = Translations.of(context)!;
     final options = _orderOptions(translations);
-    final colors = Theme.of(context).colorScheme;
-    final dropBg = colors.brightness == Brightness.light ? colors.primary : colors.surface;
     final value = ref.watch(weatherOrderProvider);
     return DropdownButtonHideUnderline(
       child: DropdownButton<WeatherOrder>(
-        iconEnabledColor: Colors.white,
-        dropdownColor: dropBg,
         value: value,
-        items: _orderItems(value, options),
-        selectedItemBuilder: (context) => _selectedOrderItems(context, options),
+        items: _items(value, options),
+        selectedItemBuilder: (context) => _selectedItems(context, options),
+        alignment: AlignmentDirectional.centerEnd,
         onChanged: (selection) => _onOrderSelected(selection, ref.read),
       ),
     );
   }
 
-  List<DropdownMenuItem<WeatherOrder>> _orderItems(
-      WeatherOrder value, List<MapEntry<String, WeatherOrder>> options) {
-    const style = TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
-    return options.map((e) {
-      final text = Text(e.key, style: style);
-      final child = e.value == value
+  List<DropdownMenuItem<WeatherOrder>> _items(
+    WeatherOrder value,
+    List<MapEntry<String, WeatherOrder>> options,
+  ) {
+    return options.map((each) {
+      final child = each.value == value
           ? Row(children: [
-              text,
+              Text(each.key),
               const SizedBox(width: 20),
-              const Icon(Icons.check, size: 20, color: Colors.white),
+              const Icon(Icons.check, size: 20),
             ])
-          : text;
-      return DropdownMenuItem(value: e.value, child: child);
+          : Text(each.key);
+      return DropdownMenuItem(value: each.value, child: child);
     }).toList();
   }
 
-  List<Widget> _selectedOrderItems(
-      BuildContext context, List<MapEntry<String, WeatherOrder>> options) {
-    const style = TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
+  List<Widget> _selectedItems(BuildContext context, List<MapEntry<String, WeatherOrder>> options) {
     return options
-        .map(
-          (e) => Center(
-            child: Row(
-              children: [Text(e.key, style: style), const SizedBox(width: 10)],
-            ),
-          ),
-        )
+        .map((each) => Row(children: [Text(each.key), const SizedBox(width: 10)]))
         .toList();
   }
 

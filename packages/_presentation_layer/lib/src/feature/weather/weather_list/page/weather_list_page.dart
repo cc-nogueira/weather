@@ -6,9 +6,10 @@ import '../../../../common/page/loading_page.dart';
 import '../../../../common/page/message_page.dart';
 import '../../../../l10n/translations.dart';
 import '../../../../routes/routes.dart';
+import '../../../settings/widget/preferences_app_bar.dart';
+import '../../../settings/widget/preferences_drawer.dart';
 import '../../../settings/widget/preferences_widget.dart';
 import '../widget/weather_list.dart';
-import '../widget/weather_list_app_bar.dart';
 
 class WeatherListPage extends ConsumerWidget {
   const WeatherListPage({super.key});
@@ -30,7 +31,8 @@ class WeatherListPage extends ConsumerWidget {
     List<City> cities,
   ) =>
       Scaffold(
-        appBar: WeatherListAppBar(title: translations.weather_list_page_title),
+        appBar: PreferencesAppBar(title: translations.weather_list_page_title),
+        endDrawer: const PreferencesDrawer(),
         body: _bodyStack(read, cities),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _addCity(context),

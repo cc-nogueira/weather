@@ -24,7 +24,7 @@ class _TemperatureUnitDropdown extends UnitDropdown<Temperature> {
 
   @override
   String unitLabel(Unit<Temperature> unit) {
-    final name = unit.name;
+    final name = unit.name.toLowerCase();
     return name.startsWith('degrees ') ? name.substring(8) : name;
   }
 }

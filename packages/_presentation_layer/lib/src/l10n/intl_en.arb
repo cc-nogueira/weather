@@ -70,6 +70,10 @@
   "@label_language_selector": {
     "description": "Label for language selector"
   },
+  "label_list_order": "Order list by",
+  "@label_list_order": {
+    "description": "Label for list order option"
+  },
   "label_remove": "Remove",
   "@label_remove": {
     "description": "Label for remove"
@@ -189,19 +193,23 @@
   "@title_city_already_in_your_list": {
     "description": "Title for City already in your list dialog"
   },
+  "title_preferences": "Preferences",
+  "@title_preferences": {
+    "description": "Title for preferences panel"
+  },
   "weather_list_page_title": "Weather List",
   "@weather_list_page_title": {
     "description": "Weather List page title"
   },
-  "weather_list_sort_by_country_option": "by Country",
+  "weather_list_sort_by_country_option": "country",
   "@weather_list_sort_by_country_option": {
     "description": "Option to sort tiles by country name then city name"
   },
-  "weather_list_sort_by_name_option": "by Name",
+  "weather_list_sort_by_name_option": "name",
   "@weather_list_sort_by_name_option": {
     "description": "Option to sort tiles by name"
   },
-  "weather_list_sort_by_temp_option": "by Temp",
+  "weather_list_sort_by_temp_option": "temp",
   "@weather_list_sort_by_temp_option": {
     "description": "Option to sort tiles by temperature"
   },

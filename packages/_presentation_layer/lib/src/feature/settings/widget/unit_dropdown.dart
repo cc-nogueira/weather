@@ -38,13 +38,16 @@ abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidge
   Widget build(BuildContext context, WidgetRef ref) {
     final options = unitOptions;
     final value = ref.watch(unitProvider);
-    return DropdownButtonHideUnderline(
-      child: DropdownButton<Unit<T>>(
-        value: value,
-        items: _items(options, value),
-        selectedItemBuilder: (context) => _selectedItems(options),
-        alignment: AlignmentDirectional.centerEnd,
-        onChanged: (selection) => _onChanged(selection, ref.read),
+    return Align(
+      alignment: Alignment.centerRight,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<Unit<T>>(
+          value: value,
+          items: _items(options, value),
+          selectedItemBuilder: (context) => _selectedItems(options),
+          alignment: AlignmentDirectional.centerEnd,
+          onChanged: (selection) => _onChanged(selection, ref.read),
+        ),
       ),
     );
   }
@@ -75,8 +78,5 @@ abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidge
     }
   }
 
-  Widget _unitLabel(Unit<T> unit) {
-    const style = TextStyle(fontWeight: FontWeight.bold);
-    return Text(unitLabel(unit), style: style, textAlign: TextAlign.right);
-  }
+  Widget _unitLabel(Unit<T> unit) => Text(unitLabel(unit), textAlign: TextAlign.right);
 }
