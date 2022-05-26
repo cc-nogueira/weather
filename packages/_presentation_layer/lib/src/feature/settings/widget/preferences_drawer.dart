@@ -23,17 +23,23 @@ class PreferencesDrawer extends StatelessWidget {
       width: 340,
       child: DecoratedBox(
         decoration: BoxDecoration(border: Border(left: side)),
-        child: ListView(
-          padding: EdgeInsets.zero,
+        child: Column(
           children: [
             _header(context, translations),
-            _themePreferences(translations),
-            _divider,
-            _languagePreferences(translations),
-            _divider,
-            _sortPreferences(translations),
-            _divider,
-            _unitPreferences(translations),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  _themePreferences(translations),
+                  _divider,
+                  _languagePreferences(translations),
+                  _divider,
+                  _sortPreferences(translations),
+                  _divider,
+                  _unitPreferences(translations),
+                ],
+              ),
+            ),
           ],
         ),
       ),
