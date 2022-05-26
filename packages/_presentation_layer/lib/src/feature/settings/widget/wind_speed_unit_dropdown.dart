@@ -1,27 +1,26 @@
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 
 import 'unit_dropdown.dart';
 
-class WindSpeedUnitDropdown extends UnitDropdown<Speed> {
-  const WindSpeedUnitDropdown({super.key, this.changeCallback});
-
-  final VoidCallback? changeCallback;
+class WindSpeedUnitDropdown extends UnitDropdownWidget {
+  const WindSpeedUnitDropdown({super.key, super.changeCallback});
 
   @override
-  StateProvider<Unit<Speed>> unitProvider(Reader read) =>
-      read(preferencesUsecaseProvider).windSpeedUnitProvider;
+  Widget unitDropdown(PreferencesUsecase usecase) =>
+      _WindSpeedUnitDropdown(changeCallback: changeCallback, usecase: usecase);
+}
+
+class _WindSpeedUnitDropdown extends UnitDropdown<Speed> {
+  _WindSpeedUnitDropdown({required super.usecase, super.changeCallback})
+      : super(unitProvider: windSpeedUnitProvider);
 
   @override
-  List<Unit<Speed>> unitOptions(Reader read) => read(preferencesUsecaseProvider).windSpeedUnits;
+  List<Unit<Speed>> get unitOptions => usecase.windSpeedUnits;
 
   @override
-  void onChanged(Unit<Speed> selection, Reader read) {
-    read(preferencesUsecaseProvider).windSpeedUnit = selection;
-    changeCallback?.call();
-  }
+  void onChanged(Unit<Speed> selection) => usecase.windSpeedUnit = selection;
 
   @override
   String unitLabel(Unit<Speed> unit) => unit.symbol == 'kt' ? 'knots' : unit.symbol;

@@ -1,19 +1,43 @@
+import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 
-abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidget {
-  const UnitDropdown({super.key});
+abstract class UnitDropdownWidget extends ConsumerWidget {
+  const UnitDropdownWidget({super.key, this.changeCallback});
 
-  StateProvider<Unit<T>> unitProvider(Reader read);
-  List<Unit<T>> unitOptions(Reader read);
-  void onChanged(Unit<T> selection, Reader read);
-  String unitLabel(Unit<T> unit) => unit.name;
+  final VoidCallback? changeCallback;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final options = unitOptions(ref.read);
-    final value = ref.watch(unitProvider(ref.read));
+    final usecase = ref.watch(preferencesUsecaseProvider);
+    return unitDropdown(usecase);
+  }
+
+  Widget unitDropdown(PreferencesUsecase usecase);
+}
+
+abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidget {
+  const UnitDropdown({
+    super.key,
+    required this.usecase,
+    required this.unitProvider,
+    this.changeCallback,
+  });
+
+  final PreferencesUsecase usecase;
+  final VoidCallback? changeCallback;
+  final Provider<Unit<T>> unitProvider;
+
+  List<Unit<T>> get unitOptions;
+  void onChanged(Unit<T> selection);
+
+  String unitLabel(Unit<T> unit) => unit.symbol;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final options = unitOptions;
+    final value = ref.watch(unitProvider);
     return DropdownButtonHideUnderline(
       child: DropdownButton<Unit<T>>(
         value: value,
@@ -46,7 +70,8 @@ abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidge
 
   void _onChanged(Unit<T>? selection, Reader read) {
     if (selection != null) {
-      onChanged(selection, read);
+      onChanged(selection);
+      changeCallback?.call();
     }
   }
 

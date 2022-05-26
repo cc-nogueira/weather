@@ -1,28 +1,24 @@
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 
 import 'unit_dropdown.dart';
 
-class PrecipitationUnitDropdown extends UnitDropdown<Speed> {
-  const PrecipitationUnitDropdown({super.key, this.changeCallback});
-
-  final VoidCallback? changeCallback;
+class PrecipitationUnitDropdown extends UnitDropdownWidget {
+  const PrecipitationUnitDropdown({super.key, super.changeCallback});
 
   @override
-  StateProvider<Unit<Speed>> unitProvider(Reader read) =>
-      read(preferencesUsecaseProvider).precipitationUnitProvider;
+  Widget unitDropdown(PreferencesUsecase usecase) =>
+      _PrecipitationUnitDropdown(changeCallback: changeCallback, usecase: usecase);
+}
+
+class _PrecipitationUnitDropdown extends UnitDropdown<Speed> {
+  _PrecipitationUnitDropdown({required super.usecase, super.changeCallback})
+      : super(unitProvider: precipitationUnitProvider);
 
   @override
-  List<Unit<Speed>> unitOptions(Reader read) => read(preferencesUsecaseProvider).precipitationUnits;
+  List<Unit<Speed>> get unitOptions => usecase.precipitationUnits;
 
   @override
-  void onChanged(Unit<Speed> selection, Reader read) {
-    read(preferencesUsecaseProvider).precipitationUnit = selection;
-    changeCallback?.call();
-  }
-
-  @override
-  String unitLabel(Unit<Speed> unit) => unit.symbol;
+  void onChanged(Unit<Speed> selection) => usecase.precipitationUnit = selection;
 }

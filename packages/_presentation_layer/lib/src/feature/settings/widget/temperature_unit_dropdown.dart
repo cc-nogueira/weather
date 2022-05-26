@@ -1,28 +1,26 @@
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 
 import 'unit_dropdown.dart';
 
-class TemperatureUnitDropdown extends UnitDropdown<Temperature> {
-  const TemperatureUnitDropdown({super.key, this.changeCallback});
-
-  final VoidCallback? changeCallback;
+class TemperatureUnitDropdown extends UnitDropdownWidget {
+  const TemperatureUnitDropdown({super.key, super.changeCallback});
 
   @override
-  StateProvider<Unit<Temperature>> unitProvider(Reader read) =>
-      read(preferencesUsecaseProvider).temperatureUnitProvider;
+  Widget unitDropdown(PreferencesUsecase usecase) =>
+      _TemperatureUnitDropdown(changeCallback: changeCallback, usecase: usecase);
+}
+
+class _TemperatureUnitDropdown extends UnitDropdown<Temperature> {
+  _TemperatureUnitDropdown({required super.usecase, super.changeCallback})
+      : super(unitProvider: temperatureUnitProvider);
 
   @override
-  List<Unit<Temperature>> unitOptions(Reader read) =>
-      read(preferencesUsecaseProvider).temperatureUnits;
+  List<Unit<Temperature>> get unitOptions => usecase.temperatureUnits;
 
   @override
-  void onChanged(Unit<Temperature> selection, Reader read) {
-    read(preferencesUsecaseProvider).temperatureUnit = selection;
-    changeCallback?.call();
-  }
+  void onChanged(Unit<Temperature> selection) => usecase.temperatureUnit = selection;
 
   @override
   String unitLabel(Unit<Temperature> unit) {
