@@ -2,7 +2,7 @@ name: weather
 description: Single page weather app with multiple locations
 
 publish_to: 'none'
-version: 0.0.4+22
+version: 0.0.5+23
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
