@@ -3,10 +3,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../common/translation/noum_gender.dart';
-import '../../../l10n/translations.dart';
-import '../../weather/one_call_weather/widget/chart_widget.dart';
-import '../../weather/widget/color_range_mixin.dart';
+import '../../../../common/translation/noum_gender.dart';
+import '../../../../l10n/translations.dart';
+import '../../one_call_weather/widget/chart_widget.dart';
+import '../../widget/color_range_mixin.dart';
 import 'scale_intensity.dart';
 
 abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget with ColorRangeMixin {

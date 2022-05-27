@@ -5,7 +5,7 @@ import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../l10n/translations.dart';
-import '../../../chart_scale/widget/rain_scale_widget.dart';
+import '../../chart_scale/widget/rain_scale_widget.dart';
 import '../../widget/rain_mixin.dart';
 import '../helper/one_call_weather_stats.dart';
 import 'add_temp_to_rain_chart_switch.dart';

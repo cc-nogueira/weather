@@ -1,5 +1,5 @@
-import '../../../common/translation/noum_gender.dart';
-import '../../../l10n/translations.dart';
+import '../../../../common/translation/noum_gender.dart';
+import '../../../../l10n/translations.dart';
 
 enum ScaleIntensity {
   light,

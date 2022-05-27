@@ -8,7 +8,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../../l10n/translations.dart';
-import '../../../chart_scale/widget/wind_scale_widget.dart';
+import '../../chart_scale/widget/wind_scale_widget.dart';
 import '../../widget/wind_mixin.dart';
 import '../helper/one_call_weather_stats.dart';
 import 'add_temp_to_wind_chart_switch.dart';

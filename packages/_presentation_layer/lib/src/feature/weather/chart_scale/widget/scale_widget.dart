@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/helper/theme_builder.dart';
-import '../../../common/translation/noum_gender.dart';
-import '../../../l10n/translations.dart';
-import '../../weather/widget/color_range_mixin.dart';
+import '../../../../common/helper/theme_builder.dart';
+import '../../../../common/translation/noum_gender.dart';
+import '../../../../l10n/translations.dart';
+import '../../widget/color_range_mixin.dart';
 import 'scale_intensity.dart';
 
 abstract class ScaleWidget extends StatelessWidget with ColorRangeMixin {

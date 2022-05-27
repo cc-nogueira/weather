@@ -4,9 +4,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../common/translation/noum_gender.dart';
-import '../../../l10n/translations.dart';
-import '../../weather/widget/snow_mixin.dart';
+import '../../../../common/translation/noum_gender.dart';
+import '../../../../l10n/translations.dart';
+import '../../widget/snow_mixin.dart';
 import 'scale_chart.dart';
 import 'scale_intensity.dart';
 import 'scale_widget.dart';

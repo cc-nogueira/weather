@@ -5,7 +5,7 @@ import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../l10n/translations.dart';
-import '../../../chart_scale/widget/temperature_scale_widget.dart';
+import '../../chart_scale/widget/temperature_scale_widget.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_mixin.dart';
 import '../../widget/weather_mixin.dart';
