@@ -2,19 +2,29 @@ import 'dart:io';
 
 import 'package:_di_layer/di_layer.dart';
 import 'package:_presentation_layer/presentation_layer.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
-import 'package:window_size/window_size.dart';
 
 void main() {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isAndroid || Platform.isIOS) {
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  } else {
-    setWindowMaxSize(const Size(1024, -1));
-    setWindowMinSize(const Size(520, 700));
+  } else if (Platform.isWindows) {
+    doWhenWindowReady(() {
+      const min = Size(420, 700);
+      const initial = Size(420, 1000);
+      final win = appWindow;
+      win.minSize = min;
+      win.size = initial;
+      win.alignment = Alignment.topRight;
+      win.title = "Weather List";
+      win.show();
+    });
+    // setWindowMaxSize(const Size(1024, -1));
+    // setWindowMinSize(const Size(520, 700));
   }
   runApp(
     ProviderScope(

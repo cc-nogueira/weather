@@ -36,29 +36,37 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
     final asyncValue = ref.watch(currentWeatherByLocationAutoRefreshProvider(city.location!));
     return asyncValue.maybeWhen(
       data: (data) => _WeatherAppBar(
+        height: preferredSize.height,
         city: city,
         weather: data.weather,
         isRefreshing: asyncValue.isRefreshing || isRefreshing,
       ),
-      orElse: () =>
-          _WeatherAppBar(city: city, weather: initialWeather.weather, isRefreshing: isRefreshing),
+      orElse: () => _WeatherAppBar(
+        height: preferredSize.height,
+        city: city,
+        weather: initialWeather.weather,
+        isRefreshing: isRefreshing,
+      ),
     );
   }
 }
 
 class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMixin {
   _WeatherAppBar({
+    required this.height,
     required this.city,
     required this.weather,
     required this.isRefreshing,
   });
 
+  final double height;
   final City city;
   final Weather weather;
   final bool isRefreshing;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final systemBarHeight = MediaQuery.of(context).padding.top;
     return AppBar(
       leading: const BackButton(),
       foregroundColor: _foreColor(context),
@@ -71,7 +79,7 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
         if (!Platform.isAndroid && !Platform.isIOS) OneCallWeatherRefreshButton(city: city),
         const OpenEndDrawerButton(),
       ],
-      flexibleSpace: FlexibleSpaceBar(background: _background(context)),
+      flexibleSpace: SizedBox(height: height + systemBarHeight, child: _timeAndWeatherBar(context)),
     );
   }
 
@@ -90,7 +98,7 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
     return color.withOpacity(0.7);
   }
 
-  Widget _background(BuildContext context) {
+  Widget _timeAndWeatherBar(BuildContext context) {
     final topPadding = (Platform.isAndroid || Platform.isAndroid) ? 72.0 : 48.0;
     return Stack(
       children: [

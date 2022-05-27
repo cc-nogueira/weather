@@ -143,7 +143,6 @@ abstract class HourlyChart extends ChartWidget {
   bool get hasRightAxes => false;
 
   int? desiredIntervals(BoxConstraints constraints) {
-    print('Constraints: $constraints');
     final axesPadding = 20 + (hasRightAxes ? 20 : 0);
     final graphWidth = constraints.maxWidth - axesPadding;
     if (graphWidth < 440) {

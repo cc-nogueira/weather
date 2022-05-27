@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../common/page/message_page.dart';
 import '../../../../common/widget/loading_widget.dart';
+import '../../../../common/widget/window_with_title_bar.dart';
 import '../../../../provider/presentation_providers.dart';
 import '../../../settings/widget/preferences_drawer.dart';
 import '../widget/one_call_weather_app_bar.dart';
@@ -30,17 +33,53 @@ class OneCallWeatherPage extends ConsumerWidget {
     );
   }
 
-  Widget _scaffold(ThemeData darkTheme, bool isRefreshing, Widget body) {
+  Widget _scaffold(
+    ThemeData darkTheme,
+    bool isRefreshing,
+    Widget body,
+  ) {
+    if (Platform.isWindows) {
+      return _windowsScaffold(darkTheme, isRefreshing, body);
+    } else {
+      return _mobileScaffold(darkTheme, isRefreshing, body);
+    }
+  }
+
+  Widget _mobileScaffold(ThemeData darkTheme, bool isRefreshing, Widget body) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: OneCallWeatherAppBar(
-          city: city, initialWeather: currentWeather, isRefreshing: isRefreshing),
+        city: city,
+        initialWeather: currentWeather,
+        isRefreshing: isRefreshing,
+      ),
       endDrawer: const PreferencesDrawer(),
       body: Theme(
         data: darkTheme,
         child: DefaultTextStyle(
           style: TextStyle(color: darkTheme.colorScheme.onSurface),
           child: body,
+        ),
+      ),
+    );
+  }
+
+  Widget _windowsScaffold(ThemeData darkTheme, bool isRefreshing, Widget body) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      endDrawer: const PreferencesDrawer(),
+      body: Theme(
+        data: darkTheme,
+        child: DefaultTextStyle(
+          style: TextStyle(color: darkTheme.colorScheme.onSurface),
+          child: WindowWithTitleBar(
+            appBar: OneCallWeatherAppBar(
+              city: city,
+              initialWeather: currentWeather,
+              isRefreshing: isRefreshing,
+            ),
+            child: body,
+          ),
         ),
       ),
     );
