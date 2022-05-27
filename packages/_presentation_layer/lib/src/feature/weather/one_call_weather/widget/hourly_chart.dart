@@ -53,7 +53,10 @@ abstract class HourlyChart extends ChartWidget {
                     EdgeInsets.only(left: padding.left, right: padding.right, top: padding.top),
                 child: title,
               ),
-            LayoutBuilder(builder: (context, constraints) => chart(context, constraints, data)),
+            shouldReplaceChart(data)
+                ? chartReplacement(context, data)
+                : LayoutBuilder(
+                    builder: (context, constraints) => chart(context, constraints, data)),
           ],
         ),
       ),
@@ -62,25 +65,22 @@ abstract class HourlyChart extends ChartWidget {
 
   Widget? chartTitle(BuildContext context, List<HourlyWeather> data) => null;
 
-  Widget chart(BuildContext context, BoxConstraints constraints, List<HourlyWeather> data) {
-    return shouldReplaceChart(data)
-        ? chartReplacement(context, data)
-        : SizedBox(
-            height: height,
-            child: SfCartesianChart(
-              series: series(data),
-              margin: padding,
-              palette: palette,
-              primaryXAxis: primaryXAxis(context, constraints, data),
-              primaryYAxis: primaryYAxis(context, data),
-              axes: axes,
-              zoomPanBehavior: ZoomPanBehavior(
-                enablePanning: true,
-                zoomMode: ZoomMode.x,
-              ),
-            ),
-          );
-  }
+  Widget chart(BuildContext context, BoxConstraints constraints, List<HourlyWeather> data) =>
+      SizedBox(
+        height: height,
+        child: SfCartesianChart(
+          series: series(data),
+          margin: padding,
+          palette: palette,
+          primaryXAxis: primaryXAxis(context, constraints, data),
+          primaryYAxis: primaryYAxis(context, data),
+          axes: axes,
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePanning: true,
+            zoomMode: ZoomMode.x,
+          ),
+        ),
+      );
 
   bool shouldReplaceChart(List<HourlyWeather> data) => false;
 
@@ -143,6 +143,7 @@ abstract class HourlyChart extends ChartWidget {
   bool get hasRightAxes => false;
 
   int? desiredIntervals(BoxConstraints constraints) {
+    print('Constraints: $constraints');
     final axesPadding = 20 + (hasRightAxes ? 20 : 0);
     final graphWidth = constraints.maxWidth - axesPadding;
     if (graphWidth < 440) {
