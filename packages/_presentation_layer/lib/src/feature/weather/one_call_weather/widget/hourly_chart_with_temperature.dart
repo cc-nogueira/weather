@@ -59,6 +59,9 @@ abstract class HourlyChartWithTemperature<T extends PhysicalProperty<T>> extends
   String get _temperatureYAxisName => 'temp';
 
   @override
+  bool get hasRightAxes => showTemperature;
+
+  @override
   List<ChartAxis> get axes => [
         if (showTemperature)
           NumericAxis(

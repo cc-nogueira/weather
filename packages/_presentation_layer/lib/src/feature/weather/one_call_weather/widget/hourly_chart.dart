@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -51,7 +53,7 @@ abstract class HourlyChart extends ChartWidget {
                     EdgeInsets.only(left: padding.left, right: padding.right, top: padding.top),
                 child: title,
               ),
-            chart(context, data),
+            LayoutBuilder(builder: (context, constraints) => chart(context, constraints, data)),
           ],
         ),
       ),
@@ -60,7 +62,7 @@ abstract class HourlyChart extends ChartWidget {
 
   Widget? chartTitle(BuildContext context, List<HourlyWeather> data) => null;
 
-  Widget chart(BuildContext context, List<HourlyWeather> data) {
+  Widget chart(BuildContext context, BoxConstraints constraints, List<HourlyWeather> data) {
     return shouldReplaceChart(data)
         ? chartReplacement(context, data)
         : SizedBox(
@@ -69,7 +71,7 @@ abstract class HourlyChart extends ChartWidget {
               series: series(data),
               margin: padding,
               palette: palette,
-              primaryXAxis: primaryXAxis(context, data),
+              primaryXAxis: primaryXAxis(context, constraints, data),
               primaryYAxis: primaryYAxis(context, data),
               axes: axes,
               zoomPanBehavior: ZoomPanBehavior(
@@ -112,20 +114,48 @@ abstract class HourlyChart extends ChartWidget {
 
   double? get primaryYAxisMaximum => null;
 
-  ChartAxis? primaryXAxis(BuildContext context, List<HourlyWeather> data) => DateTimeAxis(
+  ChartAxis? primaryXAxis(
+          BuildContext context, BoxConstraints constraints, List<HourlyWeather> data) =>
+      DateTimeAxis(
         interval: primaryXAxisInterval,
-        desiredIntervals: 8,
+        desiredIntervals: desiredIntervals(constraints),
         intervalType: DateTimeIntervalType.hours,
         plotBands: plotBands(data),
         multiLevelLabels: multiLevelLabels(context, data),
         multiLevelLabelStyle: multiLevelLabelStyle,
         autoScrollingMode: AutoScrollingMode.start,
-        autoScrollingDelta: autoScrollingDelta,
+        autoScrollingDelta: autoScrollingDelta(constraints),
+        axisLabelFormatter: axisLabelFormatter,
+        enableAutoIntervalOnZooming: false,
       );
+
+  ChartLabelFormatterCallback? get axisLabelFormatter =>
+      (AxisLabelRenderDetails axisLabelRenderArgs) {
+        final dt = DateTime.fromMillisecondsSinceEpoch(axisLabelRenderArgs.value.toInt());
+        if (dt.hour % 3 != 0) {
+          return ChartAxisLabel('', null);
+        }
+        return ChartAxisLabel(axisLabelRenderArgs.text, null);
+      };
 
   double get primaryXAxisInterval => 3.0;
 
-  int? get autoScrollingDelta => 24;
+  bool get hasRightAxes => false;
+
+  int? desiredIntervals(BoxConstraints constraints) {
+    final axesPadding = 20 + (hasRightAxes ? 20 : 0);
+    final graphWidth = constraints.maxWidth - axesPadding;
+    if (graphWidth < 440) {
+      return 8;
+    }
+    return min((graphWidth / 55).floor(), 16);
+  }
+
+  int? autoScrollingDelta(BoxConstraints constraints) {
+    final intervals = desiredIntervals(constraints);
+    if (intervals == null) return null;
+    return (intervals * primaryXAxisInterval).round();
+  }
 
   MultiLevelLabelStyle get multiLevelLabelStyle =>
       const MultiLevelLabelStyle(borderType: MultiLevelBorderType.rectangle);

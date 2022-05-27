@@ -13,8 +13,8 @@ void main() {
   if (Platform.isAndroid || Platform.isIOS) {
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   } else {
-    setWindowMaxSize(const Size(640, -1));
-    setWindowMinSize(const Size(500, 700));
+    setWindowMaxSize(const Size(1024, -1));
+    setWindowMinSize(const Size(512, 700));
   }
   runApp(
     ProviderScope(

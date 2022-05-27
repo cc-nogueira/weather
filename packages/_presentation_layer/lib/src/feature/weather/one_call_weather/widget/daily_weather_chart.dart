@@ -126,14 +126,11 @@ class DailyWeatherChart extends ChartWidget with ColorRangeMixin, TemperatureMix
         majorTickLines: const MajorTickLines(size: 0),
         rangePadding: ChartRangePadding.round,
         labelAlignment: LabelAlignment.center,
-        // labelPosition: ChartDataLabelPosition.inside,
         multiLevelLabels: _multiLevelLabels(context, data),
         multiLevelLabelStyle:
             const MultiLevelLabelStyle(borderType: MultiLevelBorderType.rectangle),
-        autoScrollingMode: AutoScrollingMode.start,
         dateFormat: DateFormat.d(),
         axisLabelFormatter: (_) => ChartAxisLabel('', const TextStyle(fontSize: 1)),
-        //borderWidth: 0,
       );
 
   List<DateTimeMultiLevelLabel> _multiLevelLabels(BuildContext context, List<DailyWeather> data) {
