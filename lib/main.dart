@@ -14,7 +14,7 @@ void main() {
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   } else if (Platform.isWindows) {
     doWhenWindowReady(() {
-      const min = Size(420, 700);
+      const min = Size(360, 700);
       const initial = Size(420, 1000);
       final win = appWindow;
       win.minSize = min;
