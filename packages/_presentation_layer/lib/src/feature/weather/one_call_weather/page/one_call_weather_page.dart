@@ -68,16 +68,16 @@ class OneCallWeatherPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       endDrawer: const PreferencesDrawer(),
-      body: Theme(
-        data: darkTheme,
-        child: DefaultTextStyle(
-          style: TextStyle(color: darkTheme.colorScheme.onSurface),
-          child: WindowWithTitleBar(
-            appBar: OneCallWeatherAppBar(
-              city: city,
-              initialWeather: currentWeather,
-              isRefreshing: isRefreshing,
-            ),
+      body: WindowWithTitleBar(
+        appBar: OneCallWeatherAppBar(
+          city: city,
+          initialWeather: currentWeather,
+          isRefreshing: isRefreshing,
+        ),
+        child: Theme(
+          data: darkTheme,
+          child: DefaultTextStyle(
+            style: TextStyle(color: darkTheme.colorScheme.onSurface),
             child: body,
           ),
         ),

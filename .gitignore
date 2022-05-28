@@ -28,6 +28,9 @@ doc/api/
 .flutter-plugins
 .flutter-plugins-dependencies
 
+# Keep generated color schemes
+!lib_color_schemes*.g.dart
+
 # ObjectBox test stores
 test/**/data.mdb
 test/**/lock.mdb

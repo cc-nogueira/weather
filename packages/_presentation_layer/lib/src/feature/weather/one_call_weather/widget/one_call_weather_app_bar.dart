@@ -121,7 +121,7 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
   }
 
   Gradient _gradient(BuildContext context) => temperatureGradient(
-        startColor: Theme.of(context).colorScheme.surface,
+        startColor: Theme.of(context).colorScheme.surfaceVariant,
         celcius: weather.conditions.temperatures.temperature,
         begin: const Alignment(-0.5, -1.5),
         end: Alignment.bottomRight,

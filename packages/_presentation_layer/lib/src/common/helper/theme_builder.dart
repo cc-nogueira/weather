@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
 
+import 'lib_color_schemes-clear.g.dart';
+
 class ThemeBuilder {
-  const ThemeBuilder();
+  const ThemeBuilder({this.useGenerated = true});
+
+  final bool useGenerated;
 
   ThemeData get darkTheme => _theme(ThemeMode.dark);
   ThemeData get lightTheme => _theme(ThemeMode.light);
 
   ThemeData _theme(ThemeMode mode) {
     final base = mode == ThemeMode.dark
-        ? ThemeData(brightness: Brightness.dark, useMaterial3: true)
-        : ThemeData(brightness: Brightness.light, useMaterial3: true);
+        ? ThemeData(
+            brightness: Brightness.dark,
+            useMaterial3: true,
+            colorScheme: useGenerated ? darkColorScheme : null)
+        : ThemeData(
+            brightness: Brightness.light,
+            useMaterial3: true,
+            colorScheme: useGenerated ? lightColorScheme : null);
 
-    final bgColor = _scaffoldBackgroundColor(mode);
+    if (useGenerated) {
+      return base.copyWith(scaffoldBackgroundColor: base.colorScheme.surface);
+    }
 
     return base.copyWith(
       colorScheme: _colorScheme(mode, base.colorScheme),
       textTheme: _textTheme(mode, base.textTheme),
       appBarTheme: _appBarTheme(mode, base.appBarTheme),
-      scaffoldBackgroundColor: bgColor,
+      scaffoldBackgroundColor: _scaffoldBackgroundColor(mode),
     );
   }
 

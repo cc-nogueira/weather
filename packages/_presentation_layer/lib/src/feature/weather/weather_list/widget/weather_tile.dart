@@ -283,7 +283,7 @@ class _WeatherTile extends _WeatherTileBase
           TemperatureGradientBoxHero(
             city: city,
             gradient: temperatureGradient(
-              startColor: Theme.of(context).colorScheme.surface,
+              startColor: Theme.of(context).colorScheme.surfaceVariant,
               celcius: weather.conditions.temperatures.temperature,
               begin: const Alignment(0.3, -2.8),
               end: Alignment.bottomRight,

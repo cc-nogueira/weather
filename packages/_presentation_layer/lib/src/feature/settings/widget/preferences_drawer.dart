@@ -55,9 +55,9 @@ class PreferencesDrawer extends StatelessWidget {
     final side = BorderSide(width: 1.5, color: colors.onSurface);
     return DrawerHeader(
       padding: const EdgeInsets.all(0.0),
-      decoration: BoxDecoration(color: theme.scaffoldBackgroundColor),
+      decoration: BoxDecoration(color: colors.surface),
       child: Container(
-        decoration: BoxDecoration(color: theme.scaffoldBackgroundColor, border: Border(left: side)),
+        decoration: BoxDecoration(color: colors.surface, border: Border(left: side)),
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Column(
           children: [

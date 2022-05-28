@@ -9,25 +9,21 @@ class WindowWithTitleBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // height: MediaQuery.of(context).size.height,
-      decoration: const BoxDecoration(),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          WindowTitleBarBox(
-              child: Row(
-            children: [
-              Expanded(child: MoveWindow()),
-              MinimizeWindowButton(),
-              MaximizeWindowButton(),
-              CloseWindowButton(),
-            ],
-          )),
-          if (appBar != null) appBar!,
-          Expanded(child: child),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        WindowTitleBarBox(
+            child: Row(
+          children: [
+            Expanded(child: MoveWindow()),
+            MinimizeWindowButton(),
+            MaximizeWindowButton(),
+            CloseWindowButton(),
+          ],
+        )),
+        if (appBar != null) appBar!,
+        Expanded(child: child),
+      ],
     );
   }
 }
