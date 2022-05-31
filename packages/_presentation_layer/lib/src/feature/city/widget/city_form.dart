@@ -160,6 +160,7 @@ class _CityFormState extends State<_CityForm> {
               ? null
               : IconButton(
                   icon: const Icon(Icons.clear),
+                  tooltip: widget.translations.message_clear_input,
                   onPressed: () {
                     controller.clear();
                     _onFormChanged();

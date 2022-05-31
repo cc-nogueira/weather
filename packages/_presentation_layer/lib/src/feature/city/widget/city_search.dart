@@ -96,7 +96,8 @@ class _CitySearch extends ConsumerWidget {
       trailing: _alreadyContains(city)
           ? OutlinedButton(
               onPressed: () => _onCityAlreadyExistis(context, translations, showName),
-              child: Text(translations.add_label),
+              child: Text(translations.add_label,
+                  semanticsLabel: translations.message_city_already_in_your_list(showName)),
             )
           : ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -104,7 +105,8 @@ class _CitySearch extends ConsumerWidget {
                 primary: colors.primary,
               ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
               onPressed: () => onCitySelected(city),
-              child: Text(translations.add_label),
+              child: Text(translations.add_label,
+                  semanticsLabel: translations.message_add_city_to_your_list(showName)),
             ),
     );
   }
