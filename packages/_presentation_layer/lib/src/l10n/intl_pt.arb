@@ -208,9 +208,9 @@
   "@title_preferences": {
     "description": "Title for preferences panel"
   },
-  "weather_list_page_title": "Weather Colors",
+  "weather_list_page_title": "Clima em Cores",
   "@weather_list_page_title": {
-    "description": "Weather Colors page title"
+    "description": "Weather List page title"
   },
   "weather_list_sort_by_country_option": "país",
   "@weather_list_sort_by_country_option": {
