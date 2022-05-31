@@ -20,7 +20,7 @@ void main() {
       win.minSize = min;
       win.size = initial;
       win.alignment = Alignment.topRight;
-      win.title = "Weather List";
+      win.title = "Weather Colors";
       win.show();
     });
     // setWindowMaxSize(const Size(1024, -1));

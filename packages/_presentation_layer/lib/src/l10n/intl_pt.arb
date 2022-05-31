@@ -78,12 +78,23 @@
   "@label_remove": {
     "description": "Label for remove"
   },
+  "message_add_city_to_your_list": "adicionar {name} à sua lista de cidades",
+  "@message_add_city_to_your_list": {
+    "description": "Message to describe add city to your list action",
+    "placeholders": {
+      "name": {}
+    }
+  },
   "message_city_already_in_your_list": "{name} já está na sua lista de cidades.",
   "@message_city_already_in_your_list": {
     "description": "Message for City already in your list dialog",
     "placeholders": {
       "name": {}
     }
+  },
+  "message_clear_input": "limpar campo",
+  "@message_clear_input": {
+    "description": "Message for clear input action"
   },
   "message_loading": "Carregando...",
   "@message_loading": {
@@ -197,9 +208,9 @@
   "@title_preferences": {
     "description": "Title for preferences panel"
   },
-  "weather_list_page_title": "Weather List",
+  "weather_list_page_title": "Weather Colors",
   "@weather_list_page_title": {
-    "description": "Weather List page title"
+    "description": "Weather Colors page title"
   },
   "weather_list_sort_by_country_option": "país",
   "@weather_list_sort_by_country_option": {

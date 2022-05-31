@@ -1,6 +1,6 @@
-## Weather List: Privacy policy
+## Weather Colors: Privacy policy
 
-Welcome to the Weather List app for Android!
+Welcome to the Weather Colors app for Android!
 
 This is an open source Android app developed by Ricardo Nogueira from #!dev. The source code is available on GitHub under the BSD 3-Clause License; the app is also available on Google Play.
 
