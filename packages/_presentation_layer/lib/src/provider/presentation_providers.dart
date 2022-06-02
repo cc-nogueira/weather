@@ -23,7 +23,7 @@ final adUnitIds = Provider<AdUnitIds>(
 /// AdState for Mobile or FakeAdState for Desktop
 final adStateProvider = Provider(
   (ref) => Platform.isAndroid || Platform.isIOS
-      ? MobileAdState(adUnitIds: ref.watch(adUnitIds), useTestAdUnit: true)
+      ? MobileAdState(adUnitIds: ref.watch(adUnitIds), useTestAdUnit: false)
       : FakeAdState(),
 );
 
