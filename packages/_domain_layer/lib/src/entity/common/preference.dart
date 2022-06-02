@@ -13,6 +13,7 @@ part 'preference.freezed.dart';
 /// @see [PreferencesUsecase].
 @freezed
 class Preference with _$Preference implements Entity {
+  /// Freezed factory constructor.
   const factory Preference({
     @Default(0) int id,
     @Default('') String key,

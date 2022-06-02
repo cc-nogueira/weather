@@ -8,6 +8,7 @@ part 'location.freezed.dart';
 /// It is referenced by other entities, services, mappers, etc.
 @freezed
 class Location with _$Location {
+  /// Freezed factory constructor.
   const factory Location({
     @Default(0.0) double latitude,
     @Default(0.0) double longitude,
