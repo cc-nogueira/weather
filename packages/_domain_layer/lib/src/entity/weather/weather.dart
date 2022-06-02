@@ -5,11 +5,18 @@ import 'geo.dart';
 
 part 'weather.freezed.dart';
 
+/// Localtime mixin.
+///
+/// Provides an API to access locatime as UTC DateTime and to access this dateTime shifted to the
+/// Geo location local time.
 mixin Localtime {
   int get dateTimeMillis;
   Geo get geo;
 
+  /// UTC dateTime
   DateTime get utcDateTime => DateTime.fromMillisecondsSinceEpoch(dateTimeMillis, isUtc: true);
+
+  /// DateTime shifted to the Geo location local time.
   DateTime get localShiftedDateTime {
     final shifted =
         DateTime.fromMillisecondsSinceEpoch(dateTimeMillis + geo.timeShiftMillis, isUtc: true);
@@ -18,17 +25,26 @@ mixin Localtime {
   }
 }
 
+/// Common conditions container definition.
 abstract class ConditionsContainer {
   Conditions get conditions;
 }
 
+/// Common Weather container definition.
 abstract class WeatherContainer {
   Weather get weather;
 }
 
+/// Weather entity.
+///
+/// Freezed class with weather info.
+/// Implements ConditionsContainer with Localtime API.
 @freezed
 class Weather with _$Weather, Localtime implements ConditionsContainer {
+  /// Private constructor.
   const Weather._();
+
+  /// Freezed factory constructor.
   const factory Weather({
     @Default(0) int dateTimeMillis,
     @Default(Geo()) Geo geo,
@@ -36,9 +52,15 @@ class Weather with _$Weather, Localtime implements ConditionsContainer {
   }) = _Weather;
 }
 
+/// DailyWeather entity.
+///
+/// Freezed class with daily weather info with Localtime API.
 @freezed
 class DailyWeather with _$DailyWeather, Localtime {
+  /// Private constructor.
   const DailyWeather._();
+
+  /// Freezed factory constructor.
   const factory DailyWeather({
     @Default(0) int dateTimeMillis,
     @Default(Geo()) Geo geo,
@@ -46,9 +68,16 @@ class DailyWeather with _$DailyWeather, Localtime {
   }) = _DailyWeather;
 }
 
+/// HourlyWeather entity.
+///
+/// Freezed class with hourly weather info.
+/// Implements ConditionsContainer with Localtime API.
 @freezed
 class HourlyWeather with _$HourlyWeather, Localtime implements ConditionsContainer {
+  /// Private constructor.
   const HourlyWeather._();
+
+  /// Freezed factory constructor.
   const factory HourlyWeather({
     @Default(0) int dateTimeMillis,
     @Default(Geo()) Geo geo,

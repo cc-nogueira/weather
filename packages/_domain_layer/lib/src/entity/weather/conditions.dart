@@ -6,8 +6,12 @@ import 'wind.dart';
 
 part 'conditions.freezed.dart';
 
+/// Weather hourly conditions entity.
+///
+/// Freezed class with hourly weather conditions info.
 @freezed
 class Conditions with _$Conditions {
+  /// Freezed factory constructor.
   const factory Conditions({
     @Default(0) int code,
     @Default('') String title,
@@ -23,8 +27,12 @@ class Conditions with _$Conditions {
   }) = _Conditions;
 }
 
+/// Weather daily confitions entity.
+///
+/// Freezed class with daily weather conditions info.
 @freezed
 class DailyConditions with _$DailyConditions {
+  /// Freezed factory constructor.
   const factory DailyConditions({
     @Default(0) int code,
     @Default('') String title,
