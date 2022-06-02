@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:qty/qty.dart';
 import 'package:quiver/async.dart';
 import 'package:quiver/time.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:tuple/tuple.dart';
 
-import '../entity/common/language_option.dart';
 import '../entity/common/location.dart';
 import '../entity/time_zone/time_zone.dart';
 import '../entity/weather/city.dart';
 import '../entity/weather/current_weather.dart';
 import '../entity/weather/one_call_weather.dart';
-import '../entity/weather/weather_order.dart';
 import '../layer/domain_layer.dart';
 import '../usecase/app_lifecycle_usecase.dart';
 import '../usecase/cities_usecase.dart';
@@ -33,56 +30,11 @@ final appLifecycleUsecaseProvider =
 
 // -- Preferences:
 
-/// System locales obtained on main()
+/// System locales obtained on main() and updated by PresentationLayer App.
 final systemLocalesProvider = StateProvider<List<Locale>>((ref) => []);
 
 final preferencesUsecaseProvider =
     Provider<PreferencesUsecase>((ref) => ref.watch(domainLayerProvider).preferencesUsecase);
-
-final languageOptionProvider = Provider<LanguageOption>((ref) {
-  final usecase = ref.watch(preferencesUsecaseProvider);
-  return ref.watch(usecase.languageOptionProvider);
-});
-
-final themeModeProvider = Provider<ThemeMode>((ref) {
-  final usecase = ref.watch(preferencesUsecaseProvider);
-  return ref.watch(usecase.themeProvider);
-});
-
-final addTempToRainChartProvider = Provider<bool>((ref) {
-  final usecase = ref.watch(preferencesUsecaseProvider);
-  return ref.watch(usecase.addTempToRainChartProvider);
-});
-
-final addTempToSnowChartProvider = Provider<bool>((ref) {
-  final usecase = ref.watch(preferencesUsecaseProvider);
-  return ref.watch(usecase.addTempToSnowChartProvider);
-});
-
-final addTempToWindChartProvider = Provider<bool>((ref) {
-  final usecase = ref.watch(preferencesUsecaseProvider);
-  return ref.watch(usecase.addTempToWindChartProvider);
-});
-
-final weatherOrderProvider = Provider<WeatherOrder>((ref) {
-  final usecase = ref.watch(preferencesUsecaseProvider);
-  return ref.watch(usecase.weatherOrderProvider);
-});
-
-final temperatureUnitProvider = Provider<Unit<Temperature>>((ref) {
-  final usecase = ref.watch(preferencesUsecaseProvider);
-  return ref.watch(usecase.temperatureUnitProvider);
-});
-
-final windSpeedUnitProvider = Provider<Unit<Speed>>((ref) {
-  final usecase = ref.watch(preferencesUsecaseProvider);
-  return ref.watch(usecase.windSpeedUnitProvider);
-});
-
-final precipitationUnitProvider = Provider<Unit<Speed>>((ref) {
-  final usecase = ref.watch(preferencesUsecaseProvider);
-  return ref.watch(usecase.precipitationUnitProvider);
-});
 
 // -- Cities:
 

@@ -6,7 +6,62 @@ import 'package:riverpod/riverpod.dart';
 import '../entity/common/language_option.dart';
 import '../entity/common/preference.dart';
 import '../entity/weather/weather_order.dart';
+import '../provider/providers.dart';
 import '../repository/preferences_repository.dart';
+
+/// LanguageOption preference provider
+final languageOptionProvider = Provider<LanguageOption>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase._languageOptionProvider);
+});
+
+/// ThemeMode preference provider
+final themeModeProvider = Provider<ThemeMode>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase._themeProvider);
+});
+
+/// AddTempToRainChart preference provider
+final addTempToRainChartProvider = Provider<bool>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase._addTempToRainChartProvider);
+});
+
+/// AddTempToSnowChart preference provider
+final addTempToSnowChartProvider = Provider<bool>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase._addTempToSnowChartProvider);
+});
+
+/// AddTempToWindChart preference provider
+final addTempToWindChartProvider = Provider<bool>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase._addTempToWindChartProvider);
+});
+
+/// WeatherOrder preference provider
+final weatherOrderProvider = Provider<WeatherOrder>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase._weatherOrderProvider);
+});
+
+/// TemperatureUnit preference provider
+final temperatureUnitProvider = Provider<Unit<Temperature>>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase._temperatureUnitProvider);
+});
+
+/// WindSpeedUnit preference provider
+final windSpeedUnitProvider = Provider<Unit<Speed>>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase._windSpeedUnitProvider);
+});
+
+/// PrecipitationUnit preference provider
+final precipitationUnitProvider = Provider<Unit<Speed>>((ref) {
+  final usecase = ref.watch(preferencesUsecaseProvider);
+  return ref.watch(usecase._precipitationUnitProvider);
+});
 
 /// PreferencesUsecase manages a well defined domain of preferences.
 ///
@@ -16,15 +71,21 @@ import '../repository/preferences_repository.dart';
 ///
 /// Preferences keys and initial values are private to the class.
 ///
-/// All setter methods do save the preference to storage and updates the corresponding Provider,
-/// making it very convenient to rely on providers for stay up to date with preferences state.
+/// All setter methods do save the preference to storage and updates the corresponding StateProvider,
+/// making it very convenient to rely on providers and stay up to date with preferences state.
+/// This strategy works combined with those public read only Providers available above in this file.
 ///
 /// These providers are late initialized retrieving the storage state on first access with default
 /// initial values.
 ///
-/// Preferences allowed values are available through the and instance lists of values that can be
-/// accesse by the usecase provider state instance.
+/// Preferences allowed values are available through this usecase singleton instance API.
 class PreferencesUsecase {
+  /// Constructor requires the injection of [PreferencesRepository] implementation and a Riverpod
+  /// [Reader].
+  ///
+  /// The repository is used for preferences persistence.
+  /// The Reader is used to manipulate local StateProviders that store and notify changes for  all
+  /// preferences.
   PreferencesUsecase({required this.read, required this.repository});
 
   static const _languageOptionKey = 'language';
@@ -44,37 +105,58 @@ class PreferencesUsecase {
   static get _initialWindSpeedUnit => Speed().knot;
   static get _initialPrecipitationUnit => Speed().millimeterPerHour;
 
+  /// Internal Riverpod [Reader].
+  @internal
+  final Reader read;
+
+  /// Internal [PreferencesRepositoty] implementation.
+  @internal
+  final PreferencesRepository repository;
+
+  /// Available themes.
   final themes = const [ThemeMode.dark, ThemeMode.light];
+
+  /// Available WeatherOrder values.
   final weatherOrders = WeatherOrder.values;
+
+  /// Available temperature units.
   final temperatureUnits = [Temperature().celcius, Temperature().fahrenheit];
+
+  /// Available wind speed units.
   final windSpeedUnits = [
     Speed().knot,
     Speed().meterPerSecond,
     Speed().kilometerPerHour,
     Speed().milePerHour,
   ];
+
+  /// Available precipitation (rain and snow) units.
   final precipitationUnits = [Speed().millimeterPerHour, Speed().inchPerHour];
 
-  final Reader read;
-  late final languageOptionProvider = StateProvider((_) => _languageOption);
-  late final themeProvider = StateProvider((_) => _theme);
-  late final addTempToRainChartProvider = StateProvider((_) => _addTempToRainChart);
-  late final addTempToSnowChartProvider = StateProvider((_) => _addTempToSnowChart);
-  late final addTempToWindChartProvider = StateProvider((_) => _addTempToWindChart);
-  late final weatherOrderProvider = StateProvider((_) => _weatherOrder);
-  late final temperatureUnitProvider = StateProvider<Unit<Temperature>>((ref) => _temperatureUnit);
-  late final windSpeedUnitProvider = StateProvider<Unit<Speed>>((ref) => _windSpeedUnit);
-  late final precipitationUnitProvider = StateProvider<Unit<Speed>>((ref) => _precipitationUnit);
+  // Private prividers:
+  late final _languageOptionProvider = StateProvider((_) => _languageOption);
+  late final _themeProvider = StateProvider((_) => _theme);
+  late final _addTempToRainChartProvider = StateProvider((_) => _addTempToRainChart);
+  late final _addTempToSnowChartProvider = StateProvider((_) => _addTempToSnowChart);
+  late final _addTempToWindChartProvider = StateProvider((_) => _addTempToWindChart);
+  late final _weatherOrderProvider = StateProvider((_) => _weatherOrder);
+  late final _temperatureUnitProvider = StateProvider<Unit<Temperature>>((ref) => _temperatureUnit);
+  late final _windSpeedUnitProvider = StateProvider<Unit<Speed>>((ref) => _windSpeedUnit);
+  late final _precipitationUnitProvider = StateProvider<Unit<Speed>>((ref) => _precipitationUnit);
 
-  @internal
-  final PreferencesRepository repository;
-
+  /// Setter to change the [LanguageOption] preference.
+  ///
+  /// This setter will trigger this preference change notification through the correpondent provider.
   set languageOption(LanguageOption languageOption) {
     final optionStr = '${languageOption.languageCode}_${languageOption.countryCode ?? ''}';
     repository.saveByKey(Preference(key: _languageOptionKey, value: optionStr));
-    read(languageOptionProvider.notifier).state = languageOption;
+    read(_languageOptionProvider.notifier).state = languageOption;
   }
 
+  /// Internal getter for [LanguageOption] preference.
+  ///
+  /// This method reads the preference from the [PreferencesRepository] with a default initialValue.
+  /// Use the correspondent public provider instead.
   LanguageOption get _languageOption {
     final pref = repository.getByKey(_languageOptionKey);
     if (pref == null) return LanguageOption.none;
@@ -84,13 +166,18 @@ class PreferencesUsecase {
     return LanguageOption.matching(languageCode, countryCode);
   }
 
-  /// Save the theme preference and updates this usecase [themeProvider].
+  /// Setter to change the [ThemeMode] preference.
+  ///
+  /// This setter will trigger this preference change notification through the correpondent provider.
   set theme(ThemeMode theme) {
     repository.saveByKey(Preference(key: _themeKey, value: theme.name));
-    read(themeProvider.notifier).state = theme;
+    read(_themeProvider.notifier).state = theme;
   }
 
-  /// Read the theme from storage using a default initial value
+  /// Internal getter for [ThemeMode] preference.
+  ///
+  /// This method reads the preference from the [PreferencesRepository] with a default initialValue.
+  /// Use the correspondent public provider instead.
   ThemeMode get _theme {
     final pref = repository.getByKey(_themeKey);
     if (pref?.value == ThemeMode.light.name) return ThemeMode.light;
@@ -98,13 +185,18 @@ class PreferencesUsecase {
     return _initialTheme;
   }
 
-  /// Save the addTempToRainChart preference and updates this usecase [addTempToRainChartProvider].
+  /// Setter to change the addTempToRainChart preference.
+  ///
+  /// This setter will trigger this preference change notification through the correpondent provider.
   set addTempToRainChart(bool option) {
     repository.saveByKey(Preference(key: _addTempToRainChartKey, value: option.toString()));
-    read(addTempToRainChartProvider.notifier).state = option;
+    read(_addTempToRainChartProvider.notifier).state = option;
   }
 
-  /// Read the combineTemperatureToRainAndSnow option from storage using a default initial value
+  /// Internal getter for addTempToRainChart preference.
+  ///
+  /// This method reads the preference from the [PreferencesRepository] with a default initialValue.
+  /// Use the correspondent public provider instead.
   bool get _addTempToRainChart {
     final pref = repository.getByKey(_addTempToRainChartKey);
     if (pref?.value == "true") return true;
@@ -112,13 +204,18 @@ class PreferencesUsecase {
     return _initialAddTempToCharts;
   }
 
-  /// Save the combineTemperatureToRainAndSnow preference and updates this usecase [addTempToSnowChartProvider].
+  /// Setter to change the addTempToSnowChart preference.
+  ///
+  /// This setter will trigger this preference change notification through the correpondent provider.
   set addTempToSnowChart(bool option) {
     repository.saveByKey(Preference(key: _addTempToSnowChartKey, value: option.toString()));
-    read(addTempToSnowChartProvider.notifier).state = option;
+    read(_addTempToSnowChartProvider.notifier).state = option;
   }
 
-  /// Read the combineTemperatureToRainAndSnow option from storage using a default initial value
+  /// Internal getter for addTempToSnowChart preference.
+  ///
+  /// This method reads the preference from the [PreferencesRepository] with a default initialValue.
+  /// Use the correspondent public provider instead.
   bool get _addTempToSnowChart {
     final pref = repository.getByKey(_addTempToSnowChartKey);
     if (pref?.value == "true") return true;
@@ -126,13 +223,18 @@ class PreferencesUsecase {
     return _initialAddTempToCharts;
   }
 
-  /// Save the combineTemperatureToRainAndSnow preference and updates this usecase [addTempToSnowChartProvider].
+  /// Setter to change the addTempToWindChart preference.
+  ///
+  /// This setter will trigger this preference change notification through the correpondent provider.
   set addTempToWindChart(bool option) {
     repository.saveByKey(Preference(key: _addTempToWindChartKey, value: option.toString()));
-    read(addTempToWindChartProvider.notifier).state = option;
+    read(_addTempToWindChartProvider.notifier).state = option;
   }
 
-  /// Read the combineTemperatureToRainAndSnow option from storage using a default initial value
+  /// Internal getter for addTempToWindChart preference.
+  ///
+  /// This method reads the preference from the [PreferencesRepository] with a default initialValue.
+  /// Use the correspondent public provider instead.
   bool get _addTempToWindChart {
     final pref = repository.getByKey(_addTempToWindChartKey);
     if (pref?.value == "true") return true;
@@ -140,13 +242,18 @@ class PreferencesUsecase {
     return _initialAddTempToCharts;
   }
 
-  /// Save the weather order preference and update this usecase [weatherOrderProvider].
+  /// Setter to change the weatherOrder preference.
+  ///
+  /// This setter will trigger this preference change notification through the correpondent provider.
   set weatherOrder(WeatherOrder order) {
     repository.saveByKey(Preference(key: _weatherOrderKey, value: order.name));
-    read(weatherOrderProvider.notifier).state = order;
+    read(_weatherOrderProvider.notifier).state = order;
   }
 
-  /// Read the weather order preference from storage using a default initial value
+  /// Internal getter for weatherOrder preference.
+  ///
+  /// This method reads the preference from the [PreferencesRepository] with a default initialValue.
+  /// Use the correspondent public provider instead.
   WeatherOrder get _weatherOrder {
     final pref = repository.getByKey(_weatherOrderKey);
     for (final option in WeatherOrder.values) {
@@ -155,13 +262,18 @@ class PreferencesUsecase {
     return _initialWeatherOrder;
   }
 
-  /// Save the temperature unit preference and update this usecase [temperatureUnitProvider].
+  /// Setter to change the temperatureUnit preference.
+  ///
+  /// This setter will trigger this preference change notification through the correpondent provider.
   set temperatureUnit(Unit<Temperature> unit) {
     repository.saveByKey(Preference(key: _temperatureUnitKey, value: unit.symbol));
-    read(temperatureUnitProvider.notifier).state = unit;
+    read(_temperatureUnitProvider.notifier).state = unit;
   }
 
-  /// Read the temperature unit preference from storage using a default initial value
+  /// Internal getter for temperatureUnit preference.
+  ///
+  /// This method reads the preference from the [PreferencesRepository] with a default initialValue.
+  /// Use the correspondent public provider instead.
   Unit<Temperature> get _temperatureUnit {
     final pref = repository.getByKey(_temperatureUnitKey);
     for (final option in temperatureUnits) {
@@ -171,13 +283,18 @@ class PreferencesUsecase {
     return _initialTemperatureUnit;
   }
 
-  /// Save the wind speed unit preference and update this usecase [windSpeedUnitProvider].
+  /// Setter to change the windSpeedUnit preference.
+  ///
+  /// This setter will trigger this preference change notification through the correpondent provider.
   set windSpeedUnit(Unit<Speed> unit) {
     repository.saveByKey(Preference(key: _windSpeedUnitKey, value: unit.symbol));
-    read(windSpeedUnitProvider.notifier).state = unit;
+    read(_windSpeedUnitProvider.notifier).state = unit;
   }
 
-  /// Read the wind speed unit preference from storage using a default initial value
+  /// Internal getter for windSpeedUnit preference.
+  ///
+  /// This method reads the preference from the [PreferencesRepository] with a default initialValue.
+  /// Use the correspondent public provider instead.
   Unit<Speed> get _windSpeedUnit {
     final pref = repository.getByKey(_windSpeedUnitKey);
     for (final option in windSpeedUnits) {
@@ -186,13 +303,18 @@ class PreferencesUsecase {
     return _initialWindSpeedUnit;
   }
 
-  /// Save the precipitation unit preference and update this usecase [precipitationUnitProvider].
+  /// Setter to change the precipitationUnit preference.
+  ///
+  /// This setter will trigger this preference change notification through the correpondent provider.
   set precipitationUnit(Unit<Speed> unit) {
     repository.saveByKey(Preference(key: _precipitationUnitKey, value: unit.symbol));
-    read(precipitationUnitProvider.notifier).state = unit;
+    read(_precipitationUnitProvider.notifier).state = unit;
   }
 
-  /// Read the wind speed unit preference from storage using a default initial value
+  /// Internal getter for precipitationUnit preference.
+  ///
+  /// This method reads the preference from the [PreferencesRepository] with a default initialValue.
+  /// Use the correspondent public provider instead.
   Unit<Speed> get _precipitationUnit {
     final pref = repository.getByKey(_precipitationUnitKey);
     for (final option in precipitationUnits) {
