@@ -5,9 +5,14 @@ import 'package:_domain_layer/domain_layer.dart';
 import '../model/city_model.dart';
 import 'entity_mapper.dart';
 
+/// CityMapper to convert domain entities to persistence models and vice-versa.
+///
+/// Mapper class to convert Domain City entity to/from Persistence CityModel objects.
 class CityMapper extends EntityMapper<City, CityModel> {
+  /// Const constructor.
   const CityMapper();
 
+  /// Map a persistence model to a domain entity.
   @override
   City mapEntity(CityModel model) => City(
         id: model.id,
@@ -19,6 +24,7 @@ class CityMapper extends EntityMapper<City, CityModel> {
         nameTranslations: _mapEntityNameTranslations(model),
       );
 
+  /// Map a domain entity to a persistence model.
   @override
   CityModel mapModel(City entity) => CityModel(
         id: entity.id,
@@ -31,6 +37,7 @@ class CityMapper extends EntityMapper<City, CityModel> {
         nameTranslations: _mapModelNameTranslations(entity),
       );
 
+  /// Internal - map model location to domain Location
   Location? _mapEntityLocation(CityModel model) {
     if (model.latitude == 0.0 && model.longitude == 0.0) {
       return null;
@@ -38,6 +45,7 @@ class CityMapper extends EntityMapper<City, CityModel> {
     return Location(latitude: model.latitude, longitude: model.longitude);
   }
 
+  /// Internal - map model name translations to entity translations map.
   Map<String, String> _mapEntityNameTranslations(CityModel model) {
     if (model.nameTranslations.isEmpty) return {};
     try {
@@ -51,5 +59,6 @@ class CityMapper extends EntityMapper<City, CityModel> {
     }
   }
 
+  /// Map domain translations map to persistence model json.
   String _mapModelNameTranslations(City entity) => json.encode(entity.nameTranslations);
 }
