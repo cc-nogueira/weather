@@ -8,7 +8,10 @@ part 'time_zone.freezed.dart';
 /// It also provides a getter to convert int millis to currentLocalTime.
 @freezed
 class TimeZone with _$TimeZone {
+  /// Private constructor.
   const TimeZone._();
+
+  /// Freezed factory constructor.
   const factory TimeZone({
     @Default('') String timeZone,
     @Default(0) int currentLocalTimeMillis,
@@ -19,9 +22,11 @@ class TimeZone with _$TimeZone {
     @Default(DstInterval()) DstInterval dstInterval,
   }) = _TimeZone;
 
+  /// Current local time as DateTime.
   DateTime get currentLocalTime =>
       DateTime.fromMillisecondsSinceEpoch(currentLocalTimeMillis, isUtc: false);
 
+  /// Current UTC offest duration.
   Duration get currentUtcOffsetDuration => Duration(seconds: currentUtcOffset.seconds);
 }
 
