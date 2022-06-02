@@ -2,6 +2,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'time_zone.freezed.dart';
 
+/// TimeZone entity.
+///
+/// Freezed class with time zone information.
+/// It also provides a getter to convert int millis to currentLocalTime.
 @freezed
 class TimeZone with _$TimeZone {
   const TimeZone._();
@@ -21,6 +25,7 @@ class TimeZone with _$TimeZone {
   Duration get currentUtcOffsetDuration => Duration(seconds: currentUtcOffset.seconds);
 }
 
+/// TimeZoneOffset entity used by TimeZone.
 @freezed
 class TimeZoneOffset with _$TimeZoneOffset {
   const factory TimeZoneOffset({
@@ -29,6 +34,7 @@ class TimeZoneOffset with _$TimeZoneOffset {
   }) = _TimeZoneOffset;
 }
 
+/// DstInterval entity used by TimeZone.
 @freezed
 class DstInterval with _$DstInterval {
   const factory DstInterval({
