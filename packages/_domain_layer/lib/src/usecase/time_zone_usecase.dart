@@ -9,8 +9,10 @@ import '../service/time_zone_service.dart';
 /// TimeZoneService has a single method in its API.
 /// There are no business rules and this use case just forwards the service API.
 class TimeZoneUsecase {
+  /// Constructor recieves injection of a TimeZoneService implementation.
   const TimeZoneUsecase({required this.service});
 
+  /// Internal TimeZoneService implementation.
   @internal
   final TimeZoneService service;
 

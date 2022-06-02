@@ -11,7 +11,7 @@ import 'entity_usecase.dart';
 /// This class must be injected with an [EntityStreamRepository].
 /// See providers.
 abstract class EntityStreamUsecase<T extends Entity> extends EntityUsecase<T> {
-  const EntityStreamUsecase({required super.repository});
+  const EntityStreamUsecase({required EntityStreamRepository<T> super.repository});
 
   @internal
   @override

@@ -13,6 +13,8 @@ import '../routes/routes.dart';
 ///
 /// Besides the regular constructor there is WeatherApp.error constructor to
 /// handle initialization errors.
+///
+/// Its instance is registered as observer of WidgetsBinding listenning to change in system locales.
 class WeatherApp extends ConsumerWidget with WidgetsBindingObserver {
   const WeatherApp({super.key, required this.read}) : error = null;
 

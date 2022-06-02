@@ -13,16 +13,27 @@ import '../service/weather_service.dart';
 /// This constants are used to configure automatic refresh of weather information directly at
 /// the definition of weather providers (@see [providers.dart])
 class WeatherUsecase {
+  /// Constructor receives injection of WeatherService implementation and a Logger.
   const WeatherUsecase({required this.service, required this.log});
 
-  static const defaultLanguage = 'en';
+  /// Static const for currentWeatherRefresh interval.
   static const currentWeatherRefreshInterval = Duration(minutes: 60);
+
+  /// Static const for currentWeather MinRefresh interval (prevent frequent manual refreshes).
   static const currentWeatherMinRefreshInterval = Duration(minutes: 10);
+
+  /// Static const for oneCallWeatherRefresh interval.
   static const oneCallWeatherRefreshInterval = Duration(hours: 2);
+
+  /// Static const for oneCallWeather MinRefresh interval (prevent frequent manual refreshes).
   static const oneCallWeatherMinRefreshInterval = Duration(minutes: 10);
 
+  /// Internal WeatherService implementation reference (injected on constructor).
   @internal
   final WeatherService service;
+
+  /// Internal logger
+  @internal
   final Logger log;
 
   /// Search cities matching the argument (name and country)

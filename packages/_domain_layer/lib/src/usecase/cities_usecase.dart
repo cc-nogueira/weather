@@ -10,6 +10,7 @@ import 'entity_stream_usecase.dart';
 ///   - validate
 ///   - adjust
 class CitiesUsecase extends EntityStreamUsecase<City> {
+  /// Constructor receives a EntityStreamRepository implementation.
   const CitiesUsecase({required super.repository});
 
   /// Compare two cities by user defined order.
