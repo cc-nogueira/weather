@@ -6,11 +6,17 @@ import 'time_api_client.dart';
 
 /// Time API service provided by TimeAPI.io.
 ///
+/// Implements domain's TimeZoneService interface.
+///
 /// Access Time API by Location.
 class TimeApiService implements TimeZoneService {
+  /// Const constructor.
   const TimeApiService() : client = const TimeApiClient();
 
+  /// TimeAPI client
   final TimeApiClient client;
+
+  /// Mapper to convert from service Model to domain Entity.
   final _mapper = const TimeZoneMapper();
 
   /// Fetch Time Zone information from TimeAPI client.

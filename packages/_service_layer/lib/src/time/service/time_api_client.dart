@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 ///
 /// Remote invocations to Time API.
 class TimeApiClient {
+  /// Const constructor.
   const TimeApiClient();
 
   /// Fetches current time zone info JSON from Time API.
@@ -22,6 +23,9 @@ class TimeApiClient {
     return _invoke<Map<String, dynamic>>(uri);
   }
 
+  /// Internal - invoke http call.
+  ///
+  /// Return decoded json.
   Future<T> _invoke<T>(Uri uri) async {
     final response = await http.get(uri);
     return json.decode(response.body) as T;

@@ -8,8 +8,10 @@ import 'package:http/http.dart' as http;
 ///
 /// Remote invocations to OpenWeather API.
 class OpenWeatherClient {
+  /// Const constructor must receive a valid OpenWeather AppID.
   const OpenWeatherClient({required this.appId});
 
+  /// OpenWeather AppID stored in ServiceLayer (must be redefined with a valid ID).
   final String appId;
 
   /// Fetches a list with one or zero Geo Locations JSON from OpenWeather API.
@@ -73,6 +75,8 @@ class OpenWeatherClient {
     return _invoke<Map<String, dynamic>>(uri);
   }
 
+  /// Internal - http invocation.
+  /// Return decoded JSON.
   Future<T> _invoke<T>(Uri uri) async {
     final response = await http.get(uri);
     return json.decode(response.body) as T;

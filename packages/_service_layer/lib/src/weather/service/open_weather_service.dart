@@ -14,15 +14,22 @@ import 'open_weather_client.dart';
 
 /// Wheather service provided by OpenWeather.
 ///
+/// Implements domain's WeatherSerice interface.
+///
 /// Access CurrentWeather by City or Location.
 class OpenWeatherService implements WeatherService {
+  /// Constructor must receive a valid OpenWeather AppID and a Riverpod Reader.
   OpenWeatherService({
     required String appId,
     required this.read,
   }) : client = OpenWeatherClient(appId: appId);
 
+  /// OpenWeather client.
   final OpenWeatherClient client;
+
+  /// Riverpod Reader to access current selected language option.
   final Reader read;
+
   final _weatherMapper = const CurrentWeatherMapper();
   final _oneCallMapper = const OneCallMapper();
   final _cityMapper = const CityMapper();
@@ -92,6 +99,7 @@ class OpenWeatherService implements WeatherService {
     return _oneCallMapper.mapEntity(model);
   }
 
+  /// Internal - get selected language option stored in a Riverpod provider or use system locale.
   String get _language =>
       read(languageOptionProvider).locale?.languageCode ?? window.locale.languageCode;
 }

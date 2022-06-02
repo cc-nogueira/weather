@@ -1,3 +1,4 @@
+import 'package:_domain_layer/domain_layer.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../layer/service_layer.dart';
@@ -7,7 +8,9 @@ import '../weather/service/open_weather_service.dart';
 /// Layer provider
 final serviceLayerProvider = Provider((_) => const ServiceLayer());
 
-final timeApiServiceProvider = Provider((_) => const TimeApiService());
+/// TimeZone service implementaion provider
+final timeApiServiceProvider = Provider<TimeZoneService>((_) => const TimeApiService());
 
-final weatherServiceProvider =
-    Provider((ref) => OpenWeatherService(appId: ServiceLayer.openWeatherAppId, read: ref.read));
+/// Weather service implementation provider.
+final weatherServiceProvider = Provider<WeatherService>(
+    (ref) => OpenWeatherService(appId: ServiceLayer.openWeatherAppId, read: ref.read));

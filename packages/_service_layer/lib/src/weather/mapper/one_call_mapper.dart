@@ -2,9 +2,14 @@ import 'package:_domain_layer/domain_layer.dart';
 
 import '../model/one_call_weather_model.dart';
 
+/// CityMapper converts [OneCallWeatherModel] to [OneCallWeather] entity.
+///
+/// This is a one-way only conversion. Only from Model to Entity.
 class OneCallMapper {
+  /// Const constructor.
   const OneCallMapper();
 
+  /// Maps a OneCallWeather service Model to a [OneCallWeather] domain Entity.
   OneCallWeather mapEntity(OneCallWeatherModel model) {
     final currentModel = model.current;
     final currentWeather = currentModel.weather.first;
@@ -54,6 +59,7 @@ class OneCallMapper {
     );
   }
 
+  /// Internal - maps a list of [HourlyModel] to a list of [HourlyWeather] entities.
   List<HourlyWeather> _mapHourly(List<HourlyModel> hourlyModels, Geo geo) {
     final list = <HourlyWeather>[];
     for (final model in hourlyModels) {
@@ -87,6 +93,7 @@ class OneCallMapper {
     return list;
   }
 
+  /// Internal - maps a list of [DailyModel] to a list of [DailyWeather] entities.
   List<DailyWeather> _mapDaily(List<DailyModel> dailyModels, Geo geo) {
     final list = <DailyWeather>[];
     for (final model in dailyModels) {
@@ -139,6 +146,7 @@ class OneCallMapper {
     return list;
   }
 
+  /// Internal - maps a list of [AlertModel] to a list of [Alert] entities.
   List<Alert> _mapAlerts(List<AlertModel> alertModels, Geo geo) {
     final alerts = <Alert>[];
     for (final model in alertModels) {

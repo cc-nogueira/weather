@@ -2,9 +2,14 @@ import 'package:_domain_layer/domain_layer.dart';
 
 import '../model/current_weather_model.dart';
 
+/// CityMapper converts [CurrentWeatherModel] to [CurrentWeather] entity.
+///
+/// This is a one-way only conversion. Only from Model to Entity.
 class CurrentWeatherMapper {
+  /// Const constructor.
   const CurrentWeatherMapper();
 
+  /// Maps a CurrentWeather service Model to a [CurrentWeather] domain Entity.
   CurrentWeather mapEntity(CurrentWeatherModel model) {
     final weatherModel = model.weather.first;
     final main = model.main;
