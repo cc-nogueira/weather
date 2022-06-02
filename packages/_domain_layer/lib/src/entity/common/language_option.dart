@@ -1,20 +1,38 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
+/// Languages enum.
+///
+/// Available languages, including a 'none' value.
+/// This 'none' value is used for no match lookup and can signal no user selected language and
+/// the desire to use the SystemLanguage of the device.
 enum Language {
   none,
   en,
   pt;
 
+  /// Find the enum corresponding to a language code or 'none'.
   static Language forLanguageCode(String languageCode) => values.firstWhere(
         (element) => element.name == languageCode,
         orElse: () => none,
       );
 
+  /// Find the enum for a Locale language code or 'none'.
   static Language forLocale(Locale locale) => forLanguageCode(locale.languageCode);
 
+  /// Return the language code for a enum value or empty for the enum 'none'.
   String get languageCode => this == none ? '' : name;
 }
 
+///
+/// LanguageCountry enum.
+///
+/// Enumerates known Language Countries, each one with a two letter code, a flag and a list of
+/// Language values valid for that country.
+///
+/// Also includes a 'none' value to signal a no match value for country lookup.
+/// This 'none' value carries only the Language.none value in its list of valid languages.
 enum LanguageCountry {
   none(null, '', [Language.none]),
   australia('AU', '🇦🇺', [Language.en]),
@@ -25,28 +43,57 @@ enum LanguageCountry {
   unitedKingdom('UK', '🇬🇧', [Language.en]),
   unitedStates('US', '🇺🇸', [Language.en]);
 
+  /// Constructor with countryCode, flag and list of languages.
   const LanguageCountry(this.countryCode, this.flag, this.languages);
 
+  /// Find the list of countries that support a given language.
   static List<LanguageCountry> forLanguage(Language language) =>
       values.where((each) => each.languages.contains(language)).toList();
 
+  /// Country code if any.
   final String? countryCode;
+
+  /// Country flag as a UNICODE char.
+  /// Note that windows does not render these Flag chars as images, but rather as their corresponding
+  /// country code.
   final String flag;
+
+  /// List of languages valid for a country.
   final List<Language> languages;
 }
 
+/// LanguageOption entity.
+///
+/// Represents a language option the user can select for the system.
+///
+/// This class has a static API to tell the default language option for each language supported in
+/// the system, and to find a valid LanguageOption for a combination of languageCode and an optional
+/// countryCode.
+///
+/// It can also construct a list of language options combinining Language and LanguageCountry
+/// that best suit the current system locales and the current saved LanguageOption.
+///
+/// This is also a 'none' value used for no match lookup and can signal no user selected language and
+/// the desire to use the SystemLanguage of the device.
+@immutable
 class LanguageOption {
+  /// Private constructor.
   const LanguageOption._(this.language, this.country);
 
+  /// None option to signal the desire to use a system locale language.
   static const none = LanguageOption._(Language.none, LanguageCountry.none);
 
+  /// Internal default options.
   static const _defaultLanguageOptions = [
     none,
     LanguageOption._(Language.en, LanguageCountry.unitedStates),
     LanguageOption._(Language.pt, LanguageCountry.brazil)
   ];
 
+  /// Language value.
   final Language language;
+
+  /// LanguageCountry value (can be 'none').
   final LanguageCountry country;
 
   /// Default LanguageOption for a language or none.
@@ -77,7 +124,8 @@ class LanguageOption {
     return defaultLanguageOptionFor(language);
   }
 
-  /// List of available LanguageOptions.
+  /// List of available LanguageOptions that best suit the combination of system locales and the
+  /// current saved LanguageOption.
   ///
   /// This is list is constructed in the following order:
   /// - first is none.
@@ -131,6 +179,7 @@ class LanguageOption {
     return list;
   }
 
+  /// Private method to find the best combination of language and country using system locales.
   static LanguageOption? _findOptionInSystemLocales(List<Locale> systemLocales, Language language) {
     final countries = LanguageCountry.forLanguage(language);
     for (final locale in systemLocales) {
@@ -151,9 +200,13 @@ class LanguageOption {
   /// Is this a none option?
   bool get isNone => language == Language.none;
 
+  /// Language code value.
   String get languageCode => language.languageCode;
+
+  /// Optional country code value.
   String? get countryCode => country.countryCode;
 
+  /// Corresponding Locale or null for the 'none' LanguageOption.
   Locale? get locale => isNone ? null : Locale(languageCode, countryCode);
 
   @override
