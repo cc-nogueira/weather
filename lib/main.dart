@@ -11,9 +11,12 @@ import 'package:logging/logging.dart';
 void main() {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
+  late final Widget loadingWidget;
   if (Platform.isAndroid || Platform.isIOS) {
+    loadingWidget = Container();
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   } else if (Platform.isWindows) {
+    loadingWidget = const Center(child: CircularProgressIndicator());
     doWhenWindowReady(() {
       const min = Size(360, 700);
       const initial = Size(420, 1000);
@@ -31,7 +34,7 @@ void main() {
     ProviderScope(
       child: Consumer(
         builder: (_, ref, __) => ref.watch(appProvider).when(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => loadingWidget,
               data: (app) => app,
               error: (error, _) => WeatherApp.error(error, read: ref.read),
             ),
