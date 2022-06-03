@@ -36,7 +36,7 @@ void main() {
         builder: (_, ref, __) => ref.watch(appProvider).when(
               loading: () => loadingWidget,
               data: (app) => app,
-              error: (error, _) => WeatherApp.error(error, read: ref.read),
+              error: (error, _) => WeatherApp.error(error),
             ),
       ),
     ),
@@ -54,7 +54,7 @@ final appProvider = FutureProvider.autoDispose<Widget>((ref) async {
   final diLayer = ref.watch(diLayerProvider);
   await diLayer.init();
 
-  final app = WeatherApp(read: ref.read);
+  const app = WeatherApp();
   if (Platform.isAndroid || Platform.isIOS) {
     FlutterNativeSplash.remove();
   }

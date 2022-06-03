@@ -28,6 +28,9 @@ typedef DomainConfiguration = void Function({
 
 /// DomainLayer has the responsibility to provide domain usecases.
 ///
+/// On initialization this layer registers itself as a WidgetsBindings observer listenning to
+/// changes in system locales, maintainging the corresponding system locales provider up to date.
+///
 /// To fullfill this responsibility DomainLayer requires its configuration to be
 /// invoked before any usecase is accessed. Configuration is usually done during
 /// DILayer's init() method.
@@ -61,6 +64,10 @@ class DomainLayer extends AppLayer with WidgetsBindingObserver {
   /// Configured [WeatherUsecase] singleton.
   late final WeatherUsecase weatherUsecase;
 
+  /// Initialize the DomainLayer.
+  ///
+  /// Intializes the systemLocalesProvider state and register this layer object as a
+  /// WidgetsBindings observer to keep this provider always up to date with system locale changes.
   @override
   Future<void> init() {
     final systemLocales = WidgetsBinding.instance.platformDispatcher.locales;
@@ -71,6 +78,9 @@ class DomainLayer extends AppLayer with WidgetsBindingObserver {
     return SynchronousFuture(null);
   }
 
+  /// Handle system locales changes.
+  ///
+  /// Keep the systemLocalesProvier up to date with the system locales.
   @override
   void didChangeLocales(List<Locale>? locales) {
     if (locales != null) {
