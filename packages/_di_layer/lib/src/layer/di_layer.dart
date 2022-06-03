@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:_core_layer/core_layer.dart';
 import 'package:_data_layer/data_layer.dart';
 import 'package:_domain_layer/domain_layer.dart';
@@ -56,10 +54,6 @@ class DiLayer extends AppLayer {
     serviceLayerProvider,
     presentationLayerProvider,
   ];
-
-  void preInitWith(List<Locale> systemLocales) {
-    _read(systemLocalesProvider.notifier).state = systemLocales;
-  }
 
   /// Init all layers and configure those that requires dependency injections.
   @override

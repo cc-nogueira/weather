@@ -14,22 +14,15 @@ import '../routes/routes.dart';
 /// Besides the regular constructor there is WeatherApp.error constructor to
 /// handle initialization errors.
 ///
-/// Its instance is registered as observer of WidgetsBinding listenning to change in system locales.
-class WeatherApp extends ConsumerWidget with WidgetsBindingObserver {
+/// Its instance is registered as observer of WidgetsBinding listenning to changes in system locales.
+class WeatherApp extends ConsumerWidget {
   const WeatherApp({super.key, required this.read}) : error = null;
 
   const WeatherApp.error(this.error, {super.key, required this.read});
 
   final Reader read;
-  final _routes = const Routes();
   final Object? error;
-
-  @override
-  void didChangeLocales(List<Locale>? locales) {
-    if (locales != null) {
-      read(systemLocalesProvider.notifier).state = locales;
-    }
-  }
+  final _routes = const Routes();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

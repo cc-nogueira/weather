@@ -1,8 +1,11 @@
 import 'package:_core_layer/core_layer.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../provider/providers.dart';
 import '../repository/cities_repository.dart';
 import '../repository/preferences_repository.dart';
 import '../service/time_zone_service.dart';
@@ -36,7 +39,7 @@ typedef DomainConfiguration = void Function({
 ///   - [citiesUsecase]
 ///   - [timeUsecase]
 ///   - [weatherUsecase]
-class DomainLayer extends AppLayer {
+class DomainLayer extends AppLayer with WidgetsBindingObserver {
   /// Constructor.
   ///
   /// Required a Riverpod Reader to instantite the [PreferencesUsecase].
@@ -57,6 +60,23 @@ class DomainLayer extends AppLayer {
 
   /// Configured [WeatherUsecase] singleton.
   late final WeatherUsecase weatherUsecase;
+
+  @override
+  Future<void> init() {
+    final systemLocales = WidgetsBinding.instance.platformDispatcher.locales;
+    read(systemLocalesProvider.notifier).state = systemLocales;
+
+    WidgetsBinding.instance.addObserver(this);
+
+    return SynchronousFuture(null);
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    if (locales != null) {
+      read(systemLocalesProvider.notifier).state = locales;
+    }
+  }
 
   /// Configure method called by the [DiLayer] object at system initialization.
   ///

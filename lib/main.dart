@@ -10,6 +10,7 @@ import 'package:logging/logging.dart';
 
 void main() {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
   if (Platform.isAndroid || Platform.isIOS) {
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   } else if (Platform.isWindows) {
@@ -29,7 +30,7 @@ void main() {
   runApp(
     ProviderScope(
       child: Consumer(
-        builder: (_, ref, __) => ref.watch(appProvider(widgetsBinding)).when(
+        builder: (_, ref, __) => ref.watch(appProvider).when(
               loading: () => const Center(child: CircularProgressIndicator()),
               data: (app) => app,
               error: (error, _) => WeatherApp.error(error, read: ref.read),
@@ -42,21 +43,15 @@ void main() {
 /// Provides the configured application.
 ///
 /// Configure global logger.
-/// PreInitWith system locales.
 /// Async initialzes all layers through DI Layer init method.
-/// Add this app as a WidgetsBindingObserver.
 /// Removes splash screen just before returning the main app widget.
-final appProvider =
-    FutureProvider.family.autoDispose<Widget, WidgetsBinding>((ref, widgetsBinding) async {
+final appProvider = FutureProvider.autoDispose<Widget>((ref) async {
   _configureLogger();
 
   final diLayer = ref.watch(diLayerProvider);
-  diLayer.preInitWith(widgetsBinding.platformDispatcher.locales);
   await diLayer.init();
 
   final app = WeatherApp(read: ref.read);
-  widgetsBinding.addObserver(app);
-
   if (Platform.isAndroid || Platform.isIOS) {
     FlutterNativeSplash.remove();
   }
