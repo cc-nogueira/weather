@@ -42,6 +42,7 @@ dependencies:
   syncfusion_flutter_charts: ^20.1.58+1
   syncfusion_localizations: ^20.1.58
   tuple: ^2.0.0
+  url_launcher: ^6.1.2
 
 dev_dependencies:
   flutter_lints: ^2.0.1
@@ -52,8 +53,12 @@ flutter:
   generate: true
   uses-material-design: true
 
+  fonts:
+    - family: Alice
+      fonts:
+        - asset: fonts/Alice-Regular.ttf
+
   assets:
-    - assets/image/brazil-grunge-flag.jpg
     - assets/image/open_weather_logo.png
     - assets/image/syncfusion_logo_150dpi.png
     - assets/image/wind_direction_black.png
