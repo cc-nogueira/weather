@@ -15,7 +15,7 @@ class WeatherConditionsHero extends StatelessWidget {
     final style = Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.normal);
     return Hero(
         tag: '${city.id}_weatherConditions',
-        flightShuttleBuilder: heroTextFlightShuttleBuilder,
+        flightShuttleBuilder: heroFittedBoxFlightShuttleBuilder,
         child: Text(weather.conditions.description.capitalized, style: style));
   }
 }

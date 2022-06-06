@@ -6,9 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../common/page/message_page.dart';
 import '../../../../common/widget/loading_widget.dart';
-import '../../../../common/widget/window_with_title_bar.dart';
 import '../../../../provider/presentation_providers.dart';
 import '../../../settings/widget/preferences_drawer.dart';
+import '../widget/one_call_container_app_and_title_bar.dart';
 import '../widget/one_call_weather_app_bar.dart';
 import '../widget/one_call_weather_widget.dart';
 
@@ -68,12 +68,10 @@ class OneCallWeatherPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       endDrawer: const PreferencesDrawer(),
-      body: WindowWithTitleBar(
-        appBar: OneCallWeatherAppBar(
-          city: city,
-          initialWeather: currentWeather,
-          isRefreshing: isRefreshing,
-        ),
+      body: OneCallWeatherContainerAppAndTitleBar(
+        city: city,
+        initialWeather: currentWeather,
+        isRefreshing: isRefreshing,
         child: Theme(
           data: darkTheme,
           child: DefaultTextStyle(

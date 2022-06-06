@@ -6,9 +6,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../common/page/loading_page.dart';
 import '../../../../common/page/message_page.dart';
-import '../../../../common/widget/window_with_title_bar.dart';
+import '../../../../common/widget/container_with_title_bar.dart';
 import '../../../../l10n/translations.dart';
 import '../../../../routes/routes.dart';
+import '../../../settings/widget/open_end_drawer_button.dart';
 import '../../../settings/widget/preferences_app_bar.dart';
 import '../../../settings/widget/preferences_drawer.dart';
 import '../widget/weather_list.dart';
@@ -60,18 +61,22 @@ class WeatherListPage extends ConsumerWidget {
     Reader read,
     Translations translations,
     List<City> cities,
-  ) =>
-      Scaffold(
-        endDrawer: const PreferencesDrawer(),
-        body: WindowWithTitleBar(
-          appBar: PreferencesAppBar(title: translations.weather_list_page_title),
-          child: WeatherList(read: read, cities: cities),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _addCity(context),
-          child: const Icon(Icons.add),
-        ),
-      );
+  ) {
+    final theme = Theme.of(context);
+    final titleStyle = theme.textTheme.headline6!.copyWith(color: theme.colorScheme.onSurface);
+    return Scaffold(
+      endDrawer: const PreferencesDrawer(),
+      body: ContainerWithTitleBar(
+        title: Text(translations.weather_list_page_title, style: titleStyle),
+        actions: const [OpenEndDrawerButton()],
+        child: WeatherList(read: read, cities: cities),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _addCity(context),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
 
   void _addCity(BuildContext context) => Navigator.pushNamed(context, Routes.city);
 }

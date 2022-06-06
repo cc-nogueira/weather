@@ -13,7 +13,7 @@ class OneCallWeatherRefreshButton extends ConsumerWidget with OneCallWeatherRefr
   Widget build(BuildContext context, WidgetRef ref) {
     final messenger = ScaffoldMessenger.of(context);
     return Padding(
-        padding: const EdgeInsets.only(right: 8.0),
+        padding: const EdgeInsets.only(right: 6.0),
         child: IconButton(
           icon: const Icon(Icons.refresh),
           onPressed: () => refresh(ref, messenger, city.location!),

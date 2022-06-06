@@ -43,7 +43,7 @@ class _TimeHero extends ConsumerWidget {
     final min = localTime.minute.toString().padLeft(2, '0');
     return Hero(
       tag: '${city.id}_time',
-      flightShuttleBuilder: heroTextFlightShuttleBuilder,
+      flightShuttleBuilder: heroFittedBoxFlightShuttleBuilder,
       child: Text('$hr:$min', style: style),
     );
   }

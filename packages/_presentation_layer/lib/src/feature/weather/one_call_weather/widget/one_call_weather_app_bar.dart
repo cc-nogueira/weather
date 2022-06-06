@@ -8,13 +8,10 @@ import '../../../../common/widget/cut_and_flip_ad.dart';
 import '../../../settings/widget/open_end_drawer_button.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_gradient_box_hero.dart';
-import '../../widget/temperature_hero.dart';
 import '../../widget/temperature_mixin.dart';
-import '../../widget/time_hero.dart';
-import '../../widget/weather_conditions_hero.dart';
-import '../../widget/weather_mixin.dart';
 import '../../widget/weather_title_hero.dart';
 import 'one_call_weather_refresh_button.dart';
+import 'time_and_weather_bar.dart';
 
 class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const OneCallWeatherAppBar({
@@ -51,7 +48,7 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
   }
 }
 
-class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMixin {
+class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMixin {
   _WeatherAppBar({
     required this.height,
     required this.city,
@@ -65,7 +62,7 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
   final bool isRefreshing;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final systemBarHeight = MediaQuery.of(context).padding.top;
     return AppBar(
       leading: const BackButton(),
@@ -108,7 +105,7 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
           child: Center(
             child: CutAndFlipAd(
               startingCutLength: 65.0,
-              child: _TimeAndWeatherBar(
+              child: TimeAndWeatherBar(
                 city: city,
                 weather: weather,
                 isRefreshing: isRefreshing,
@@ -126,74 +123,4 @@ class _WeatherAppBar extends ConsumerWidget with ColorRangeMixin, TemperatureMix
         begin: const Alignment(-0.5, -1.5),
         end: Alignment.bottomRight,
       );
-}
-
-class _TimeAndWeatherBar extends StatelessWidget with WeatherMixin {
-  const _TimeAndWeatherBar({required this.city, required this.weather, required this.isRefreshing});
-
-  final City city;
-  final Weather weather;
-  final bool isRefreshing;
-
-  @override
-  Widget build(BuildContext context) {
-    final leading = Padding(
-      padding: const EdgeInsets.only(left: 8.0),
-      child: TimeHero(city, fontSize: 32.0),
-    );
-    final trailing = Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [trailing1(context), trailing2(context)],
-      ),
-    );
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [leading, trailing],
-    );
-  }
-
-  Widget trailing1(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        TemperatureHero(city: city, weather: weather),
-        Padding(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: WeatherConditionsHero(city: city, weather: weather),
-        ),
-      ],
-    );
-  }
-
-  Widget trailing2(BuildContext context) =>
-      isRefreshing ? loadingIndicator : heroWeatherIcon(city, weather);
-
-  Widget get loadingIndicator => const SizedBox(
-        height: 60,
-        width: 60,
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: CircularProgressIndicator(color: Colors.grey),
-        ),
-      );
-
-  Color? textColor(ThemeData theme, ListTileThemeData tileTheme) {
-    final defaultColor = theme.textTheme.subtitle1!.color;
-    return tileTheme.textColor ?? theme.listTileTheme.textColor ?? defaultColor;
-  }
-
-  Color? iconColor(ThemeData theme, ListTileThemeData tileTheme) {
-    final Color? color = tileTheme.iconColor ?? theme.listTileTheme.iconColor;
-    if (color != null) return color;
-
-    switch (theme.brightness) {
-      case Brightness.light:
-        return Colors.black45;
-      case Brightness.dark:
-        return null; // null - use current icon theme color
-    }
-  }
 }
