@@ -4,9 +4,9 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../common/desktop/container_with_title_bar.dart';
 import '../../../../common/page/loading_page.dart';
 import '../../../../common/page/message_page.dart';
-import '../../../../common/widget/container_with_title_bar.dart';
 import '../../../../l10n/translations.dart';
 import '../../../../routes/routes.dart';
 import '../../../settings/widget/open_end_drawer_button.dart';

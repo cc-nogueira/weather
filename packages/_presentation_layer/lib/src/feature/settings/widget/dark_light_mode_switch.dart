@@ -2,13 +2,27 @@ import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+/// Dark/Light mode preference switch.
+///
+/// Widget watches the [themeModeProvider] to show the current preference value and updates its
+/// value via [PreferencesUsecase].
 class DarkLightModeSwitch extends ConsumerWidget {
+  /// Const constructor with all arguments optional.
   const DarkLightModeSwitch({super.key, this.padding, this.iconSize, this.changeCallback});
 
+  /// Optional iconSize (defaults to IconTheme.of(context).size or 24.0)
   final double? iconSize;
+
+  /// Optional padding.
   final EdgeInsets? padding;
+
+  /// Optional callback to notify changes (usually to auto-close the settings drawer).
   final VoidCallback? changeCallback;
 
+  /// Build this switch.
+  ///
+  /// Watches the [themeModeProvider] (readonly) to display the current Dark/Light preference value.
+  /// Updates to this value are realized through the corresponding use case.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final darkMode = ref.watch(themeModeProvider) == ThemeMode.dark;
@@ -28,6 +42,9 @@ class DarkLightModeSwitch extends ConsumerWidget {
     return Padding(padding: padding!, child: widget);
   }
 
+  /// Internal - update the dark/light preference through its use case.
+  ///
+  /// Will call the optional changeCallback after calling the use case update.
   void _onThemeChange(Reader read, bool option) {
     read(preferencesUsecaseProvider).theme = option ? ThemeMode.dark : ThemeMode.light;
     changeCallback?.call();

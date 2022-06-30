@@ -1,7 +1,20 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 
+/// Container with title bar is used to present a scaffold title bar in the body of the scaffold.
+///
+/// This is used to allow custom title bars for Desktop platforms allowing extra flexibilitty not
+/// necessary in Mobile platforms.
+///
+/// With this bitsdojo approach it is possible to create title less applications (like Spotify) that
+/// renders minimize, maximize and close window buttons inside the app.
+///
+/// Renders a column with:
+///  - title bar with dragTitle and a right aligned bar with minimize, maximize and close buttons.
+///  - optional right aligned second row of buttons (action buttons).
+///  - child widget in an expanded container.
 class ContainerWithTitleBar extends StatelessWidget {
+  /// Const constructor.
   const ContainerWithTitleBar({
     super.key,
     required this.title,
@@ -10,11 +23,19 @@ class ContainerWithTitleBar extends StatelessWidget {
     this.titleButtonsBackgroundColor,
   });
 
+  /// Title widget expanded at the fist row, contained in a dragWindow container.
   final Widget title;
+
+  /// Optional actions buttons for a second row of right aligned buttons.
   final List<Widget>? actions;
+
+  /// Expanded child after the title bar
   final Widget child;
+
+  /// Optional title buttons background color (defaults to light shadded transparency).
   final Color? titleButtonsBackgroundColor;
 
+  /// Build the container with title bar and expanded child.
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,6 +47,7 @@ class ContainerWithTitleBar extends StatelessWidget {
     );
   }
 
+  /// Internal - title bar with drag title and trailing controls.
   Widget _titleBar(BuildContext context) {
     return IntrinsicHeight(
       child: Row(
@@ -37,6 +59,7 @@ class ContainerWithTitleBar extends StatelessWidget {
     );
   }
 
+  /// Internal - expanded title inside a drag window container.
   Widget _dragTitle(BuildContext context) => Expanded(
         child: GestureDetector(
           onPanStart: (_) => appWindow.startDragging(),
@@ -52,6 +75,10 @@ class ContainerWithTitleBar extends StatelessWidget {
         ),
       );
 
+  /// Internal - trailing controls.
+  ///
+  /// These controls include a row with window buttons (minimize, maximize and close) and an
+  /// optional row with action buttons.
   Widget _trailingControls(BuildContext context) {
     final windowButtons = Container(
       color: _buttonsBgColor(context),
@@ -78,6 +105,9 @@ class ContainerWithTitleBar extends StatelessWidget {
     );
   }
 
+  /// Internal - window buttons background color.
+  ///
+  /// Default to a light shade, intensity of shadding according to theme brightness.
   Color? _buttonsBgColor(BuildContext context) =>
       titleButtonsBackgroundColor ??
       (Theme.of(context).brightness == Brightness.dark ? Colors.black26 : Colors.black12);

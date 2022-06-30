@@ -236,6 +236,10 @@
   "@word_and": {
     "description": "Word for and"
   },
+  "word_auto": "auto",
+  "@word_auto": {
+    "description": "Word for auto"
+  },
   "word_end": "término",
   "@word_end": {
     "description": "Word for end"

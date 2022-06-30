@@ -46,7 +46,7 @@ void main() {
 /// Provides the configured application.
 ///
 /// Configure global logger.
-/// Async initialzes all layers through DI Layer init method.
+/// Async initializes all layers through DI Layer init method.
 /// Removes splash screen just before returning the main app widget.
 final appProvider = FutureProvider.autoDispose<Widget>((ref) async {
   _configureLogger();

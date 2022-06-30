@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:_core_layer/core_layer.dart';
 import 'package:_domain_layer/domain_layer.dart';
 
@@ -44,11 +46,14 @@ class DataLayer extends AppLayer {
   /// Internal async routine to open the ObjectBox Store.
   Future<Store> _openStore() async {
     final appDir = await getApplicationDocumentsDirectory();
-    final objectboxPath = '${appDir.path}/objectbox';
+    final objectboxPath =
+        _isMobile ? '${appDir.path}/objectbox' : '${appDir.path}/objectbox/weather_colors';
     if (Store.isOpen(objectboxPath)) {
       return Store.attach(getObjectBoxModel(), objectboxPath);
     } else {
       return Store(getObjectBoxModel(), directory: objectboxPath);
     }
   }
+
+  bool get _isMobile => Platform.isAndroid || Platform.isIOS;
 }

@@ -5,7 +5,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../l10n/translations.dart';
 
+/// City form to fill the search data.
+///
+/// This form has a mandatory City name field and an optional country selector field.
+/// Data is uptaded in the given city StateProvider.
+///
+/// This widget will probably sit inside a Flutter Form widget to coordinate validation.
+/// Fields are configured with internationalized labels and validation messages.
 class CityForm extends ConsumerWidget {
+  /// Const constructor. The positional argument is the city provider that is updated in sync with
+  /// field values.
   const CityForm(
     this.cityProvider, {
     super.key,
@@ -13,46 +22,78 @@ class CityForm extends ConsumerWidget {
     required this.onCityNameCleared,
   });
 
+  /// City state provider that is updated with field value changes.
   final StateProvider<City> cityProvider;
+
+  /// Callback when the country changes (that may trigger a form complete event for this widget parent).
   final VoidCallback onCountryChanged;
+
+  /// Callback to be called when the city name is cleared (that may trigger results clearing in the parent).
   final VoidCallback onCityNameCleared;
 
+  /// Builds the internal [_CityForm] providing the state controller to sync with field values.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final translations = Translations.of(context)!;
+    final tr = Translations.of(context)!;
     final controller = ref.watch(cityProvider.notifier);
-    return _CityForm(translations, cityProvider, controller, onCountryChanged, onCityNameCleared);
+    return _CityForm(tr, controller, onCountryChanged, onCityNameCleared);
   }
 }
 
+/// Internal statefull widget to controll form fields.
+///
+/// It is responsibility of this class to keep the state controller in sync with fields and to
+/// invoke onCountryChanged and onCityNameCleared callbacks as appropriate.
 class _CityForm extends StatefulWidget {
+  /// Const constructor.
   const _CityForm(
-    this.translations,
-    this.cityProvider,
+    this.tr,
     this.cityController,
     this.onCountryChanged,
     this.onCityNameCleared,
   );
 
-  final Translations translations;
-  final StateProvider<City> cityProvider;
+  /// Translations for field labels and messages.
+  final Translations tr;
+
+  /// City state controller to keep field values in sync with form's city state.
   final StateController<City> cityController;
+
+  /// Callback when the country changes (that may trigger a form complete event for this widget parent).
   final VoidCallback onCountryChanged;
+
+  /// Callback to be called when the city name is cleared (that may trigger results clearing in the parent).
   final VoidCallback onCityNameCleared;
 
   @override
   State<_CityForm> createState() => _CityFormState();
 
+  /// Getter for the controller's city.
   City get city => cityController.state;
+
+  /// Setter for the controller's city.
   set city(City city) => cityController.state = city;
 }
 
+/// Internal - State class with form fields.
+///
+/// Class that manage statefull fields keeping them in sync with parent's city state controller.
 class _CityFormState extends State<_CityForm> {
+  /// City name text editing controller.
   late final TextEditingController cityTextController;
+
+  /// Country code text editing controller.
+  ///
+  /// This field is read only, changes are maneged by the country picker component.
   late final TextEditingController countryTextController;
+
+  /// City focus node.
   late final FocusNode cityFocus;
+
+  /// Country focus node.
   late final FocusNode countryFocus;
 
+  /// Init state by creating TextEditing controllers and FocusNodes.
   @override
   void initState() {
     super.initState();
@@ -62,6 +103,7 @@ class _CityFormState extends State<_CityForm> {
     countryFocus = FocusNode();
   }
 
+  /// Dispose handler to dispose local resources.
   @override
   void dispose() {
     cityTextController.dispose();
@@ -71,12 +113,17 @@ class _CityFormState extends State<_CityForm> {
     super.dispose();
   }
 
+  /// Build city fields form.
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: _fields(context),
       );
 
+  /// Internal - create form fields.
+  ///
+  /// This form has a field for City name and for Country code.
+  /// Country code field is read only, changes are maneged by the country picker component.
   Widget _fields(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +131,7 @@ class _CityFormState extends State<_CityForm> {
         Expanded(
           child: _formField(
             context,
-            widget.translations.city_label,
+            widget.tr.city_label,
             cityTextController,
             validator: _validateCity,
             onChanged: (_) => _onFormChanged(),
@@ -97,7 +144,7 @@ class _CityFormState extends State<_CityForm> {
           width: 90,
           child: _formField(
             context,
-            widget.translations.country_label,
+            widget.tr.country_label,
             countryTextController,
             readOnly: true,
             onTap: () => showCountryPicker(
@@ -115,6 +162,10 @@ class _CityFormState extends State<_CityForm> {
     );
   }
 
+  /// Internal - handle city name or country changes.
+  ///
+  /// Updates the city state controller.
+  /// Invokes onCityNameCleared callback when city name is empty.
   void _onFormChanged() => setState(() {
         widget.city = City(name: cityTextController.text, country: countryTextController.text);
         if (widget.city.name.isEmpty) {
@@ -122,15 +173,25 @@ class _CityFormState extends State<_CityForm> {
         }
       });
 
+  /// Internal - handle country picker selection.
+  ///
+  /// Updates the readonly country field, invoke _onFormChanged handler.
+  /// Invokes onCountryChanged callback.
   void _onCountryChanged(Country country, TextEditingController controller) {
     controller.text = country.countryCode;
     _onFormChanged();
     widget.onCountryChanged();
   }
 
+  /// Internal - City name validation.
+  ///
+  /// City name is a required field.
   String? _validateCity(String? text) =>
-      text == null || text.isEmpty ? '* ${widget.translations.required_label}' : null;
+      text == null || text.isEmpty ? '* ${widget.tr.required_label}' : null;
 
+  /// Internal - Helper function to create form fields.
+  ///
+  /// Creates a text form field with common decorations and event handlers.
   Widget _formField(
     BuildContext context,
     String label,
@@ -160,7 +221,7 @@ class _CityFormState extends State<_CityForm> {
               ? null
               : IconButton(
                   icon: const Icon(Icons.clear),
-                  tooltip: widget.translations.message_clear_input,
+                  tooltip: widget.tr.message_clear_input,
                   onPressed: () {
                     controller.clear();
                     _onFormChanged();
@@ -179,6 +240,7 @@ class _CityFormState extends State<_CityForm> {
         textCapitalization: textCapitalization,
       );
 
+  /// Internal - change input focus.
   void _focusNext(BuildContext context, FocusNode current, FocusNode next) {
     current.unfocus();
     FocusScope.of(context).requestFocus(next);

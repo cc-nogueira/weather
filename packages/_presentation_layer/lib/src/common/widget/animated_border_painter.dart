@@ -2,18 +2,32 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+/// Enumeration of known PathTypes.
 enum PathType {
   rect,
   rRect,
   circle,
 }
 
+/// Enumeration of possible animation directions.
 enum AnimationDirection {
   clockwise,
   counterclockwise,
 }
 
+/// AnimatedBorderPainter class.
+///
+/// Animate the drawing of a border around the contained widget.
+/// The border can be customized with
+/// - pathType
+/// - strokeWidth
+/// - strokeColor
+/// - radius
+/// - startDistancePercentage or startDistance
+/// - animationDirection
+/// - dissolveOnReverse flag
 class AnimatedBorderPainter extends CustomPainter {
+  /// Constructor with border style and animation parameters.
   AnimatedBorderPainter({
     required this.animation,
     this.pathType = PathType.rect,
@@ -27,22 +41,74 @@ class AnimatedBorderPainter extends CustomPainter {
   })  : assert(startDistancePercentage == 0 || startDistance == 0.0),
         super(repaint: animation);
 
+  /// Required animation parameter.
+  /// Animation should run from 0.0 to 1.0 and reverse from 1.0 to 0.0.
   final Animation<double> animation;
+
+  /// Chosen PathType, defaults to PathType.rect.
   final PathType pathType;
+
+  /// Stroke width, defaults to 2.0.
   final double strokeWidth;
+
+  /// Stroke color, defaults to Colors.black.
   final Color strokeColor;
+
+  /// Corner radius, defaults to Radius.circular(4.0).
   final Radius radius;
+
+  /// Start distance percentage, defaults to zero.
+  /// Only one start parameter may be defined (different then zero).
+  /// Either startDistancePercentage or startDistance.
   final int startDistancePercentage;
+
+  /// Start distance, defaults to zero.
+  /// Only one start parameter may be defined (different then zero).
+  /// Either startDistancePercentage or startDistance.
   final double startDistance;
+
+  /// Animation direction, defaults to AnimationDirection.clockwise.
   final AnimationDirection animationDirection;
+
+  /// Flag to define with back animation should be a dissolve animation instead of undoing the border
+  /// in the reverse direction.
   final bool dissolveOnReverse;
 
+  /// Cached calculated size (defined in _init), used to decide weather to recalculate other instance
+  /// values that may be required if the widget size changes mid-animation.
   Size? _calculatedSize;
-  late Path _originalPath;
-  late double _totalLength;
-  late Paint _paint;
-  late Paint _backPaint;
 
+  /// Cached original path for the border that will be continually drawn during the animation.
+  /// Defined in _init method.
+  late Path _originalPath;
+
+  /// Cached total length (calculated in _init)
+  late double _totalLength;
+
+  /// Paint for drawing
+  late final _paint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = strokeWidth
+    ..color = strokeColor;
+
+  /// Back paint is used to draw or dissolve the border during the reverse animation.
+  late final _backPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = strokeWidth
+    ..color = strokeColor;
+
+  /// Animate the painting a border progressevely surrounding this widget.
+  /// When the animation is reversed it may animate the drawing of this border back or dissolve the
+  /// whole border progressevely.
+  ///
+  /// Deals with edge cases (animation value 0.0 or 1.0) drawing none or the complete border
+  /// respectively.
+  ///
+  /// Call _init on each frame with the current size. Init should only reinitialize calculated values
+  /// when the size changes.
+  ///
+  /// After _init draw the border up to the percentage corresponding to the animation value.
+  /// On the reverse animation it may optionally always draw the whole border, thinner at each frame.
   @override
   void paint(Canvas canvas, Size size) {
     if (animation.value == 0.0) {
@@ -60,6 +126,9 @@ class AnimatedBorderPainter extends CustomPainter {
     }
   }
 
+  /// Init all calculated values and paths.
+  ///
+  /// This method recalculates these values only when the widget size changes during animation.
   void _init(Size size) {
     if (_calculatedSize != size) {
       _calculatedSize = size;
@@ -70,23 +139,15 @@ class AnimatedBorderPainter extends CustomPainter {
           : _originalPath.computeMetrics().toList().reversed.toList();
 
       _onOriginalPathCreated(pathMetrics);
-
-      _paint = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..color = strokeColor;
-
-      _backPaint = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..color = strokeColor;
     }
   }
 
+  /// Cache values associated with the original border path recently created.
   void _onOriginalPathCreated(List<PathMetric> pathMetrics) {
     _totalLength = pathMetrics.fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
   }
 
+  /// Reconfigure the back paint to be thinned at each frame, proportionally to the animation value.
   void _dissolveBackPaint() {
     final percent = animation.value;
     _backPaint.strokeWidth = percent * strokeWidth;
@@ -97,6 +158,7 @@ class AnimatedBorderPainter extends CustomPainter {
     }
   }
 
+  /// Create the original complete border path.
   Path _createOriginalPath(Size size) {
     switch (pathType) {
       case PathType.rect:
@@ -108,6 +170,7 @@ class AnimatedBorderPainter extends CustomPainter {
     }
   }
 
+  /// Create the original Rectangular border path.
   Path _createOriginalPathRect(Size size) {
     final originalPath = Path()
       ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
@@ -121,6 +184,7 @@ class AnimatedBorderPainter extends CustomPainter {
     return originalPath;
   }
 
+  /// Create the original Rounded Rectangular border path.
   Path _createOriginalPathRRect(Size size) {
     final originalPath = Path()
       ..addRRect(RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), radius));
@@ -133,6 +197,7 @@ class AnimatedBorderPainter extends CustomPainter {
     return originalPath;
   }
 
+  /// Create the original Circular border path.
   Path _createOriginalPathCircle(Size size) {
     final originalPath = Path()..addOval(Rect.fromLTWH(0, 0, size.width, size.height));
     if (startDistancePercentage > 0 && startDistancePercentage < 100) {
@@ -144,6 +209,7 @@ class AnimatedBorderPainter extends CustomPainter {
     return originalPath;
   }
 
+  /// Creates a path that originates at a shifted percentage point.
   Path _createPathForStartingPercentage(Path originalPath, PathType pathType, [Size? size]) {
     // Assumes that original path consists of one subpath only
     final pathMetrics = originalPath.computeMetrics().first;
@@ -152,6 +218,7 @@ class AnimatedBorderPainter extends CustomPainter {
     return _createPathForStartingFromCutoffPoint(pathMetrics, pathCutoffPoint, pathType, size);
   }
 
+  /// Creates a path that originates at a shifted length point.
   Path _createPathForStartingLength(Path originalPath, PathType pathType, [Size? size]) {
     // Assumes that original path consists of one subpath only
     final pathMetrics = originalPath.computeMetrics().first;
@@ -162,6 +229,7 @@ class AnimatedBorderPainter extends CustomPainter {
     return _createPathForStartingFromCutoffPoint(pathMetrics, startDistance, pathType, size);
   }
 
+  /// Create a path that originates at a shifted cutoff point.
   Path _createPathForStartingFromCutoffPoint(
     PathMetric pathMetrics,
     double pathCutoffPoint,
@@ -198,11 +266,13 @@ class AnimatedBorderPainter extends CustomPainter {
       ..addPath(firstSubPath, Offset.zero);
   }
 
+  // Create the path that will be drawn for the current animation percentage.
   Path _createAnimatedPath() {
     final currentLength = _totalLength * animation.value;
     return _extractPathUntilLength(currentLength);
   }
 
+  // Create the path that will be drawn for the current animation length.
   Path _extractPathUntilLength(double length) {
     final path = Path();
 
@@ -240,6 +310,9 @@ class AnimatedBorderPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
+/// AnimetedBorderPainter with Cached Metrics.
+///
+/// Extends the previous class caching path metrics.
 class AnimatedBorderPainterWithCachedMetrics extends AnimatedBorderPainter {
   AnimatedBorderPainterWithCachedMetrics({
     required super.animation,
@@ -253,9 +326,13 @@ class AnimatedBorderPainterWithCachedMetrics extends AnimatedBorderPainter {
     super.dissolveOnReverse,
   });
 
+  /// Cached path metrics.
   late List<PathMetric> _originalPathMetrics;
+
+  /// Cached path segments.
   late List<Path> _originalPathSegments;
 
+  /// Cache values associated with the original border path recently created.
   @override
   void _onOriginalPathCreated(List<PathMetric> pathMetrics) {
     super._onOriginalPathCreated(pathMetrics);
@@ -270,6 +347,9 @@ class AnimatedBorderPainterWithCachedMetrics extends AnimatedBorderPainter {
     }
   }
 
+  /// Redifinition of super class method to use cached metrics.
+  ///
+  /// Create the path that will be drawn for the current animation length.
   @override
   Path _extractPathUntilLength(double length) {
     final path = Path();

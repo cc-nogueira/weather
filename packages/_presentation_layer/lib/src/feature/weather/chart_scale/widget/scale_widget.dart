@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../common/helper/theme_builder.dart';
 import '../../../../common/translation/noum_gender.dart';
 import '../../../../l10n/translations.dart';
+import '../../../../provider/presentation_providers.dart';
 import '../../widget/color_range_mixin.dart';
 import 'scale_intensity.dart';
 
-abstract class ScaleWidget extends StatelessWidget with ColorRangeMixin {
+abstract class ScaleWidget extends ConsumerWidget with ColorRangeMixin {
   const ScaleWidget({super.key});
 
   NoumGender get intensityGender;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final translations = Translations.of(context)!;
-    final theme = const ThemeBuilder().darkTheme;
+    final theme = ref.watch(darkThemeProvider);
     final txtSt = TextStyle(fontSize: 16, color: theme.colorScheme.onSurface);
     final clrs = colors();
     final lightSt = TextStyle(fontWeight: FontWeight.w600, color: clrs[0]);

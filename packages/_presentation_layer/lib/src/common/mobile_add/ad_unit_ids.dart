@@ -1,5 +1,9 @@
 import 'package:meta/meta.dart';
 
+/// Class to hold all AdUnit and AdTestUnit ids for a platform.
+///
+/// User code should subclass both the Android and IOs specializations to provide
+/// his valid AdUnit Ids.
 abstract class AdUnitIds {
   const AdUnitIds({
     required this.appOpenTestId,
@@ -76,6 +80,10 @@ abstract class AdUnitIds {
   final String nativeAdvancedVideoTestId;
 }
 
+/// Class to hold all AdUnit and AdTestUnit ids for Android platform.
+///
+/// User code should subclass this to provide valid Android AdUnit Ids inheriting AdTestUnit ids for
+/// Android
 class AndroidAdUnitIds extends AdUnitIds {
   const AndroidAdUnitIds({
     super.appOpenId,
@@ -98,6 +106,10 @@ class AndroidAdUnitIds extends AdUnitIds {
         );
 }
 
+/// Class to hold all AdUnit and AdTestUnit ids for IOS platform.
+///
+/// User code should subclass this to provide valid IOS AdUnit Ids inheriting AdTestUnit ids for
+/// IOS.
 class IosAdUnitIds extends AdUnitIds {
   const IosAdUnitIds({
     super.appOpenId,
@@ -120,6 +132,9 @@ class IosAdUnitIds extends AdUnitIds {
         );
 }
 
+/// Subclass of AdUnitIds with no IDs defined.
+///
+/// Used for platforms that do not support AdMob
 class NoAdUnitIds extends AdUnitIds {
   NoAdUnitIds()
       : super(

@@ -7,6 +7,10 @@ import '../../../l10n/translations.dart';
 
 typedef CityCallback = void Function(City city);
 
+/// City search widget.
+///
+/// This "parent" widget loads the current list of user cities and forward this list along other
+/// constructor argumenta to the internal city search widget.
 class CitySearch extends ConsumerWidget {
   const CitySearch({super.key, required this.cityProvider, required this.onCitySelected});
 
@@ -30,19 +34,31 @@ class CitySearch extends ConsumerWidget {
   }
 }
 
+/// Internal city search widget.
+///
+/// This widget watchs a city provider to execute a remote search and show results.
+/// It uses the already registered list of cities to prevent doubled cities.
 class _CitySearch extends ConsumerWidget {
-  _CitySearch({
-    required this.cityProvider,
-    required this.onCitySelected,
-    List<City>? currentCities,
-  }) : currentCitiesKeys = currentCities == null
+  /// Constructor.
+  _CitySearch({required this.cityProvider, required this.onCitySelected, List<City>? currentCities})
+      : _currentCitiesKeys = currentCities == null
             ? {}
             : currentCities.map((each) => each.alphabeticalOrderByCountryKey).toSet();
 
+  /// City to be searched provider.
+  ///
+  /// This provider is watched to trigger new searchs.
   final StateProvider<City> cityProvider;
-  final CityCallback onCitySelected;
-  final Set<String> currentCitiesKeys;
 
+  /// Callback when a city is selected to be added to the user's list.
+  final CityCallback onCitySelected;
+
+  /// Internal set of already registered cities.
+  final Set<String> _currentCitiesKeys;
+
+  /// Build method watches the city provider and triggers searching when it changes.
+  /// Search results are displayed as a list for matches with and Add button for each.
+  /// If a result is already included in the user's list this button will reflect this state.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final city = ref.watch(cityProvider);
@@ -56,10 +72,17 @@ class _CitySearch extends ConsumerWidget {
         );
   }
 
+  /// Internal - show a circular progress indicator when a fresh search is executing.
+  /// As is the "new" standard for Riverpod, only the first search show the loading state, and new
+  /// searchs will display the old result until the new data comes in.
   Widget _loading() => const Center(
         child: SizedBox(height: 100, width: 100, child: CircularProgressIndicator()),
       );
 
+  /// Internal - show search results in a list view.
+  ///
+  /// Each result is displayed as a tile with city information and a Add button.
+  /// If a result is already included in the user's list this button will reflect this state.
   Widget _showResults(BuildContext context, List<City> results) {
     final translations = Translations.of(context)!;
     final locale = Localizations.localeOf(context);
@@ -79,11 +102,20 @@ class _CitySearch extends ConsumerWidget {
           );
   }
 
+  /// Internal - when no matches are found displays a text message.
   Widget _noResults(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Text(Translations.of(context)!.no_matches_found_message, style: textTheme.titleMedium);
   }
 
+  /// Internal - builder for each matching result.
+  ///
+  /// Displays a tile with city information and a Add button.
+  ///
+  /// Presents the city name according to the current language and its official name.
+  /// Also displays city's state and country.
+  /// After the information displays a trailling Add button.
+  /// If a result is already included in the user's list this button will reflect this state.
   Widget _itemBuilder(BuildContext context, Translations translations, Locale locale,
       ColorScheme colors, City city) {
     final localName = city.translation(locale.languageCode);
@@ -111,9 +143,11 @@ class _CitySearch extends ConsumerWidget {
     );
   }
 
+  /// Internal - check if this city is already registered in the user's list.
   bool _alreadyContains(City city) =>
-      currentCitiesKeys.contains(city.alphabeticalOrderByCountryKey);
+      _currentCitiesKeys.contains(city.alphabeticalOrderByCountryKey);
 
+  /// Internal - handler to dlisplay a message when the Add button is tapped for a already existing city.
   void _onCityAlreadyExistis(BuildContext context, Translations translations, String showName) {
     showDialog(
       context: context,
@@ -130,6 +164,7 @@ class _CitySearch extends ConsumerWidget {
     );
   }
 
+  /// Internal - handler to show a error message that had occurred when searching.
   Widget _showError(BuildContext context, Object error) {
     final msg =
         error is ArgumentError ? error.message : Translations.of(context)!.error_searching_message;

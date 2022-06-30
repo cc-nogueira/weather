@@ -17,16 +17,19 @@ class WeatherApp extends ConsumerWidget {
   /// Normal const contructor.
   const WeatherApp({super.key}) : error = null;
 
+  /// Error state constructor.
   const WeatherApp.error(this.error, {super.key});
 
+  /// Optional error object used by the Error constructor.
   final Object? error;
+
+  /// Internal routes object.
   final _routes = const Routes();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return error == null ? _app(ref) : _errorApp;
-  }
+  Widget build(BuildContext context, WidgetRef ref) => error == null ? _app(ref) : _errorApp;
 
+  /// internal - build the app
   Widget _app(WidgetRef ref) {
     final locale = ref.watch(languageOptionProvider).locale;
     return MaterialApp(
@@ -45,6 +48,7 @@ class WeatherApp extends ConsumerWidget {
     );
   }
 
+  /// internal - build errorApp with no navigation configured.
   Widget get _errorApp => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),

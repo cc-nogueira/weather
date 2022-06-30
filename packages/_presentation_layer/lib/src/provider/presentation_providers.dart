@@ -23,31 +23,22 @@ final adUnitIds = Provider<AdUnitIds>(
 /// AdState for Mobile or FakeAdState for Desktop
 final adStateProvider = Provider(
   (ref) => Platform.isAndroid || Platform.isIOS
-      ? MobileAdState(adUnitIds: ref.watch(adUnitIds), useTestAdUnit: false)
+      ? AdMobState(adUnitIds: ref.watch(adUnitIds), useTestAdUnit: false)
       : FakeAdState(),
 );
 
-// -- Preferences Panel:
-
-/// Currently showing preferences panel
-final showPreferencesPanelProvider = StateProvider((_) => false);
-
-/// Shared duration for panel animations
-final preferencesPanelAnimationDurationProvider =
-    StateProvider((_) => const Duration(milliseconds: 600));
-
-/// Shared curve for panel animations
-final preferencesPanelAnimationCurve = StateProvider((_) => Curves.easeOutSine);
-
 // -- Theme:
 
+/// theme builder provider
+final themeBuilderProvider = Provider((_) => ThemeBuilder());
+
 /// dark theme
-final darkThemeProvider = Provider((_) => const ThemeBuilder().darkTheme);
+final darkThemeProvider = Provider((ref) => ref.watch(themeBuilderProvider).darkTheme);
 
 /// light theme
-final lightThemeProvider = Provider((_) => const ThemeBuilder().lightTheme);
+final lightThemeProvider = Provider((ref) => ref.watch(themeBuilderProvider).lightTheme);
 
-/// theme prvider
+/// theme provider based on mode preference.
 final themeProvider = Provider((ref) {
   final mode = ref.watch(themeModeProvider);
   if (mode == ThemeMode.light) {

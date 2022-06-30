@@ -4,17 +4,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../../common/helper/theme_builder.dart';
 import '../../../../l10n/translations.dart';
+import '../../../../provider/presentation_providers.dart';
 import '../../widget/temperature_mixin.dart';
 import 'scale_chart.dart';
 
-class TemperatureScaleWidget extends StatelessWidget {
+class TemperatureScaleWidget extends ConsumerWidget {
   const TemperatureScaleWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final theme = const ThemeBuilder().darkTheme;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(darkThemeProvider);
     const txtSt = TextStyle(fontSize: 16);
     return Material(
       type: MaterialType.transparency,
