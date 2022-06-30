@@ -19,9 +19,9 @@ dependencies:
   flutter:
     sdk: flutter
     
-  flutter_native_splash: ^2.2.3
+  flutter_native_splash: ^2.2.3+1
   flutter_riverpod: ^2.0.0-dev.9
-  google_mobile_ads: ^1.2.0
+  google_mobile_ads: ^1.3.0
   logging: ^1.0.2
 
 dev_dependencies:
@@ -30,7 +30,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  icons_launcher: ^1.1.9
+  icons_launcher: ^1.2.1
         
 flutter:
   uses-material-design: true
