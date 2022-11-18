@@ -1,8 +1,18 @@
 import 'package:_core_layer/core_layer.dart';
 import 'package:_domain_layer/domain_layer.dart';
 import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../common/mobile_add/ad_state.dart';
+import '../provider/presentation_providers.dart';
+
+part 'presentation_layer.g.dart';
+
+@Riverpod(keepAlive: true)
+PresentationLayer presentationLayer(PresentationLayerRef ref) => PresentationLayer(
+      appLifecycleUsecase: ref.watch(appLifecycleUsecaseProvider),
+      adState: ref.watch(adStateProvider),
+    );
 
 class PresentationLayer extends AppLayer with WidgetsBindingObserver {
   const PresentationLayer({required this.appLifecycleUsecase, required this.adState});

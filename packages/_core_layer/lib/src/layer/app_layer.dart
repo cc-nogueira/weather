@@ -2,6 +2,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_layer.g.dart';
 
+@Riverpod(keepAlive: true)
+AppLayer coreLayer(CoreLayerRef ref) => const AppLayer();
+
 /// Application Layer Class
 ///
 /// Each layer of the application will have one instance of [AppLayer] to manage
@@ -36,6 +39,3 @@ class AppLayer {
   /// execution of the application.
   void dispose() {}
 }
-
-@Riverpod(keepAlive: true)
-AppLayer coreLayer(CoreLayerRef ref) => const AppLayer();
