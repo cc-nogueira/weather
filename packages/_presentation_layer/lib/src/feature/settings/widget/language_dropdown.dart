@@ -43,7 +43,7 @@ class LanguageDropdown extends ConsumerWidget {
           items: _items(tr, options, currentOption),
           selectedItemBuilder: (context) => _selectedItems(tr, options),
           alignment: AlignmentDirectional.centerEnd,
-          onChanged: (LanguageOption? selection) => _onChanged(selection, ref.read),
+          onChanged: (LanguageOption? selection) => _onChanged(selection, ref),
         ),
       ),
     );
@@ -94,9 +94,9 @@ class LanguageDropdown extends ConsumerWidget {
     ]);
   }
 
-  void _onChanged(LanguageOption? selection, Reader read) {
+  void _onChanged(LanguageOption? selection, WidgetRef ref) {
     if (selection != null) {
-      read(preferencesUsecaseProvider).languageOption = selection;
+      ref.read(preferencesUsecaseProvider).languageOption = selection;
       changeCallback?.call();
     }
   }

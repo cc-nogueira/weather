@@ -133,8 +133,8 @@ class _CitySearch extends ConsumerWidget {
             )
           : ElevatedButton(
               style: ElevatedButton.styleFrom(
-                onPrimary: colors.onPrimary,
-                primary: colors.primary,
+                foregroundColor: colors.onPrimary,
+                backgroundColor: colors.primary,
               ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
               onPressed: () => onCitySelected(city),
               child: Text(translations.add_label,

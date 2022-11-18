@@ -23,33 +23,33 @@ class WeatherListPage extends ConsumerWidget {
     return ref.watch(watchAllCitiesProvider).when(
           loading: LoadingPage.builder(translations.weather_list_page_title),
           error: ErrorMessagePage.errorBuilder,
-          data: (cities) => _scaffold(context, ref.read, translations, cities),
+          data: (cities) => _scaffold(context, ref, translations, cities),
         );
   }
 
   Widget _scaffold(
     BuildContext context,
-    Reader read,
+    WidgetRef ref,
     Translations translations,
     List<City> cities,
   ) {
     if (Platform.isWindows) {
-      return _windowsScaffold(context, read, translations, cities);
+      return _windowsScaffold(context, ref, translations, cities);
     } else {
-      return _mobileScaffold(context, read, translations, cities);
+      return _mobileScaffold(context, ref, translations, cities);
     }
   }
 
   Widget _mobileScaffold(
     BuildContext context,
-    Reader read,
+    WidgetRef ref,
     Translations translations,
     List<City> cities,
   ) =>
       Scaffold(
         appBar: PreferencesAppBar(title: translations.weather_list_page_title),
         endDrawer: const PreferencesDrawer(),
-        body: WeatherList(read: read, cities: cities),
+        body: WeatherList(ref: ref, cities: cities),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _addCity(context),
           child: const Icon(Icons.add),
@@ -58,7 +58,7 @@ class WeatherListPage extends ConsumerWidget {
 
   Widget _windowsScaffold(
     BuildContext context,
-    Reader read,
+    WidgetRef ref,
     Translations translations,
     List<City> cities,
   ) {
@@ -69,7 +69,7 @@ class WeatherListPage extends ConsumerWidget {
       body: ContainerWithTitleBar(
         title: Text(translations.weather_list_page_title, style: titleStyle),
         actions: const [OpenEndDrawerButton()],
-        child: WeatherList(read: read, cities: cities),
+        child: WeatherList(ref: ref, cities: cities),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _addCity(context),

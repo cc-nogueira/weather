@@ -8,9 +8,9 @@ import '../../../../l10n/translations.dart';
 import 'weather_tile.dart';
 
 class WeatherList extends ConsumerWidget {
-  const WeatherList({super.key, required this.read, required this.cities});
+  const WeatherList({super.key, required this.ref, required this.cities});
 
-  final Reader read;
+  final WidgetRef ref;
   final List<City> cities;
 
   @override
@@ -33,7 +33,7 @@ class WeatherList extends ConsumerWidget {
     return _SortedWeatherList(tiles: tiles);
   }
 
-  void _removeCity(City city) => read(citiesUsecaseProvider).remove(city.id);
+  void _removeCity(City city) => ref.read(citiesUsecaseProvider).remove(city.id);
 }
 
 class _SortedWeatherList extends ConsumerWidget {
@@ -49,10 +49,10 @@ class _SortedWeatherList extends ConsumerWidget {
         ref.watch<Celcius?>(tile.temperatureNotifierProvider);
       }
     }
-    return _WeatherList(tiles: _sortTiles(ref.read, order));
+    return _WeatherList(tiles: _sortTiles(ref, order));
   }
 
-  List<WeatherTile> _sortTiles(Reader read, WeatherOrder order) {
+  List<WeatherTile> _sortTiles(WidgetRef ref, WeatherOrder order) {
     final list = tiles.toList();
     list.sort((a, b) {
       if (order == WeatherOrder.byCountry) {
@@ -62,8 +62,8 @@ class _SortedWeatherList extends ConsumerWidget {
         return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
       }
       if (order == WeatherOrder.byTemp) {
-        final aTemp = read(a.temperatureNotifierProvider);
-        final bTemp = read(b.temperatureNotifierProvider);
+        final aTemp = ref.read(a.temperatureNotifierProvider);
+        final bTemp = ref.read(b.temperatureNotifierProvider);
         if (aTemp == null && bTemp == null) {
           return a.city.alphabeticalOrderKey.compareTo(b.city.alphabeticalOrderKey);
         }

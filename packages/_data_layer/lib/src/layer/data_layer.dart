@@ -4,12 +4,29 @@ import 'package:_core_layer/core_layer.dart';
 import 'package:_domain_layer/domain_layer.dart';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../objectbox.g.dart';
 import '../model/city_model.dart';
 import '../model/preference_model.dart';
 import '../repository/objectbox_cities_repository.dart';
 import '../repository/objectbox_preferences_repository.dart';
+
+part 'data_layer.g.dart';
+
+/// Data Layer provider
+@Riverpod(keepAlive: true)
+DataLayer dataLayer(DataLayerRef ref) => DataLayer();
+
+/// PreferencesRepositoy implementation provider
+@Riverpod(keepAlive: true)
+PreferencesRepository preferencesRepository(PreferencesRepositoryRef ref) =>
+    ref.watch(dataLayerProvider).preferencesRepository;
+
+/// CitiesRepository implementation provider
+@Riverpod(keepAlive: true)
+CitiesRepository citiesRepository(CitiesRepositoryRef ref) =>
+    ref.watch(dataLayerProvider).citiesRepository;
 
 /// DataLayer has the responsibility to provide repository implementaions.
 ///

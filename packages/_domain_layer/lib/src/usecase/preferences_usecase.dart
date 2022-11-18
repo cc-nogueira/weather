@@ -6,7 +6,7 @@ import 'package:riverpod/riverpod.dart';
 import '../entity/common/language_option.dart';
 import '../entity/common/preference.dart';
 import '../entity/weather/weather_order.dart';
-import '../provider/providers.dart';
+import '../layer/domain_layer.dart';
 import '../repository/preferences_repository.dart';
 
 /// LanguageOption preference provider
@@ -86,7 +86,7 @@ class PreferencesUsecase {
   /// The repository is used for preferences persistence.
   /// The Reader is used to manipulate local StateProviders that store and notify changes for  all
   /// preferences.
-  PreferencesUsecase({required this.read, required this.repository});
+  PreferencesUsecase({required this.ref, required this.repository});
 
   static const _languageOptionKey = 'language';
   static const _themeKey = 'theme';
@@ -107,7 +107,7 @@ class PreferencesUsecase {
 
   /// Internal Riverpod [Reader].
   @internal
-  final Reader read;
+  final Ref ref;
 
   /// Internal [PreferencesRepositoty] implementation.
   @internal
@@ -150,7 +150,7 @@ class PreferencesUsecase {
   set languageOption(LanguageOption languageOption) {
     final optionStr = '${languageOption.languageCode}_${languageOption.countryCode ?? ''}';
     repository.saveByKey(Preference(key: _languageOptionKey, value: optionStr));
-    read(_languageOptionProvider.notifier).state = languageOption;
+    ref.read(_languageOptionProvider.notifier).state = languageOption;
   }
 
   /// Internal getter for [LanguageOption] preference.
@@ -171,7 +171,7 @@ class PreferencesUsecase {
   /// This setter will trigger this preference change notification through the correpondent provider.
   set theme(ThemeMode theme) {
     repository.saveByKey(Preference(key: _themeKey, value: theme.name));
-    read(_themeProvider.notifier).state = theme;
+    ref.read(_themeProvider.notifier).state = theme;
   }
 
   /// Internal getter for [ThemeMode] preference.
@@ -190,7 +190,7 @@ class PreferencesUsecase {
   /// This setter will trigger this preference change notification through the correpondent provider.
   set addTempToRainChart(bool option) {
     repository.saveByKey(Preference(key: _addTempToRainChartKey, value: option.toString()));
-    read(_addTempToRainChartProvider.notifier).state = option;
+    ref.read(_addTempToRainChartProvider.notifier).state = option;
   }
 
   /// Internal getter for addTempToRainChart preference.
@@ -209,7 +209,7 @@ class PreferencesUsecase {
   /// This setter will trigger this preference change notification through the correpondent provider.
   set addTempToSnowChart(bool option) {
     repository.saveByKey(Preference(key: _addTempToSnowChartKey, value: option.toString()));
-    read(_addTempToSnowChartProvider.notifier).state = option;
+    ref.read(_addTempToSnowChartProvider.notifier).state = option;
   }
 
   /// Internal getter for addTempToSnowChart preference.
@@ -228,7 +228,7 @@ class PreferencesUsecase {
   /// This setter will trigger this preference change notification through the correpondent provider.
   set addTempToWindChart(bool option) {
     repository.saveByKey(Preference(key: _addTempToWindChartKey, value: option.toString()));
-    read(_addTempToWindChartProvider.notifier).state = option;
+    ref.read(_addTempToWindChartProvider.notifier).state = option;
   }
 
   /// Internal getter for addTempToWindChart preference.
@@ -247,7 +247,7 @@ class PreferencesUsecase {
   /// This setter will trigger this preference change notification through the correpondent provider.
   set weatherOrder(WeatherOrder order) {
     repository.saveByKey(Preference(key: _weatherOrderKey, value: order.name));
-    read(_weatherOrderProvider.notifier).state = order;
+    ref.read(_weatherOrderProvider.notifier).state = order;
   }
 
   /// Internal getter for weatherOrder preference.
@@ -267,7 +267,7 @@ class PreferencesUsecase {
   /// This setter will trigger this preference change notification through the correpondent provider.
   set temperatureUnit(Unit<Temperature> unit) {
     repository.saveByKey(Preference(key: _temperatureUnitKey, value: unit.symbol));
-    read(_temperatureUnitProvider.notifier).state = unit;
+    ref.read(_temperatureUnitProvider.notifier).state = unit;
   }
 
   /// Internal getter for temperatureUnit preference.
@@ -288,7 +288,7 @@ class PreferencesUsecase {
   /// This setter will trigger this preference change notification through the correpondent provider.
   set windSpeedUnit(Unit<Speed> unit) {
     repository.saveByKey(Preference(key: _windSpeedUnitKey, value: unit.symbol));
-    read(_windSpeedUnitProvider.notifier).state = unit;
+    ref.read(_windSpeedUnitProvider.notifier).state = unit;
   }
 
   /// Internal getter for windSpeedUnit preference.
@@ -308,7 +308,7 @@ class PreferencesUsecase {
   /// This setter will trigger this preference change notification through the correpondent provider.
   set precipitationUnit(Unit<Speed> unit) {
     repository.saveByKey(Preference(key: _precipitationUnitKey, value: unit.symbol));
-    read(_precipitationUnitProvider.notifier).state = unit;
+    ref.read(_precipitationUnitProvider.notifier).state = unit;
   }
 
   /// Internal getter for precipitationUnit preference.

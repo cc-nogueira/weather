@@ -81,7 +81,7 @@ class CutAndFlipAd extends ConsumerWidget {
       flipDuration: flipDuration,
       waitDuration: adDuration,
       startDistance: startingCutLength,
-      onFlipBackFinished: () => _onflipFinished(ref.read),
+      onFlipBackFinished: () => _onflipFinished(ref),
     );
   }
 
@@ -91,7 +91,7 @@ class CutAndFlipAd extends ConsumerWidget {
     bool handledLoaded = false;
     late final AdInRowContainer adContainer;
     adContainer = _createBannerAdInRowContainer(
-      ref.read,
+      ref,
       height: adHeight,
       onAdLoaded: (_) {
         if (!handledLoaded) {
@@ -105,12 +105,12 @@ class CutAndFlipAd extends ConsumerWidget {
 
   /// Internal - Create the AdInRowContainer with a AdMob banner ad.
   AdInRowContainer _createBannerAdInRowContainer(
-    Reader read, {
+    WidgetRef ref, {
     AdEventCallback? onAdLoaded,
     AdSize? size,
     double? height,
   }) {
-    final adState = read(adStateProvider);
+    final adState = ref.read(adStateProvider);
     return AdInRowContainer(
       ad: adState.createBannerAd(onAdLoaded: onAdLoaded, size: size),
       height: height,
@@ -119,8 +119,8 @@ class CutAndFlipAd extends ConsumerWidget {
 
   /// Internal - onFlipFinished callback to dispose the banner ad when the flipback to the original
   /// child widget finishes.
-  void _onflipFinished(Reader read) {
-    final flipFace = read(_flipProvider);
+  void _onflipFinished(WidgetRef ref) {
+    final flipFace = ref.read(_flipProvider);
     if (flipFace is AdInRowContainer) {
       flipFace.ad.dispose();
     }

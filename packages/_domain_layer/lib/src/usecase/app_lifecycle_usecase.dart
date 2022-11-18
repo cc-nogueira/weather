@@ -1,7 +1,14 @@
 import 'package:meta/meta.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain_layer.dart';
+
+part 'app_lifecycle_usecase.g.dart';
+
+/// AppLifecycleUsecase singleton provider
+@Riverpod(keepAlive: true)
+AppLifecycleUsecase appLifecycleUsecase(AppLifecycleUsecaseRef ref) =>
+    AppLifecycleUsecase(ref: ref);
 
 /// AppLifecycleUsecase instance is called by the PresentationLayer on App Lifecycle changes.
 ///

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../provider/providers.dart';
 import '../repository/cities_repository.dart';
@@ -14,6 +15,36 @@ import '../usecase/cities_usecase.dart';
 import '../usecase/preferences_usecase.dart';
 import '../usecase/time_zone_usecase.dart';
 import '../usecase/weather_usecase.dart';
+
+part 'domain_layer.g.dart';
+
+/// Domain Layer provider
+@Riverpod(keepAlive: true)
+DomainLayer domainLayer(DomainLayerRef ref) => DomainLayer(ref: ref);
+
+/// Function provider for dependency configuration (implementation injection)
+@riverpod
+DomainConfiguration domainConfiguration(DomainConfigurationRef ref) =>
+    ref.watch(domainLayerProvider).configure;
+
+/// PreferencesUsecase singleton provider
+@Riverpod(keepAlive: true)
+PreferencesUsecase preferencesUsecase(PreferencesUsecaseRef ref) =>
+    ref.watch(domainLayerProvider).preferencesUsecase;
+
+/// CitiesUsecase singleton provider
+@Riverpod(keepAlive: true)
+CitiesUsecase citiesUsecase(CitiesUsecaseRef ref) => ref.watch(domainLayerProvider).citiesUsecase;
+
+/// TimeZoneUsecase singleton provider
+@Riverpod(keepAlive: true)
+TimeZoneUsecase timeZoneUsecase(TimeZoneUsecaseRef ref) =>
+    ref.watch(domainLayerProvider).timeUsecase;
+
+/// WeatherUsecase singleton provider
+@Riverpod(keepAlive: true)
+WeatherUsecase weatherUsecase(WeatherUsecaseRef ref) =>
+    ref.watch(domainLayerProvider).weatherUsecase;
 
 /// Function definition for Domain Layer dependencies.
 ///
@@ -46,11 +77,11 @@ class DomainLayer extends AppLayer with WidgetsBindingObserver {
   /// Constructor.
   ///
   /// Required a Riverpod Reader to instantite the [PreferencesUsecase].
-  DomainLayer({required this.read});
+  DomainLayer({required this.ref});
 
   /// Internal reader
   @internal
-  final Reader read;
+  final Ref ref;
 
   /// Configured [PreferencesUsecase] singleton.
   late final PreferencesUsecase preferencesUsecase;
@@ -71,7 +102,7 @@ class DomainLayer extends AppLayer with WidgetsBindingObserver {
   @override
   Future<void> init() {
     final systemLocales = WidgetsBinding.instance.platformDispatcher.locales;
-    read(systemLocalesProvider.notifier).state = systemLocales;
+    ref.read(systemLocalesProvider.notifier).state = systemLocales;
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -84,7 +115,7 @@ class DomainLayer extends AppLayer with WidgetsBindingObserver {
   @override
   void didChangeLocales(List<Locale>? locales) {
     if (locales != null) {
-      read(systemLocalesProvider.notifier).state = locales;
+      ref.read(systemLocalesProvider.notifier).state = locales;
     }
   }
 
@@ -98,7 +129,7 @@ class DomainLayer extends AppLayer with WidgetsBindingObserver {
     required WeatherService weatherService,
   }) {
     final log = Logger('usecase');
-    preferencesUsecase = PreferencesUsecase(read: read, repository: preferencesRepository);
+    preferencesUsecase = PreferencesUsecase(ref: ref, repository: preferencesRepository);
     citiesUsecase = CitiesUsecase(repository: citiesRepository);
     timeUsecase = TimeZoneUsecase(service: timeZoneService);
     weatherUsecase = WeatherUsecase(service: weatherService, log: log);

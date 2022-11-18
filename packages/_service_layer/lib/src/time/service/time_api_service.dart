@@ -1,8 +1,16 @@
 import 'package:_domain_layer/domain_layer.dart';
+import 'package:meta/meta.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../mapper/time_zone_mapper.dart';
 import '../model/time_zone_model.dart';
 import 'time_api_client.dart';
+
+part 'time_api_service.g.dart';
+
+/// TimeZone service implementaion provider
+@Riverpod(keepAlive: true)
+TimeApiService timeApiService(TimeApiServiceRef ref) => const TimeApiService();
 
 /// Time API service provided by TimeAPI.io.
 ///
@@ -17,7 +25,8 @@ class TimeApiService implements TimeZoneService {
   final TimeApiClient client;
 
   /// Mapper to convert from service Model to domain Entity.
-  final _mapper = const TimeZoneMapper();
+  @internal
+  final mapper = const TimeZoneMapper();
 
   /// Fetch Time Zone information from TimeAPI client.
   ///
@@ -31,6 +40,6 @@ class TimeApiService implements TimeZoneService {
       throw ArgumentError('Did not find time zone info for location.');
     }
     final model = TimeZoneModel.fromJson(jsonMap);
-    return _mapper.mapEntity(model);
+    return mapper.mapEntity(model);
   }
 }

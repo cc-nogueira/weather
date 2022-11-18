@@ -41,41 +41,41 @@ class CityPage extends ConsumerWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _cityForm(context, ref.read),
-          _searchButton(context, ref.read, translations),
-          _citySearch(context, ref.read),
+          _cityForm(context, ref),
+          _searchButton(context, ref, translations),
+          _citySearch(context, ref),
         ],
       ),
     );
   }
 
   /// Internal - creates the CityForm widget inside a flutter Form.
-  Widget _cityForm(BuildContext context, Reader read) => Padding(
+  Widget _cityForm(BuildContext context, WidgetRef ref) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Form(
           key: _formKey,
           child: CityForm(
             _formCityProvider,
-            onCountryChanged: () => _onCountryChanged(context, read),
-            onCityNameCleared: () => _onCityNameCleared(read),
+            onCountryChanged: () => _onCountryChanged(context, ref),
+            onCityNameCleared: () => _onCityNameCleared(ref),
           ),
         ),
       );
 
   /// Internal - creates the CitySearch widget that searches and display matching results.
-  Widget _citySearch(BuildContext context, Reader read) => Padding(
+  Widget _citySearch(BuildContext context, WidgetRef ref) => Padding(
         padding: const EdgeInsets.all(16.0),
         child: CitySearch(
           cityProvider: _searchCityProvider,
-          onCitySelected: (city) => _onCitySelected(context, read, city),
+          onCitySelected: (city) => _onCitySelected(context, ref, city),
         ),
       );
 
   /// Internal - created the search button.
-  Widget _searchButton(BuildContext context, Reader read, Translations translations) => Padding(
+  Widget _searchButton(BuildContext context, WidgetRef ref, Translations translations) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: OutlinedButton(
-          onPressed: () => _onSearchPressed(context, read),
+          onPressed: () => _onSearchPressed(context, ref),
           child: Text(translations.search_label),
         ),
       );
@@ -83,39 +83,39 @@ class CityPage extends ConsumerWidget {
   /// Internal - handles the event when the city name is cleared.
   ///
   /// This will result in updating the search city provider and the clearing of any search results.
-  void _onCityNameCleared(Reader read) {
-    final city = read(_formCityProvider);
-    read(_searchCityProvider.notifier).state = city;
+  void _onCityNameCleared(WidgetRef ref) {
+    final city = ref.read(_formCityProvider);
+    ref.read(_searchCityProvider.notifier).state = city;
   }
 
   /// Internal - handle the event when a country is selected.
   ///
   /// If the form is fully filled it will trigger the search button event.
-  void _onCountryChanged(BuildContext context, Reader read) {
-    final city = read(_formCityProvider);
+  void _onCountryChanged(BuildContext context, WidgetRef ref) {
+    final city = ref.read(_formCityProvider);
     if (city.name.isNotEmpty && city.country.isNotEmpty) {
-      _onSearchPressed(context, read);
+      _onSearchPressed(context, ref);
     }
   }
 
   /// Internal - Validate the form and update the city search provider
   /// that triggers search.
-  void _onSearchPressed(BuildContext context, Reader read) {
+  void _onSearchPressed(BuildContext context, WidgetRef ref) {
     FocusScope.of(context).unfocus();
 
     final form = _formKey.currentState!;
     form.save();
     if (form.validate()) {
-      final city = read(_formCityProvider);
-      read(_searchCityProvider.notifier).state = city;
+      final city = ref.read(_formCityProvider);
+      ref.read(_searchCityProvider.notifier).state = city;
     }
   }
 
   /// Internal - Callback for the City search widget.
   ///
   /// This callback save the selected city to the users list and pops this page.
-  void _onCitySelected(BuildContext context, Reader read, City city) {
-    final usecase = read(citiesUsecaseProvider);
+  void _onCitySelected(BuildContext context, WidgetRef ref, City city) {
+    final usecase = ref.read(citiesUsecaseProvider);
     usecase.save(city);
     Navigator.pop(context);
   }

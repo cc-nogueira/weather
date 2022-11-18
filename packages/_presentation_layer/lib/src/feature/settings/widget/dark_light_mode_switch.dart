@@ -32,7 +32,7 @@ class DarkLightModeSwitch extends ConsumerWidget {
     final widget = Row(
       children: [
         before,
-        Switch(value: darkMode, onChanged: (value) => _onThemeChange(ref.read, value)),
+        Switch(value: darkMode, onChanged: (value) => _onThemeChange(ref, value)),
         after,
       ],
     );
@@ -45,8 +45,8 @@ class DarkLightModeSwitch extends ConsumerWidget {
   /// Internal - update the dark/light preference through its use case.
   ///
   /// Will call the optional changeCallback after calling the use case update.
-  void _onThemeChange(Reader read, bool option) {
-    read(preferencesUsecaseProvider).theme = option ? ThemeMode.dark : ThemeMode.light;
+  void _onThemeChange(WidgetRef ref, bool option) {
+    ref.read(preferencesUsecaseProvider).theme = option ? ThemeMode.dark : ThemeMode.light;
     changeCallback?.call();
   }
 }

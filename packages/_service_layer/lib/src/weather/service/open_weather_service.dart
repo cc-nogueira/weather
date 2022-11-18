@@ -1,8 +1,11 @@
 import 'dart:ui';
 
 import 'package:_domain_layer/domain_layer.dart';
+import 'package:meta/meta.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../layer/service_layer.dart';
 import '../mapper/city_mapper.dart';
 import '../mapper/current_weather_mapper.dart';
 import '../mapper/location_mapper.dart';
@@ -11,6 +14,13 @@ import '../model/city_location_model.dart';
 import '../model/current_weather_model.dart';
 import '../model/one_call_weather_model.dart';
 import 'open_weather_client.dart';
+
+part 'open_weather_service.g.dart';
+
+/// Weather service implementation provider.
+@Riverpod(keepAlive: true)
+OpenWeatherService weatherService(WeatherServiceRef ref) =>
+    OpenWeatherService(appId: ServiceLayer.openWeatherAppId, ref: ref);
 
 /// Wheather service provided by OpenWeather.
 ///
@@ -21,19 +31,28 @@ class OpenWeatherService implements WeatherService {
   /// Constructor must receive a valid OpenWeather AppID and a Riverpod Reader.
   OpenWeatherService({
     required String appId,
-    required this.read,
+    required this.ref,
   }) : client = OpenWeatherClient(appId: appId);
 
   /// OpenWeather client.
+  @internal
   final OpenWeatherClient client;
 
   /// Riverpod Reader to access current selected language option.
-  final Reader read;
+  @internal
+  final Ref ref;
 
-  final _weatherMapper = const CurrentWeatherMapper();
-  final _oneCallMapper = const OneCallMapper();
-  final _cityMapper = const CityMapper();
-  final _locationMapper = const LocationMapper();
+  @internal
+  final weatherMapper = const CurrentWeatherMapper();
+
+  @internal
+  final oneCallMapper = const OneCallMapper();
+
+  @internal
+  final cityMapper = const CityMapper();
+
+  @internal
+  final locationMapper = const LocationMapper();
 
   /// Fetch list of cities that math the given city by name, state and Country.
   ///
@@ -50,7 +69,7 @@ class OpenWeatherService implements WeatherService {
       if (stateIncluded.contains(cityModel.state)) {
         continue;
       }
-      cities.add(_cityMapper.mapEntity(cityModel));
+      cities.add(cityMapper.mapEntity(cityModel));
       stateIncluded.add(cityModel.state);
     }
 
@@ -69,7 +88,7 @@ class OpenWeatherService implements WeatherService {
     final firstMap = jsonList[0] as Map<String, dynamic>;
     final cityModel = CityLocationModel.fromJson(firstMap);
 
-    return _locationMapper.mapEntity(cityModel);
+    return locationMapper.mapEntity(cityModel);
   }
 
   /// Fetch weather information from OpenWeather client.
@@ -84,7 +103,7 @@ class OpenWeatherService implements WeatherService {
       throw ArgumentError('Did not find weather info for location.');
     }
     final model = CurrentWeatherModel.fromJson(jsonMap);
-    return _weatherMapper.mapEntity(model);
+    return weatherMapper.mapEntity(model);
   }
 
   /// Fetch oneCall information from OpenWeather client.
@@ -96,10 +115,10 @@ class OpenWeatherService implements WeatherService {
   Future<OneCallWeather> getOneCallByLocation(Location location) async {
     final jsonMap = await client.getOneCallJson(location, _language);
     final model = OneCallWeatherModel.fromJson(jsonMap);
-    return _oneCallMapper.mapEntity(model);
+    return oneCallMapper.mapEntity(model);
   }
 
   /// Internal - get selected language option stored in a Riverpod provider or use system locale.
   String get _language =>
-      read(languageOptionProvider).locale?.languageCode ?? window.locale.languageCode;
+      ref.read(languageOptionProvider).locale?.languageCode ?? window.locale.languageCode;
 }

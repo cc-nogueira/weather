@@ -10,39 +10,15 @@ import '../entity/weather/city.dart';
 import '../entity/weather/current_weather.dart';
 import '../entity/weather/one_call_weather.dart';
 import '../layer/domain_layer.dart';
-import '../usecase/app_lifecycle_usecase.dart';
-import '../usecase/cities_usecase.dart';
 import '../usecase/preferences_usecase.dart';
-import '../usecase/time_zone_usecase.dart';
 import '../usecase/weather_usecase.dart';
-
-/// Domain Layer provider
-final domainLayerProvider = Provider((ref) => DomainLayer(read: ref.read));
-
-/// Function provider for dependency configuration (implementation injection)
-final domainConfigurationProvider =
-    Provider<DomainConfiguration>((ref) => ref.watch(domainLayerProvider).configure);
-
-// -- AppLifecycle:
-
-/// AppLifecycleUsecase singleton provider
-final appLifecycleUsecaseProvider =
-    Provider<AppLifecycleUsecase>((ref) => AppLifecycleUsecase(ref: ref));
 
 // -- Preferences:
 
 /// System locales obtained on main() and updated by PresentationLayer App.
 final systemLocalesProvider = StateProvider<List<Locale>>((ref) => []);
 
-/// PreferencesUsecase singleton provider
-final preferencesUsecaseProvider =
-    Provider<PreferencesUsecase>((ref) => ref.watch(domainLayerProvider).preferencesUsecase);
-
 // -- Cities:
-
-/// CitiesUsecase singleton provider
-final citiesUsecaseProvider =
-    Provider<CitiesUsecase>((ref) => ref.watch(domainLayerProvider).citiesUsecase);
 
 /// Provider for city search service accessed through the usecase.
 final citiesSearchProvider = FutureProvider.autoDispose.family<List<City>, City>(
@@ -57,25 +33,17 @@ final watchAllCitiesProvider = StreamProvider((ref) => ref.watch(citiesUsecasePr
 
 // -- Time Zone:
 
-/// TimeZoneUsecase singleton provider
-final timeUsecaseProvider =
-    Provider<TimeZoneUsecase>((ref) => ref.watch(domainLayerProvider).timeUsecase);
-
 /// Provider for a location timezone service accessed through the usecase.
 final timeZoneProvider = FutureProvider.family<TimeZone, Location>(
   (ref, location) {
     ref.watch(currentWeatherMetronomeProvider);
     return ref.watch(
-      timeUsecaseProvider.select((usecase) => usecase.getTimeZone(location)),
+      timeZoneUsecaseProvider.select((usecase) => usecase.getTimeZone(location)),
     );
   },
 );
 
 // -- Weather:
-
-/// WeatherUsecase singleton provider
-final weatherUsecaseProvider =
-    Provider<WeatherUsecase>((ref) => ref.watch(domainLayerProvider).weatherUsecase);
 
 /// CurrentWeather provider for a location.
 /// This provider auto refreshs on currentWeatherMetronomeProvider.

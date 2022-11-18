@@ -46,7 +46,7 @@ abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidge
           items: _items(options, value),
           selectedItemBuilder: (context) => _selectedItems(options),
           alignment: AlignmentDirectional.centerEnd,
-          onChanged: (selection) => _onChanged(selection, ref.read),
+          onChanged: (selection) => _onChanged(selection, ref),
         ),
       ),
     );
@@ -71,7 +71,7 @@ abstract class UnitDropdown<T extends PhysicalProperty<T>> extends ConsumerWidge
         .toList();
   }
 
-  void _onChanged(Unit<T>? selection, Reader read) {
+  void _onChanged(Unit<T>? selection, WidgetRef ref) {
     if (selection != null) {
       onChanged(selection);
       changeCallback?.call();

@@ -15,6 +15,6 @@ class AddTemperatureToRainChartSwitch extends AddTemperatureSwitch {
   final VoidCallback? changeCallback;
 
   @override
-  void onChange(Reader read, bool option) =>
-      read(preferencesUsecaseProvider).addTempToRainChart = option;
+  void onChange(WidgetRef ref, bool option) =>
+      ref.read(preferencesUsecaseProvider).addTempToRainChart = option;
 }

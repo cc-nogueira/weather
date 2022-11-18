@@ -23,10 +23,10 @@ abstract class AddTemperatureSwitch extends ConsumerWidget {
       children: [
         Switch(
           value: add,
-          onChanged: (value) => onChange(ref.read, value),
+          onChanged: (value) => onChange(ref, value),
         ),
         InkWell(
-          onTap: () => onChange(ref.read, !add),
+          onTap: () => onChange(ref, !add),
           child: WeatherIcons.instance.thermometer(28, Colors.white),
         ),
       ],
@@ -38,5 +38,5 @@ abstract class AddTemperatureSwitch extends ConsumerWidget {
   }
 
   @internal
-  void onChange(Reader read, bool option);
+  void onChange(WidgetRef ref, bool option);
 }

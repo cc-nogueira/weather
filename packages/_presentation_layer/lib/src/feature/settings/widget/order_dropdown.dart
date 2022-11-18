@@ -24,7 +24,7 @@ class OrderDropdown extends ConsumerWidget {
         items: _items(value, options),
         selectedItemBuilder: (context) => _selectedItems(context, options),
         alignment: AlignmentDirectional.centerEnd,
-        onChanged: (selection) => _onOrderSelected(selection, ref.read),
+        onChanged: (selection) => _onOrderSelected(selection, ref),
       ),
     );
   }
@@ -51,8 +51,8 @@ class OrderDropdown extends ConsumerWidget {
         .toList();
   }
 
-  void _onOrderSelected(WeatherOrder? selection, Reader read) {
+  void _onOrderSelected(WeatherOrder? selection, WidgetRef ref) {
     if (selection == null) return;
-    read(preferencesUsecaseProvider).weatherOrder = selection;
+    ref.read(preferencesUsecaseProvider).weatherOrder = selection;
   }
 }

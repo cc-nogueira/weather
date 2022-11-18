@@ -71,7 +71,7 @@ class WeatherTile extends ConsumerWidget {
         onTap: () {},
       ),
       data: (data) {
-        _updateTemperature(ref.read, data.weather);
+        _updateTemperature(ref, data.weather);
         return _WeatherTile(
           translations: translations,
           city: city,
@@ -110,9 +110,9 @@ class WeatherTile extends ConsumerWidget {
         label: translations.label_remove,
       );
 
-  void _updateTemperature(Reader read, Weather weather) {
+  void _updateTemperature(WidgetRef ref, Weather weather) {
     Future.delayed(const Duration(milliseconds: 10), () {
-      read(temperatureNotifierProvider.notifier).onWeatherData(weather);
+      ref.read(temperatureNotifierProvider.notifier).onWeatherData(weather);
     });
   }
 
