@@ -1,4 +1,11 @@
 import 'package:_core_layer/core_layer.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'service_layer.g.dart';
+
+/// Service Layer provider
+@Riverpod(keepAlive: true)
+ServiceLayer serviceLayer(ServiceLayerRef ref) => const ServiceLayer();
 
 /// ServiceLayer has the responsibility to provide service implementaions.
 ///

@@ -63,7 +63,7 @@
 			"flutter_native_splash.yaml": true,
 			"flutter_01.sksl.json": true
 		},
-		"explorerExclude.backup": null,
+		"explorerExclude.backup": {},
 		"workbench.colorCustomizations": {
 			"activityBar.activeBackground": "#184630",
 			"activityBar.activeBorder": "#9259c6",
