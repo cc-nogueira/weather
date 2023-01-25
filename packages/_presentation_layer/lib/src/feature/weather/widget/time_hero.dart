@@ -15,8 +15,8 @@ class TimeHero extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final style = textTheme.headline6!.copyWith(
-      color: color ?? textTheme.headline4!.color,
+    final style = textTheme.titleLarge!.copyWith(
+      color: color ?? textTheme.headlineMedium!.color,
       fontSize: fontSize,
     );
 

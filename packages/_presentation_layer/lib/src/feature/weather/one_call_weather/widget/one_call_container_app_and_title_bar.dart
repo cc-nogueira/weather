@@ -159,8 +159,7 @@ class _OneCallWeatherAppAndTitleBar extends StatelessWidget with ColorRangeMixin
 
   TextStyle _titleStyle(BuildContext context) {
     final theme = Theme.of(context);
-    return theme.appBarTheme.titleTextStyle ??
-        theme.textTheme.headline6!.copyWith(color: _foreColor(context));
+    return theme.appBarTheme.titleTextStyle ?? theme.textTheme.titleLarge!.copyWith(color: _foreColor(context));
   }
 
   Color _foreColor(BuildContext context) {

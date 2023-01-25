@@ -18,13 +18,13 @@ class TemperatureHero extends ConsumerWidget {
         children: [
           Text(
             '${weather.conditions.temperatures.temperature.quantity.convertTo(unit).amount.round()}',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
             child: Text(
               unit.symbol,
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           )
         ],

@@ -41,9 +41,8 @@ class CitySearch extends ConsumerWidget {
 class _CitySearch extends ConsumerWidget {
   /// Constructor.
   _CitySearch({required this.cityProvider, required this.onCitySelected, List<City>? currentCities})
-      : _currentCitiesKeys = currentCities == null
-            ? {}
-            : currentCities.map((each) => each.alphabeticalOrderByCountryKey).toSet();
+      : _currentCitiesKeys =
+            currentCities == null ? {} : currentCities.map((each) => each.alphabeticalOrderByCountryKey).toSet();
 
   /// City to be searched provider.
   ///
@@ -116,8 +115,7 @@ class _CitySearch extends ConsumerWidget {
   /// Also displays city's state and country.
   /// After the information displays a trailling Add button.
   /// If a result is already included in the user's list this button will reflect this state.
-  Widget _itemBuilder(BuildContext context, Translations translations, Locale locale,
-      ColorScheme colors, City city) {
+  Widget _itemBuilder(BuildContext context, Translations translations, Locale locale, ColorScheme colors, City city) {
     final localName = city.translation(locale.languageCode);
     final same = latinize(localName.toLowerCase()) == latinize(city.name.toLowerCase());
     final showName = same ? localName : '$localName (${city.name})';
@@ -137,15 +135,13 @@ class _CitySearch extends ConsumerWidget {
                 backgroundColor: colors.primary,
               ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
               onPressed: () => onCitySelected(city),
-              child: Text(translations.add_label,
-                  semanticsLabel: translations.message_add_city_to_your_list(showName)),
+              child: Text(translations.add_label, semanticsLabel: translations.message_add_city_to_your_list(showName)),
             ),
     );
   }
 
   /// Internal - check if this city is already registered in the user's list.
-  bool _alreadyContains(City city) =>
-      _currentCitiesKeys.contains(city.alphabeticalOrderByCountryKey);
+  bool _alreadyContains(City city) => _currentCitiesKeys.contains(city.alphabeticalOrderByCountryKey);
 
   /// Internal - handler to dlisplay a message when the Add button is tapped for a already existing city.
   void _onCityAlreadyExistis(BuildContext context, Translations translations, String showName) {
@@ -166,9 +162,8 @@ class _CitySearch extends ConsumerWidget {
 
   /// Internal - handler to show a error message that had occurred when searching.
   Widget _showError(BuildContext context, Object error) {
-    final msg =
-        error is ArgumentError ? error.message : Translations.of(context)!.error_searching_message;
+    final msg = error is ArgumentError ? error.message : Translations.of(context)!.error_searching_message;
     final textTheme = Theme.of(context).textTheme;
-    return Text(msg, style: textTheme.headline6!.copyWith(color: Colors.red));
+    return Text(msg, style: textTheme.titleLarge!.copyWith(color: Colors.red));
   }
 }

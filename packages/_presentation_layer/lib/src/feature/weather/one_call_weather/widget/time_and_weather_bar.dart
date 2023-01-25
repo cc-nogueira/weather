@@ -51,8 +51,7 @@ class TimeAndWeatherBar extends StatelessWidget with WeatherMixin {
     );
   }
 
-  Widget trailing2(BuildContext context) =>
-      isRefreshing ? loadingIndicator : heroWeatherIcon(city, weather);
+  Widget trailing2(BuildContext context) => isRefreshing ? loadingIndicator : heroWeatherIcon(city, weather);
 
   Widget get loadingIndicator => const SizedBox(
         height: 60,
@@ -64,7 +63,7 @@ class TimeAndWeatherBar extends StatelessWidget with WeatherMixin {
       );
 
   Color? textColor(ThemeData theme, ListTileThemeData tileTheme) {
-    final defaultColor = theme.textTheme.subtitle1!.color;
+    final defaultColor = theme.textTheme.titleMedium!.color;
     return tileTheme.textColor ?? theme.listTileTheme.textColor ?? defaultColor;
   }
 

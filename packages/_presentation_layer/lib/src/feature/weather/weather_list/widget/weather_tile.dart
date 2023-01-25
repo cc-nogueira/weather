@@ -173,7 +173,7 @@ abstract class _WeatherTileBase extends StatelessWidget {
   Widget title(BuildContext context) => WeatherTitleHero(
         city: city,
         showCountry: showCountry,
-        style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.w500),
+        style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w500),
       );
 
   Widget get loadingIndicator => const SizedBox(
@@ -218,8 +218,7 @@ class _WeatherErrorTile extends _WeatherTileBase {
   Widget subtitle(BuildContext context) => Text(translations.message_no_weather_info);
 }
 
-class _WeatherTile extends _WeatherTileBase
-    with ColorRangeMixin, WeatherMixin, WindMixin, TemperatureMixin {
+class _WeatherTile extends _WeatherTileBase with ColorRangeMixin, WeatherMixin, WindMixin, TemperatureMixin {
   const _WeatherTile({
     required super.translations,
     required super.city,

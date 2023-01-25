@@ -63,7 +63,7 @@ class WeatherListPage extends ConsumerWidget {
     List<City> cities,
   ) {
     final theme = Theme.of(context);
-    final titleStyle = theme.textTheme.headline6!.copyWith(color: theme.colorScheme.onSurface);
+    final titleStyle = theme.textTheme.titleLarge!.copyWith(color: theme.colorScheme.onSurface);
     return Scaffold(
       endDrawer: const PreferencesDrawer(),
       body: ContainerWithTitleBar(
