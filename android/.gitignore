@@ -1,5 +1,4 @@
 
-app/*
 .gradle/
 gradle/
 *.gradle
@@ -7,7 +6,9 @@ gradle/
 *.properties
 gradlew
 !local.properties
-!app/build.gradle
+app/src/debug
+app/src/profile
+app/src/main/*
 !app/src/main/AndroidManifest.xml
 
 # Remember to never publicly share your keystore.
