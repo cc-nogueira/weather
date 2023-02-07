@@ -2,7 +2,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../domain/entity/weather/city.dart';
+import '../../../../domain_layer.dart';
 import '../../../l10n/translations.dart';
 
 /// City form to fill the search data.

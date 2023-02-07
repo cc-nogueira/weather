@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../domain/entity/time_zone/time_zone.dart';
-import '../../../../domain/entity/weather/city.dart';
-import '../../../../domain/provider/providers.dart';
+import '../../../../domain_layer.dart';
 import '../../../common/helper/hero_flight_shuttle_builder.dart';
 
 class TimeHero extends ConsumerWidget {

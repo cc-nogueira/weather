@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/entity/weather/celcius.dart';
+import '../../../../domain_layer.dart';
 import 'color_range_mixin.dart';
 
 final _colorStops = <double, Color>{

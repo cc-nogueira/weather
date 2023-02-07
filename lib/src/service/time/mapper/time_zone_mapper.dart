@@ -1,4 +1,4 @@
-import '../../../domain/entity/time_zone/time_zone.dart';
+import '../../../domain_layer.dart';
 import '../model/time_zone_model.dart';
 
 /// TimeZoneMapper converts [TimeZoneModel] to [TimeZone] entity.

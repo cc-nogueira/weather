@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../domain/entity/weather/city.dart';
-import '../../../../../domain/entity/weather/weather.dart';
+import '../../../../../domain_layer.dart';
 import '../../widget/temperature_hero.dart';
 import '../../widget/time_hero.dart';
 import '../../widget/weather_conditions_hero.dart';

@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../../domain/entity/weather/city.dart';
-import '../../../../../domain/provider/providers.dart';
+import '../../../../../domain_layer.dart';
 import '../../../../common/desktop/container_with_title_bar.dart';
 import '../../../../common/page/loading_page.dart';
 import '../../../../common/page/message_page.dart';

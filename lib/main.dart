@@ -4,10 +4,11 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logging/logging.dart';
 
 import 'src/di/layer/di_layer.dart';
-import 'src/presentation/app/weather_app.dart';
+import 'src/presentation_layer.dart';
 
 void main() {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,11 @@ void main() {
     // setWindowMaxSize(const Size(1024, -1));
     // setWindowMinSize(const Size(520, 700));
   }
+
+  // Test devices for AddSenese
+  final configuration = RequestConfiguration(testDeviceIds: ['4340F705713AEECCFF2F376E305FC836']);
+  MobileAds.instance.updateRequestConfiguration(configuration);
+
   runApp(
     ProviderScope(
       child: Consumer(

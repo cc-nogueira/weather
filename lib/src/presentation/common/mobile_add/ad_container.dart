@@ -85,7 +85,6 @@ class _DesktopAdWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 40.0,
                 fontFamily: 'Alice',
-                package: '_presentation_layer',
                 color: Colors.white,
               ),
             ),
@@ -99,7 +98,6 @@ class _DesktopAdWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14.0,
                 fontFamily: 'Alice',
-                package: '_presentation_layer',
                 color: Colors.white,
               ),
             ),

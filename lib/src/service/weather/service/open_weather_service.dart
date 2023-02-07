@@ -4,12 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meta/meta.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../domain/entity/common/location.dart';
-import '../../../domain/entity/weather/city.dart';
-import '../../../domain/entity/weather/current_weather.dart';
-import '../../../domain/entity/weather/one_call_weather.dart';
-import '../../../domain/service/weather_service.dart';
-import '../../../domain/usecase/preferences_usecase.dart';
+import '../../../domain_layer.dart';
 import '../../layer/service_layer.dart';
 import '../mapper/city_mapper.dart';
 import '../mapper/current_weather_mapper.dart';

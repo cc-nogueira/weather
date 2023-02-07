@@ -1,4 +1,4 @@
-import '../../domain/entity/common/preference.dart';
+import '../../domain_layer.dart';
 import '../model/preference_model.dart';
 import 'entity_mapper.dart';
 

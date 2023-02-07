@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../core/layer/app_layer.dart';
-import '../../domain/usecase/app_lifecycle_usecase.dart';
+import '../../domain_layer.dart';
 import '../common/mobile_add/ad_state.dart';
 import '../provider/presentation_providers.dart';
 

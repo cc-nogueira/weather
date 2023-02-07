@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../domain/entity/weather/city.dart';
-import '../../../../domain/entity/weather/weather.dart';
-import '../../../../domain/usecase/preferences_usecase.dart';
+import '../../../../domain_layer.dart';
 
 class TemperatureHero extends ConsumerWidget {
   const TemperatureHero({super.key, required this.city, required this.weather});

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/utils/string_utils.dart';
-import '../../../../../domain/entity/weather/alert.dart';
-import '../../../../../domain/entity/weather/one_call_weather.dart';
+import '../../../../../domain_layer.dart';
 import '../../../../l10n/translations.dart';
 
 class AlertsWidget extends StatelessWidget {

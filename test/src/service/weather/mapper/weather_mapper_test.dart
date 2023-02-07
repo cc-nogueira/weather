@@ -1,14 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:weather_colors/src/domain/entity/common/location.dart';
-import 'package:weather_colors/src/domain/entity/weather/celcius.dart';
-import 'package:weather_colors/src/domain/entity/weather/conditions.dart';
-import 'package:weather_colors/src/domain/entity/weather/current_weather.dart';
-import 'package:weather_colors/src/domain/entity/weather/geo.dart';
-import 'package:weather_colors/src/domain/entity/weather/temperatures.dart';
-import 'package:weather_colors/src/domain/entity/weather/weather.dart';
-import 'package:weather_colors/src/domain/entity/weather/wind.dart';
+import 'package:weather_colors/src/domain_layer.dart';
 import 'package:weather_colors/src/service/weather/mapper/current_weather_mapper.dart';
 import 'package:weather_colors/src/service/weather/model/current_weather_model.dart';
 

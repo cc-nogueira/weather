@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../domain/usecase/preferences_usecase.dart';
+import '../../domain_layer.dart';
 import '../common/helper/theme_builder.dart';
 import '../common/mobile_add/ad_state.dart';
 import '../common/mobile_add/ad_unit_ids.dart';

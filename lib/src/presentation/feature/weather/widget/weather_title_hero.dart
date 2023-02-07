@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../domain/entity/weather/city.dart';
+import '../../../../domain_layer.dart';
 import '../../../common/helper/hero_flight_shuttle_builder.dart';
 
 class WeatherTitleHero extends ConsumerWidget {

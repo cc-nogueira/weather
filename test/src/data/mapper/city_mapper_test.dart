@@ -1,8 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weather_colors/src/data/mapper/city_mapper.dart';
 import 'package:weather_colors/src/data/model/city_model.dart';
-import 'package:weather_colors/src/domain/entity/common/location.dart';
-import 'package:weather_colors/src/domain/entity/weather/city.dart';
+import 'package:weather_colors/src/domain_layer.dart';
 
 void main() {
   const mapper = CityMapper();

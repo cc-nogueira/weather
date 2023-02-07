@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../../../domain/entity/common/location.dart';
+import '../../../domain_layer.dart';
 
 /// Time API client.
 ///

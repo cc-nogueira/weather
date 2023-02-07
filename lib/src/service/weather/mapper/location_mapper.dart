@@ -1,4 +1,4 @@
-import '../../../domain/entity/common/location.dart';
+import '../../../domain_layer.dart';
 import '../model/city_location_model.dart';
 
 /// LocationMapper converts [CityLocationModel] to [Location] entity.

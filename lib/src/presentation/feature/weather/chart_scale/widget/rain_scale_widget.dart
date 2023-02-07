@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../../../domain/usecase/preferences_usecase.dart';
+import '../../../../../domain_layer.dart';
 import '../../../../common/translation/noum_gender.dart';
 import '../../../../l10n/translations.dart';
 import '../../widget/rain_mixin.dart';

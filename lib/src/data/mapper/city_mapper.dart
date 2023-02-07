@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import '../../domain/entity/common/location.dart';
-import '../../domain/entity/weather/city.dart';
+import '../../domain_layer.dart';
 import '../model/city_model.dart';
 import 'entity_mapper.dart';
 

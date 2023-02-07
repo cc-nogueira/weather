@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
-import '../../domain/usecase/preferences_usecase.dart';
+import '../../domain_layer.dart';
 import '../common/page/message_page.dart';
 import '../l10n/translations.dart';
 import '../provider/presentation_providers.dart';

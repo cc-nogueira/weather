@@ -1,6 +1,5 @@
 import '../../../objectbox.g.dart';
-import '../../domain/entity/weather/city.dart';
-import '../../domain/repository/cities_repository.dart';
+import '../../domain_layer.dart';
 import '../mapper/city_mapper.dart';
 import '../model/city_model.dart';
 import 'objectbox_repository.dart';

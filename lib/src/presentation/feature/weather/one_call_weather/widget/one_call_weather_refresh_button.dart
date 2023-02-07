@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../../domain/entity/weather/city.dart';
+import '../../../../../domain_layer.dart';
 import 'one_call_weather_refresh_mixin.dart';
 
 class OneCallWeatherRefreshButton extends ConsumerWidget with OneCallWeatherRefreshMixin {

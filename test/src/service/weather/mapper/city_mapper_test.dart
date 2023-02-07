@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:weather_colors/src/domain/entity/common/location.dart';
-import 'package:weather_colors/src/domain/entity/weather/city.dart';
+import 'package:weather_colors/src/domain_layer.dart';
 import 'package:weather_colors/src/service/weather/mapper/city_mapper.dart';
 import 'package:weather_colors/src/service/weather/model/city_location_model.dart';
 

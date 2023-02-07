@@ -3,10 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../domain/entity/common/language_option.dart';
-import '../../../../domain/layer/domain_layer.dart';
-import '../../../../domain/provider/providers.dart';
-import '../../../../domain/usecase/preferences_usecase.dart';
+import '../../../../domain_layer.dart';
 import '../../../l10n/translations.dart';
 
 /// Language preference drop down.

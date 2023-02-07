@@ -6,10 +6,7 @@ import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../../../../domain/entity/weather/one_call_weather.dart';
-import '../../../../../domain/entity/weather/weather.dart';
-import '../../../../../domain/entity/weather/wind.dart';
-import '../../../../../domain/usecase/preferences_usecase.dart';
+import '../../../../../domain_layer.dart';
 import '../../../../l10n/translations.dart';
 import '../../chart_scale/widget/wind_scale_widget.dart';
 import '../../widget/wind_mixin.dart';

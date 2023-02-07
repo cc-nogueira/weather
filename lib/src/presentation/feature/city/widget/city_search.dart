@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latinize/latinize.dart';
 
-import '../../../../domain/entity/weather/city.dart';
-import '../../../../domain/provider/providers.dart';
+import '../../../../domain_layer.dart';
 import '../../../l10n/translations.dart';
 
 typedef CityCallback = void Function(City city);

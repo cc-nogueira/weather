@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/entity/weather/city.dart';
+import '../../../../domain_layer.dart';
 import 'weather_icons.dart';
 
 class WeatherIconHero extends StatelessWidget {

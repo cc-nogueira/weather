@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../../../domain/entity/weather/wind.dart';
+import '../../../../domain_layer.dart';
 import 'color_range_mixin.dart';
 import 'weather_icons.dart';
 
@@ -39,10 +39,7 @@ mixin WindMixin on ColorRangeMixin {
           child: Image(
             color: color,
             fit: BoxFit.contain,
-            image: const AssetImage(
-              'assets/image/wind_direction_white.png',
-              package: '_presentation_layer',
-            ),
+            image: const AssetImage('assets/image/wind_direction_white.png'),
           ),
         ),
       );

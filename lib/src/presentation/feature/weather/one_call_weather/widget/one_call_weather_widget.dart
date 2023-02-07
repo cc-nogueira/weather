@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../../domain/entity/weather/city.dart';
-import '../../../../../domain/entity/weather/one_call_weather.dart';
+import '../../../../../domain_layer.dart';
 import '../../widget/powered_by_widget.dart';
 import '../helper/one_call_weather_stats.dart';
 import 'alerts_widget.dart';

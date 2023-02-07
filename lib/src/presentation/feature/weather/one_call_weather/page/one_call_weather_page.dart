@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../../domain/entity/weather/city.dart';
-import '../../../../../domain/entity/weather/current_weather.dart';
-import '../../../../../domain/provider/providers.dart';
+import '../../../../../domain_layer.dart';
 import '../../../../common/page/message_page.dart';
 import '../../../../common/widget/loading_widget.dart';
 import '../../../../provider/presentation_providers.dart';

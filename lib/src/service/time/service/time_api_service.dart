@@ -1,9 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../domain/entity/common/location.dart';
-import '../../../domain/entity/time_zone/time_zone.dart';
-import '../../../domain/service/time_zone_service.dart';
+import '../../../domain_layer.dart';
 import '../mapper/time_zone_mapper.dart';
 import '../model/time_zone_model.dart';
 import 'time_api_client.dart';

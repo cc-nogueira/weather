@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../domain/entity/weather/city.dart';
-import '../../domain/entity/weather/current_weather.dart';
+import '../../domain_layer.dart';
 import '../common/helper/page_transitions.dart';
 import '../common/page/message_page.dart';
 import '../feature/city/page/city_page.dart';

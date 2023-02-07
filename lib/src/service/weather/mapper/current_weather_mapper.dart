@@ -1,11 +1,4 @@
-import '../../../domain/entity/common/location.dart';
-import '../../../domain/entity/weather/celcius.dart';
-import '../../../domain/entity/weather/conditions.dart';
-import '../../../domain/entity/weather/current_weather.dart';
-import '../../../domain/entity/weather/geo.dart';
-import '../../../domain/entity/weather/temperatures.dart';
-import '../../../domain/entity/weather/weather.dart';
-import '../../../domain/entity/weather/wind.dart';
+import '../../../domain_layer.dart';
 import '../model/current_weather_model.dart';
 
 /// CityMapper converts [CurrentWeatherModel] to [CurrentWeather] entity.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qty/qty.dart';
 
-import '../../../../domain/usecase/preferences_usecase.dart';
+import '../../../../domain_layer.dart';
 import 'unit_dropdown.dart';
 
 class WindSpeedUnitDropdown extends UnitDropdownWidget {

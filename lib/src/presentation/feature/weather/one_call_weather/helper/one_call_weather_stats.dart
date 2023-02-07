@@ -1,9 +1,6 @@
 import 'dart:math';
 
-import '../../../../../domain/entity/weather/celcius.dart';
-import '../../../../../domain/entity/weather/geo.dart';
-import '../../../../../domain/entity/weather/one_call_weather.dart';
-import '../../../../../domain/entity/weather/weather.dart';
+import '../../../../../domain_layer.dart';
 
 class OneCallWeatherStats {
   OneCallWeatherStats(OneCallWeather oneCallWeather)

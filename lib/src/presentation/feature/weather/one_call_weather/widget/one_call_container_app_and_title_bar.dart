@@ -2,10 +2,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../../domain/entity/weather/city.dart';
-import '../../../../../domain/entity/weather/current_weather.dart';
-import '../../../../../domain/entity/weather/weather.dart';
-import '../../../../../domain/provider/providers.dart';
+import '../../../../../domain_layer.dart';
 import '../../../../common/widget/cut_and_flip_ad.dart';
 import '../../../../feature/settings/widget/open_end_drawer_button.dart';
 import '../../widget/color_range_mixin.dart';

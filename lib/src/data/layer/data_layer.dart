@@ -5,8 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../objectbox.g.dart';
 import '../../core/layer/app_layer.dart';
-import '../../domain/repository/cities_repository.dart';
-import '../../domain/repository/preferences_repository.dart';
+import '../../domain_layer.dart';
 import '../model/city_model.dart';
 import '../model/preference_model.dart';
 import '../repository/objectbox_cities_repository.dart';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:weather_colors/src/domain/entity/time_zone/time_zone.dart';
+import 'package:weather_colors/src/domain_layer.dart';
 import 'package:weather_colors/src/service/time/mapper/time_zone_mapper.dart';
 import 'package:weather_colors/src/service/time/model/time_zone_model.dart';
 

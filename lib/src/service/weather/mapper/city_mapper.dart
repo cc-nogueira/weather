@@ -1,4 +1,4 @@
-import '../../../domain/entity/weather/city.dart';
+import '../../../domain_layer.dart';
 import '../model/city_location_model.dart';
 import 'location_mapper.dart';
 

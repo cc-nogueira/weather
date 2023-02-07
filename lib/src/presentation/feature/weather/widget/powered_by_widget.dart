@@ -49,13 +49,12 @@ class _PoweredByBase extends StatelessWidget {
             child: Image(
               fit: BoxFit.contain,
               alignment: Alignment.bottomCenter,
-              image: AssetImage(assetName, package: '_presentation_layer'),
+              image: AssetImage(assetName),
             ),
           ),
           SizedBox(
             height: 0.4 * height,
-            child: FittedBox(
-                child: Text(text, textAlign: TextAlign.end, style: TextStyle(color: textColor))),
+            child: FittedBox(child: Text(text, textAlign: TextAlign.end, style: TextStyle(color: textColor))),
           ),
         ],
       );

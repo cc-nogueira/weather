@@ -3,8 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../../../domain/entity/weather/celcius.dart';
-import '../../../../../domain/usecase/preferences_usecase.dart';
+import '../../../../../domain_layer.dart';
 import '../../../../l10n/translations.dart';
 import '../../../../provider/presentation_providers.dart';
 import '../../widget/temperature_mixin.dart';

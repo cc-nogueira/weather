@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 
-import '../../../../../domain/entity/weather/celcius.dart';
-import '../../../../../domain/entity/weather/city.dart';
-import '../../../../../domain/entity/weather/weather.dart';
-import '../../../../../domain/provider/providers.dart';
-import '../../../../../domain/usecase/preferences_usecase.dart';
+import '../../../../../domain_layer.dart';
 import '../../../../l10n/translations.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_mixin.dart';

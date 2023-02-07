@@ -1,6 +1,5 @@
 import '../../../objectbox.g.dart';
-import '../../domain/entity/common/preference.dart';
-import '../../domain/repository/preferences_repository.dart';
+import '../../domain_layer.dart';
 import '../mapper/preference_mapper.dart';
 import '../model/preference_model.dart';
 import 'objectbox_repository.dart';

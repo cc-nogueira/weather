@@ -4,9 +4,9 @@ import 'package:meta/meta.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../core/layer/app_layer.dart';
-import '../../data/layer/data_layer.dart';
-import '../../domain/layer/domain_layer.dart';
-import '../../presentation/layer/presentation_layer.dart';
+import '../../data_layer.dart';
+import '../../domain_layer.dart';
+import '../../presentation_layer.dart';
 import '../../service/layer/service_layer.dart';
 import '../../service/time/service/time_api_service.dart';
 import '../../service/weather/service/open_weather_service.dart';

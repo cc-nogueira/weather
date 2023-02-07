@@ -6,9 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../../../../domain/entity/weather/one_call_weather.dart';
-import '../../../../../domain/entity/weather/weather.dart';
-import '../../../../../domain/provider/providers.dart';
+import '../../../../../domain_layer.dart';
 import '../helper/one_call_weather_stats.dart';
 import 'chart_widget.dart';
 

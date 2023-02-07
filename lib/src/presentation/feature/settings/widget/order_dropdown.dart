@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../domain/entity/weather/weather_order.dart';
-import '../../../../domain/layer/domain_layer.dart';
-import '../../../../domain/usecase/preferences_usecase.dart';
+import '../../../../domain_layer.dart';
 import '../../../l10n/translations.dart';
 
 class OrderDropdown extends ConsumerWidget {

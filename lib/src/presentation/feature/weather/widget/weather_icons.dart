@@ -97,14 +97,11 @@ class WeatherIcons {
 
   Image cloudy(double size, Color color) => _image('assets/weather/wi-cloudy.png', size, color);
 
-  Image cloudyGusts(double size, Color color) =>
-      _image('assets/weather/wi-cloudy-gusts.png', size, color);
+  Image cloudyGusts(double size, Color color) => _image('assets/weather/wi-cloudy-gusts.png', size, color);
 
-  Image dayCloudy(double size, Color color) =>
-      _image('assets/weather/wi-day-cloudy.png', size, color);
+  Image dayCloudy(double size, Color color) => _image('assets/weather/wi-day-cloudy.png', size, color);
 
-  Image dayCloudyGusts(double size, Color color) =>
-      _image('assets/weather/wi-day-cloudy-gusts.png', size, color);
+  Image dayCloudyGusts(double size, Color color) => _image('assets/weather/wi-day-cloudy-gusts.png', size, color);
 
   Image dayFog(double size, Color color) => _image('assets/weather/wi-day-fog.png', size, color);
 
@@ -112,36 +109,27 @@ class WeatherIcons {
 
   Image dayHaze(double size, Color color) => _image('assets/weather/wi-day-haze.png', size, color);
 
-  Image dayLightning(double size, Color color) =>
-      _image('assets/weather/wi-day-lightning.png', size, color);
+  Image dayLightning(double size, Color color) => _image('assets/weather/wi-day-lightning.png', size, color);
 
   Image dayRain(double size, Color color) => _image('assets/weather/wi-day-rain.png', size, color);
 
-  Image dayRainMix(double size, Color color) =>
-      _image('assets/weather/wi-day-rain-mix.png', size, color);
+  Image dayRainMix(double size, Color color) => _image('assets/weather/wi-day-rain-mix.png', size, color);
 
-  Image dayShowers(double size, Color color) =>
-      _image('assets/weather/wi-day-showers.png', size, color);
+  Image dayShowers(double size, Color color) => _image('assets/weather/wi-day-showers.png', size, color);
 
-  Image daySleet(double size, Color color) =>
-      _image('assets/weather/wi-day-sleet.png', size, color);
+  Image daySleet(double size, Color color) => _image('assets/weather/wi-day-sleet.png', size, color);
 
   Image daySnow(double size, Color color) => _image('assets/weather/wi-day-snow.png', size, color);
 
-  Image daySprinkle(double size, Color color) =>
-      _image('assets/weather/wi-day-sprinkle.png', size, color);
+  Image daySprinkle(double size, Color color) => _image('assets/weather/wi-day-sprinkle.png', size, color);
 
-  Image dayStormShowers(double size, Color color) =>
-      _image('assets/weather/wi-day-storm-showers.png', size, color);
+  Image dayStormShowers(double size, Color color) => _image('assets/weather/wi-day-storm-showers.png', size, color);
 
-  Image daySunny(double size, Color color) =>
-      _image('assets/weather/wi-day-sunny.png', size, color);
+  Image daySunny(double size, Color color) => _image('assets/weather/wi-day-sunny.png', size, color);
 
-  Image daySunnyOvercast(double size, Color color) =>
-      _image('assets/weather/wi-day-sunny-overcast.png', size, color);
+  Image daySunnyOvercast(double size, Color color) => _image('assets/weather/wi-day-sunny-overcast.png', size, color);
 
-  Image dayThunderstorm(double size, Color color) =>
-      _image('assets/weather/wi-day-thunderstorm.png', size, color);
+  Image dayThunderstorm(double size, Color color) => _image('assets/weather/wi-day-thunderstorm.png', size, color);
 
   Image dust(double size, Color color) => _image('assets/weather/wi-dust.png', size, color);
 
@@ -151,43 +139,32 @@ class WeatherIcons {
 
   Image hot(double size, Color color) => _image('assets/weather/wi-hot.png', size, color);
 
-  Image hurricane(double size, Color color) =>
-      _image('assets/weather/wi-hurricane.png', size, color);
+  Image hurricane(double size, Color color) => _image('assets/weather/wi-hurricane.png', size, color);
 
-  Image lightning(double size, Color color) =>
-      _image('assets/weather/wi-lightning.png', size, color);
+  Image lightning(double size, Color color) => _image('assets/weather/wi-lightning.png', size, color);
 
   Image na(double size, Color color) => _image('assets/weather/wi-na.png', size, color);
 
-  Image nightCloudy(double size, Color color) =>
-      _image('assets/weather/wi-night-alt-cloudy.png', size, color);
+  Image nightCloudy(double size, Color color) => _image('assets/weather/wi-night-alt-cloudy.png', size, color);
 
   Image nightCloudyGusts(double size, Color color) =>
       _image('assets/weather/wi-night-alt-cloudy-gusts.png', size, color);
 
-  Image nightHail(double size, Color color) =>
-      _image('assets/weather/wi-night-alt-hail.png', size, color);
+  Image nightHail(double size, Color color) => _image('assets/weather/wi-night-alt-hail.png', size, color);
 
-  Image nightLightning(double size, Color color) =>
-      _image('assets/weather/wi-night-alt-lightning.png', size, color);
+  Image nightLightning(double size, Color color) => _image('assets/weather/wi-night-alt-lightning.png', size, color);
 
-  Image nightRain(double size, Color color) =>
-      _image('assets/weather/wi-night-alt-rain.png', size, color);
+  Image nightRain(double size, Color color) => _image('assets/weather/wi-night-alt-rain.png', size, color);
 
-  Image nightRainMix(double size, Color color) =>
-      _image('assets/weather/wi-night-alt-rain-mix.png', size, color);
+  Image nightRainMix(double size, Color color) => _image('assets/weather/wi-night-alt-rain-mix.png', size, color);
 
-  Image nightShowers(double size, Color color) =>
-      _image('assets/weather/wi-night-alt-showers.png', size, color);
+  Image nightShowers(double size, Color color) => _image('assets/weather/wi-night-alt-showers.png', size, color);
 
-  Image nightSleet(double size, Color color) =>
-      _image('assets/weather/wi-night-alt-sleet.png', size, color);
+  Image nightSleet(double size, Color color) => _image('assets/weather/wi-night-alt-sleet.png', size, color);
 
-  Image nightSnow(double size, Color color) =>
-      _image('assets/weather/wi-night-alt-snow.png', size, color);
+  Image nightSnow(double size, Color color) => _image('assets/weather/wi-night-alt-snow.png', size, color);
 
-  Image nightSprinkle(double size, Color color) =>
-      _image('assets/weather/wi-night-alt-sprinkle.png', size, color);
+  Image nightSprinkle(double size, Color color) => _image('assets/weather/wi-night-alt-sprinkle.png', size, color);
 
   Image nightStormShowers(double size, Color color) =>
       _image('assets/weather/wi-night-alt-storm-showers.png', size, color);
@@ -195,11 +172,9 @@ class WeatherIcons {
   Image nightThunderstorm(double size, Color color) =>
       _image('assets/weather/wi-night-alt-thunderstorm.png', size, color);
 
-  Image nightClear(double size, Color color) =>
-      _image('assets/weather/wi-night-clear.png', size, color);
+  Image nightClear(double size, Color color) => _image('assets/weather/wi-night-clear.png', size, color);
 
-  Image nightFog(double size, Color color) =>
-      _image('assets/weather/wi-night-fog.png', size, color);
+  Image nightFog(double size, Color color) => _image('assets/weather/wi-night-fog.png', size, color);
 
   Image rain(double size, Color color) => _image('assets/weather/wi-rain.png', size, color);
 
@@ -213,22 +188,17 @@ class WeatherIcons {
 
   Image snow(double size, Color color) => _image('assets/weather/wi-snow.png', size, color);
 
-  Image snowflakeCold(double size, Color color) =>
-      _image('assets/weather/wi-snowflake-cold.png', size, color);
+  Image snowflakeCold(double size, Color color) => _image('assets/weather/wi-snowflake-cold.png', size, color);
 
   Image sprinkle(double size, Color color) => _image('assets/weather/wi-sprinkle.png', size, color);
 
-  Image stormShowers(double size, Color color) =>
-      _image('assets/weather/wi-storm-showers.png', size, color);
+  Image stormShowers(double size, Color color) => _image('assets/weather/wi-storm-showers.png', size, color);
 
-  Image strongWind(double size, Color color) =>
-      _image('assets/weather/wi-strong-wind.png', size, color);
+  Image strongWind(double size, Color color) => _image('assets/weather/wi-strong-wind.png', size, color);
 
-  Image thermometer(double size, Color color) =>
-      _image('assets/weather/wi-thermometer.png', size, color);
+  Image thermometer(double size, Color color) => _image('assets/weather/wi-thermometer.png', size, color);
 
-  Image thunderstorm(double size, Color color) =>
-      _image('assets/weather/wi-thunderstorm.png', size, color);
+  Image thunderstorm(double size, Color color) => _image('assets/weather/wi-thunderstorm.png', size, color);
 
   Image tornado(double size, Color color) => _image('assets/weather/wi-tornado.png', size, color);
 
@@ -238,6 +208,5 @@ class WeatherIcons {
 
 // ------------------------
 
-  Image _image(String name, double size, Color color) =>
-      Image.asset(name, width: size, height: size, package: '_presentation_layer', color: color);
+  Image _image(String name, double size, Color color) => Image.asset(name, width: size, height: size, color: color);
 }

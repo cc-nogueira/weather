@@ -2,8 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../../../domain/entity/weather/city.dart';
-import '../../../../domain/entity/weather/weather.dart';
+import '../../../../domain_layer.dart';
 import 'weather_icon_hero.dart';
 import 'weather_icons.dart';
 

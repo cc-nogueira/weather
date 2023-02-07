@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../../domain/entity/common/location.dart';
-import '../../../../../domain/provider/providers.dart';
-import '../../../../../domain/usecase/weather_usecase.dart';
+import '../../../../../domain_layer.dart';
 
 mixin OneCallWeatherRefreshMixin {
   Future<void> refresh(WidgetRef ref, ScaffoldMessengerState messenger, Location location) async {

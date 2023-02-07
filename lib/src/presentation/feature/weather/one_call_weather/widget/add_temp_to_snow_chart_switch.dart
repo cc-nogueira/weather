@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../../domain/layer/domain_layer.dart';
-import '../../../../../domain/usecase/preferences_usecase.dart';
+import '../../../../../domain_layer.dart';
 import 'add_temperature_switch.dart';
 
 class AddTemperatureToSnowChartSwitch extends AddTemperatureSwitch {

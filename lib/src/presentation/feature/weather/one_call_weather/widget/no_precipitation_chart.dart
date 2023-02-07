@@ -3,9 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qty/qty.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../../../domain/entity/weather/one_call_weather.dart';
-import '../../../../../domain/entity/weather/weather.dart';
-import '../../../../../domain/usecase/preferences_usecase.dart';
+import '../../../../../domain_layer.dart';
 import '../../../../l10n/translations.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/rain_mixin.dart';

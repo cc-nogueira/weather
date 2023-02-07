@@ -2,9 +2,7 @@ import 'package:objectbox/internal.dart' show QueryIntegerProperty;
 import 'package:objectbox/objectbox.dart' hide Entity;
 
 import '../../../objectbox.g.dart' show Box, ToMany, ToOne;
-import '../../domain/entity/common/entity.dart';
-import '../../domain/exception/entity_not_found_exception.dart';
-import '../../domain/repository/entity_stream_repository.dart';
+import '../../domain_layer.dart';
 import '../mapper/entity_mapper.dart';
 import '../model/model.dart';
 

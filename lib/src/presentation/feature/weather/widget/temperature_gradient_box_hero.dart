@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/entity/weather/city.dart';
+import '../../../../domain_layer.dart';
 
 class TemperatureGradientBoxHero extends StatelessWidget {
   const TemperatureGradientBoxHero({super.key, required this.city, required this.gradient});

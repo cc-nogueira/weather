@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/utils/string_utils.dart';
-import '../../../../domain/entity/weather/city.dart';
-import '../../../../domain/entity/weather/weather.dart';
+import '../../../../domain_layer.dart';
 import '../../../common/helper/hero_flight_shuttle_builder.dart';
 
 class WeatherConditionsHero extends StatelessWidget {
