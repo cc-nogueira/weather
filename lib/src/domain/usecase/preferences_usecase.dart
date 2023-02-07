@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meta/meta.dart';
 import 'package:qty/qty.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../entity/common/language_option.dart';
 import '../entity/common/preference.dart';
 import '../entity/weather/weather_order.dart';
 import '../layer/domain_layer.dart';
 import '../repository/preferences_repository.dart';
+
+part 'preferences_usecase.g.dart';
 
 /// LanguageOption preference provider
 final languageOptionProvider = Provider<LanguageOption>((ref) {
@@ -62,6 +65,10 @@ final precipitationUnitProvider = Provider<Unit<Speed>>((ref) {
   final usecase = ref.watch(preferencesUsecaseProvider);
   return ref.watch(usecase._precipitationUnitProvider);
 });
+
+@Riverpod(keepAlive: true)
+PreferencesUsecase preferencesUsecase(PreferencesUsecaseRef ref) =>
+    PreferencesUsecase(ref: ref, repository: domainLayer.dataProvision.preferencesRepositoryBuilder());
 
 /// PreferencesUsecase manages a well defined domain of preferences.
 ///

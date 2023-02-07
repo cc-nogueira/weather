@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../provider/providers.dart';
+import 'state/metronome_state.dart';
 
 part 'app_lifecycle_usecase.g.dart';
 

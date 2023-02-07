@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../domain_layer.dart';
+import '../../../app/state/system_locales_state.dart';
 import '../../../l10n/translations.dart';
 
 /// Language preference drop down.
@@ -32,7 +33,7 @@ class LanguageDropdown extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentOption = ref.watch(languageOptionProvider);
-    final locales = ref.watch(systemLocalesProvider);
+    final locales = ref.watch(systemLocalesStateProvider);
     final tr = Translations.of(context)!;
     final options = LanguageOption.languageOptions(locales, currentOption);
     return Align(

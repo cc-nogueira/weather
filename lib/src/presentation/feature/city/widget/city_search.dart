@@ -64,7 +64,7 @@ class _CitySearch extends ConsumerWidget {
     if (city.name.isEmpty) {
       return const SizedBox();
     }
-    return ref.watch(citiesSearchProvider(city)).when(
+    return ref.watch(weatherCitiesSearchProvider(city)).when(
           loading: _loading,
           data: (data) => _showResults(context, data),
           error: (error, _) => _showError(context, error),

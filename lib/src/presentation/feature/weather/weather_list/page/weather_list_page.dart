@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../../domain_layer.dart';
+import '../../../../app/routes/routes.dart';
 import '../../../../common/desktop/container_with_title_bar.dart';
 import '../../../../common/page/loading_page.dart';
 import '../../../../common/page/message_page.dart';
 import '../../../../l10n/translations.dart';
-import '../../../../routes/routes.dart';
 import '../../../settings/widget/open_end_drawer_button.dart';
 import '../../../settings/widget/preferences_app_bar.dart';
 import '../../../settings/widget/preferences_drawer.dart';

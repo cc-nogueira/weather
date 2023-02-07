@@ -1,39 +1,25 @@
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../objectbox.g.dart';
-import '../../core/layer/app_layer.dart';
 import '../../domain_layer.dart';
 import '../model/city_model.dart';
 import '../model/preference_model.dart';
 import '../repository/objectbox_cities_repository.dart';
 import '../repository/objectbox_preferences_repository.dart';
 
-part 'data_layer.g.dart';
+/// Data layer singleton.
+final dataLayer = DataLayer();
 
-/// Data Layer provider
-@Riverpod(keepAlive: true)
-DataLayer dataLayer(DataLayerRef ref) => DataLayer();
-
-/// PreferencesRepositoy implementation provider
-@Riverpod(keepAlive: true)
-PreferencesRepository preferencesRepository(PreferencesRepositoryRef ref) =>
-    ref.watch(dataLayerProvider).preferencesRepository;
-
-/// CitiesRepository implementation provider
-@Riverpod(keepAlive: true)
-CitiesRepository citiesRepository(CitiesRepositoryRef ref) => ref.watch(dataLayerProvider).citiesRepository;
-
-/// DataLayer has the responsibility to provide repository implementaions.
+/// DataLayer has the responsibility to provision repository implementaions.
 ///
-/// This layer uses the init() async call to open the ObjectBox local store.
-/// It requires no configuration after init().
-///
-/// DataLayer provides repository implementations, also accessible through providers.
-/// @see Data Layer providers.dart file.
+/// This layer uses the init() async call to initialize the local store.
 class DataLayer extends AppLayer {
+  /// Implementations provisioned by the data layer
+  late final DataLayerProvision provision;
+
   /// Private objectbox store.
   late final Store _store;
 
@@ -41,7 +27,11 @@ class DataLayer extends AppLayer {
   ///
   /// Opens the local ObjectBox Store (async routine).
   @override
-  Future<void> init() async {
+  Future<void> init(Ref ref) async {
+    provision = DataLayerProvision(
+      preferencesRepositoryBuilder: () => ObjectboxPreferencesRepository(box: _store.box<PreferenceModel>()),
+      citiesRepositoryBuilder: () => ObjectboxCitiesRepository(box: _store.box<CityModel>()),
+    );
     _store = await _openStore();
   }
 
@@ -50,12 +40,6 @@ class DataLayer extends AppLayer {
   /// Will close the ObjectBox Store when App is exiting.
   @override
   void dispose() => _store.close();
-
-  /// Getter for PreferencesRepository implementation with ObjectBox.
-  PreferencesRepository get preferencesRepository => ObjectboxPreferencesRepository(box: _store.box<PreferenceModel>());
-
-  /// Getter for CitiesRepositoty implementation with ObjectBox.
-  CitiesRepository get citiesRepository => ObjectboxCitiesRepository(box: _store.box<CityModel>());
 
   /// Internal async routine to open the ObjectBox Store.
   Future<Store> _openStore() async {

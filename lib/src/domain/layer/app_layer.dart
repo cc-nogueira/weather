@@ -1,9 +1,6 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-part 'app_layer.g.dart';
-
-@Riverpod(keepAlive: true)
-AppLayer coreLayer(CoreLayerRef ref) => const AppLayer();
+typedef ProvisionBuilder<T> = T Function();
 
 /// Application Layer Class
 ///
@@ -31,7 +28,7 @@ class AppLayer {
   ///
   /// Application start up will wait on the init of each layer in onion order, from the most internal
   /// towards external layers.
-  Future<void> init() async {}
+  Future<void> init(Ref ref) async {}
 
   /// Layer disposing.
   ///

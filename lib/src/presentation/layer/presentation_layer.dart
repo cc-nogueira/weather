@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/layer/app_layer.dart';
 import '../../domain_layer.dart';
 import '../common/mobile_add/ad_state.dart';
 import '../provider/presentation_providers.dart';
 
-part 'presentation_layer.g.dart';
+/// Presentation layer singleton.
+final presentationLayer = PresentationLayer();
 
-@Riverpod(keepAlive: true)
-PresentationLayer presentationLayer(PresentationLayerRef ref) => PresentationLayer(
-      appLifecycleUsecase: ref.watch(appLifecycleUsecaseProvider),
-      adState: ref.watch(adStateProvider),
-    );
-
+/// PresentationLayer watches the AppLifecycle to trigger use case invocation to start and stop metronomes.
 class PresentationLayer extends AppLayer with WidgetsBindingObserver {
-  const PresentationLayer({required this.appLifecycleUsecase, required this.adState});
-
-  final AppLifecycleUsecase appLifecycleUsecase;
-  final AdState adState;
+  late final AppLifecycleUsecase appLifecycleUsecase;
+  late final AdState adState;
 
   @override
-  Future<void> init() async {
+  Future<void> init(Ref ref) async {
+    appLifecycleUsecase = ref.read(appLifecycleUsecaseProvider);
+    adState = ref.read(adStateProvider);
     WidgetsBinding.instance.addObserver(this);
     await adState.init();
   }

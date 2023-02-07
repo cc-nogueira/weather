@@ -1,19 +1,31 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/layer/app_layer.dart';
+import '../../domain/layer/app_layer.dart';
+import '../../domain/layer/domain_layer.dart';
+import '../time/service/time_api_service.dart';
+import '../weather/service/open_weather_service.dart';
 
-part 'service_layer.g.dart';
-
-/// Service Layer provider
-@Riverpod(keepAlive: true)
-ServiceLayer serviceLayer(ServiceLayerRef ref) => const ServiceLayer();
+/// Service layer singleton.
+final serviceLayer = ServiceLayer();
 
 /// ServiceLayer has the responsibility to provide service implementaions.
 ///
-/// ServiceLayer exposed implementations are also available through providers.
+/// This layer uses the init() call to initialize this it's object.
 class ServiceLayer extends AppLayer {
-  const ServiceLayer();
+  /// Implementations provisioned by the service layer
+  late final ServiceLayerProvision provision;
 
   // TODO: Configure your OpenWeather key
-  static const String openWeatherAppId = '<your-OpenWeather-key>';
+  static const String openWeatherAppId = '';
+
+  /// Initilize this layer object.
+  ///
+  /// Define the layer provision.
+  @override
+  Future<void> init(Ref ref) async {
+    provision = ServiceLayerProvision(
+      timeZoneServiceBuilder: () => const TimeApiService(),
+      weatherServiceBuilder: () => OpenWeatherService(appId: openWeatherAppId, ref: ref),
+    );
+  }
 }

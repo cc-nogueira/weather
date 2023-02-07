@@ -1,6 +1,24 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import '../entity/weather/city.dart';
 import '../exception/validation_exception.dart';
+import '../layer/domain_layer.dart';
 import 'entity_stream_usecase.dart';
+
+part 'cities_usecase.g.dart';
+
+@Riverpod(keepAlive: true)
+CitiesUsecase citiesUsecase(CitiesUsecaseRef ref) =>
+    CitiesUsecase(repository: domainLayer.dataProvision.citiesRepositoryBuilder());
+
+/// StreamProvider to watch the live list of registered cities.
+/// This providers is hooked to the City repository state.
+final watchAllCitiesProvider = StreamProvider((ref) => ref.watch(citiesUsecaseProvider).watchAll());
+
+/// StreamProvider to watch the live list of registered cities.
+/// This providers is hooked to the City repository state.
+// final watchAllCitiesProvider = StreamProvider((ref) => ref.watch(citiesUsecaseProvider).watchAll());
 
 /// CitiesUsecase is a typical EntityStreamUsecase.
 ///

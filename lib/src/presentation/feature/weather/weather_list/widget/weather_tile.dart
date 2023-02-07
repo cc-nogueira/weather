@@ -5,8 +5,8 @@ import 'package:qty/qty.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../../../domain_layer.dart';
+import '../../../../app/routes/routes.dart';
 import '../../../../l10n/translations.dart';
-import '../../../../routes/routes.dart';
 import '../../widget/color_range_mixin.dart';
 import '../../widget/temperature_gradient_box_hero.dart';
 import '../../widget/temperature_hero.dart';

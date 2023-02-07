@@ -6,7 +6,7 @@ import '../../domain_layer.dart';
 import '../mapper/entity_mapper.dart';
 import '../model/model.dart';
 
-/// Implements all EntityStreamRepository intergace.
+/// Implements all EntityStreamRepository interface.
 ///
 /// Subclass must implement get idProperty, even without declaring the return
 /// type (as it comes from Objectbox internal import), something like:

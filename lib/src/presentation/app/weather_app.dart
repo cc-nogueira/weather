@@ -7,7 +7,7 @@ import '../../domain_layer.dart';
 import '../common/page/message_page.dart';
 import '../l10n/translations.dart';
 import '../provider/presentation_providers.dart';
-import '../routes/routes.dart';
+import 'routes/routes.dart';
 
 /// Weather App is this application MaterialApp.
 ///

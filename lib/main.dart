@@ -7,8 +7,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logging/logging.dart';
 
-import 'src/di/layer/di_layer.dart';
+import 'src/data_layer.dart';
+import 'src/domain_layer.dart';
 import 'src/presentation_layer.dart';
+import 'src/service_layer.dart';
+
+final layers = [
+  domainLayer,
+  dataLayer,
+  serviceLayer,
+  presentationLayer,
+];
 
 void main() {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -56,10 +65,9 @@ void main() {
 /// Async initializes all layers through DI Layer init method.
 /// Removes splash screen just before returning the main app widget.
 final appProvider = FutureProvider.autoDispose<Widget>((ref) async {
+  ref.onDispose(disposeLayers);
   _configureLogger();
-
-  final diLayer = ref.watch(diLayerProvider);
-  await diLayer.init();
+  await _initLayers(ref);
 
   const app = WeatherApp();
   if (Platform.isAndroid || Platform.isIOS) {
@@ -74,4 +82,17 @@ void _configureLogger() {
     // ignore: avoid_print
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
+}
+
+Future<void> _initLayers(Ref ref) async {
+  for (final layer in layers.reversed) {
+    await layer.init(ref);
+  }
+  domainLayer.provisioning(dataProvision: dataLayer.provision, serviceProvision: serviceLayer.provision);
+}
+
+void disposeLayers() {
+  for (final layer in layers.reversed) {
+    layer.dispose();
+  }
 }
