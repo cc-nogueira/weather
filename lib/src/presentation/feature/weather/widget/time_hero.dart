@@ -5,9 +5,9 @@ import '../../../../domain_layer.dart';
 import '../../../common/helper/hero_flight_shuttle_builder.dart';
 
 class TimeHero extends ConsumerWidget {
-  const TimeHero(this.city, {super.key, this.color, this.fontSize});
+  const TimeHero(this.weather, {super.key, this.color, this.fontSize});
 
-  final City city;
+  final Weather weather;
   final Color? color;
   final double? fontSize;
 
@@ -20,29 +20,24 @@ class TimeHero extends ConsumerWidget {
       fontSize: fontSize,
     );
 
-    return ref.watch(timeZoneProvider(city.location!)).when(
-          loading: () => Text('--:--', style: style),
-          error: (_, _) => Text('--:--', style: style),
-          data: (data) => _TimeHero(city: city, timeZone: data, style: style),
-        );
+    return _TimeHero(weather: weather, style: style);
   }
 }
 
 class _TimeHero extends ConsumerWidget {
-  const _TimeHero({required this.city, required this.timeZone, required this.style});
+  const _TimeHero({required this.weather, required this.style});
 
-  final City city;
-  final TimeZone timeZone;
+  final Weather weather;
   final TextStyle style;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final now = ref.watch(minuteMetronomeProvider).toUtc();
-    final localTime = now.add(timeZone.currentUtcOffsetDuration);
+    final localTime = now.add(Duration(milliseconds: weather.geo.timeShiftMillis));
     final hr = localTime.hour.toString();
     final min = localTime.minute.toString().padLeft(2, '0');
     return Hero(
-      tag: '${city.id}_time',
+      tag: 'lat_${weather.geo.location.latitude}_long_${weather.geo.location.longitude}_time',
       flightShuttleBuilder: heroFittedBoxFlightShuttleBuilder,
       child: Text('$hr:$min', style: style),
     );

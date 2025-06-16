@@ -22,7 +22,7 @@ class TimeAndWeatherBar extends StatelessWidget with WeatherMixin {
   Widget build(BuildContext context) {
     final leading = Padding(
       padding: const EdgeInsets.only(left: 8.0),
-      child: TimeHero(city, fontSize: 32.0),
+      child: TimeHero(weather, fontSize: 32.0),
     );
     final trailing = Padding(
       padding: const EdgeInsets.only(right: 8.0),

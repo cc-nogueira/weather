@@ -234,7 +234,7 @@ class _WeatherTile extends _WeatherTileBase with ColorRangeMixin, WeatherMixin, 
     children: [
       Column(
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: [TemperatureHero(city: city, weather: weather), TimeHero(city)],
+        children: [TemperatureHero(city: city, weather: weather), TimeHero(weather)],
       ),
       isRefreshing ? loadingIndicator : heroWeatherIcon(city, weather),
     ],
