@@ -11,14 +11,7 @@ import '../helper/one_call_weather_stats.dart';
 import 'chart_widget.dart';
 
 abstract class HourlyChart extends ChartWidget {
-  const HourlyChart({
-    super.key,
-    required this.weather,
-    required this.stats,
-    super.height,
-    super.margin,
-    super.padding,
-  });
+  const HourlyChart({super.key, required this.weather, required this.stats, super.height, super.margin, super.padding});
 
   final OneCallWeather weather;
   final OneCallWeatherStats stats;
@@ -64,38 +57,35 @@ abstract class HourlyChart extends ChartWidget {
   Widget? chartTitle(BuildContext context, List<HourlyWeather> data) => null;
 
   Widget chart(BuildContext context, BoxConstraints constraints, List<HourlyWeather> data) => SizedBox(
-        height: height,
-        child: SfCartesianChart(
-          series: series(data),
-          margin: padding,
-          palette: palette,
-          primaryXAxis: primaryXAxis(context, constraints, data),
-          primaryYAxis: primaryYAxis(context, data),
-          axes: axes,
-          zoomPanBehavior: ZoomPanBehavior(
-            enablePanning: true,
-            zoomMode: ZoomMode.x,
-          ),
-        ),
-      );
+    height: height,
+    child: SfCartesianChart(
+      series: series(data),
+      margin: padding,
+      palette: palette,
+      primaryXAxis: primaryXAxis(context, constraints, data),
+      primaryYAxis: primaryYAxis(context, data),
+      axes: axes,
+      zoomPanBehavior: ZoomPanBehavior(enablePanning: true, zoomMode: ZoomMode.x),
+    ),
+  );
 
   bool shouldReplaceChart(List<HourlyWeather> data) => false;
 
   Widget chartReplacement(BuildContext context, List<HourlyWeather> data) => Container();
 
-  List<ChartSeries> series(List<HourlyWeather> data);
+  List<CartesianSeries> series(List<HourlyWeather> data);
 
   List<ChartAxis> get axes => [];
 
-  ChartAxis? primaryYAxis(BuildContext context, List<HourlyWeather> data) => NumericAxis(
-        isVisible: primaryYAxisIsVisible,
-        name: primaryYAxisName,
-        anchorRangeToVisiblePoints: anchorRangeToVisiblePoints,
-        rangePadding: primaryYAxisRangePadding,
-        axisLabelFormatter: primaryYAxisLabelFormatter,
-        minimum: primaryYAxisMinimum,
-        maximum: primaryYAxisMaximum,
-      );
+  ChartAxis primaryYAxis(BuildContext context, List<HourlyWeather> data) => NumericAxis(
+    isVisible: primaryYAxisIsVisible,
+    name: primaryYAxisName,
+    anchorRangeToVisiblePoints: anchorRangeToVisiblePoints,
+    rangePadding: primaryYAxisRangePadding,
+    axisLabelFormatter: primaryYAxisLabelFormatter,
+    minimum: primaryYAxisMinimum,
+    maximum: primaryYAxisMaximum,
+  );
 
   bool get anchorRangeToVisiblePoints => false;
 
@@ -103,7 +93,7 @@ abstract class HourlyChart extends ChartWidget {
 
   String? get primaryYAxisName => null;
 
-  ChartRangePadding? get primaryYAxisRangePadding => null;
+  ChartRangePadding get primaryYAxisRangePadding => ChartRangePadding.none;
 
   ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => null;
 
@@ -111,26 +101,26 @@ abstract class HourlyChart extends ChartWidget {
 
   double? get primaryYAxisMaximum => null;
 
-  ChartAxis? primaryXAxis(BuildContext context, BoxConstraints constraints, List<HourlyWeather> data) => DateTimeAxis(
-        interval: primaryXAxisInterval,
-        desiredIntervals: desiredIntervals(constraints),
-        intervalType: DateTimeIntervalType.hours,
-        plotBands: plotBands(data),
-        multiLevelLabels: multiLevelLabels(context, data),
-        multiLevelLabelStyle: multiLevelLabelStyle,
-        autoScrollingMode: AutoScrollingMode.start,
-        autoScrollingDelta: autoScrollingDelta(constraints),
-        axisLabelFormatter: axisLabelFormatter,
-        enableAutoIntervalOnZooming: false,
-      );
+  ChartAxis primaryXAxis(BuildContext context, BoxConstraints constraints, List<HourlyWeather> data) => DateTimeAxis(
+    interval: primaryXAxisInterval,
+    desiredIntervals: desiredIntervals(constraints),
+    intervalType: DateTimeIntervalType.hours,
+    plotBands: plotBands(data),
+    multiLevelLabels: multiLevelLabels(context, data),
+    multiLevelLabelStyle: multiLevelLabelStyle,
+    autoScrollingMode: AutoScrollingMode.start,
+    autoScrollingDelta: autoScrollingDelta(constraints),
+    axisLabelFormatter: axisLabelFormatter,
+    enableAutoIntervalOnZooming: false,
+  );
 
   ChartLabelFormatterCallback? get axisLabelFormatter => (AxisLabelRenderDetails axisLabelRenderArgs) {
-        final dt = DateTime.fromMillisecondsSinceEpoch(axisLabelRenderArgs.value.toInt());
-        if (dt.hour % 3 != 0) {
-          return ChartAxisLabel('', null);
-        }
-        return ChartAxisLabel(axisLabelRenderArgs.text, null);
-      };
+    final dt = DateTime.fromMillisecondsSinceEpoch(axisLabelRenderArgs.value.toInt());
+    if (dt.hour % 3 != 0) {
+      return ChartAxisLabel('', null);
+    }
+    return ChartAxisLabel(axisLabelRenderArgs.text, null);
+  };
 
   double get primaryXAxisInterval => 3.0;
 
@@ -154,7 +144,7 @@ abstract class HourlyChart extends ChartWidget {
   MultiLevelLabelStyle get multiLevelLabelStyle =>
       const MultiLevelLabelStyle(borderType: MultiLevelBorderType.rectangle);
 
-  List<PlotBand>? plotBands(List<HourlyWeather> data) {
+  List<PlotBand> plotBands(List<HourlyWeather> data) {
     final bands = <PlotBand>[];
     if (data.isNotEmpty) {
       late DateTime end;
@@ -171,17 +161,10 @@ abstract class HourlyChart extends ChartWidget {
     return bands;
   }
 
-  void _addBand(
-    List<PlotBand> bands, {
-    required DateTime start,
-    required DateTime end,
-  }) {
-    bands.add(PlotBand(
-      start: start,
-      end: end,
-      color: Colors.lightGreen[700]!,
-      opacity: bands.length.isEven ? 0.0 : 0.1,
-    ));
+  void _addBand(List<PlotBand> bands, {required DateTime start, required DateTime end}) {
+    bands.add(
+      PlotBand(start: start, end: end, color: Colors.lightGreen[700]!, opacity: bands.length.isEven ? 0.0 : 0.1),
+    );
   }
 
   List<DateTimeMultiLevelLabel>? multiLevelLabels(BuildContext context, List<HourlyWeather> data) {

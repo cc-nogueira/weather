@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../entity/weather/city.dart';
@@ -9,6 +8,7 @@ import 'entity_stream_usecase.dart';
 part 'cities_usecase.g.dart';
 
 @Riverpod(keepAlive: true)
+// ignore: deprecated_member_use_from_same_package
 CitiesUsecase citiesUsecase(CitiesUsecaseRef ref) =>
     CitiesUsecase(repository: domainLayer.dataProvision.citiesRepositoryBuilder());
 

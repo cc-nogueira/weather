@@ -27,8 +27,7 @@ abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget wit
           children: [
             if (title != null)
               Padding(
-                padding:
-                    EdgeInsets.only(left: padding.left, right: padding.right, top: padding.top),
+                padding: EdgeInsets.only(left: padding.left, right: padding.right, top: padding.top),
                 child: title,
               ),
             chart(context),
@@ -54,8 +53,11 @@ abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget wit
   Widget? chartTitle(BuildContext context) {
     return Row(
       children: [
-        Text(Translations.of(context)!.scale_chart_title(chartName),
-            style: titleStyle(context), textScaleFactor: 1.2),
+        Text(
+          Translations.of(context)!.scale_chart_title(chartName),
+          style: titleStyle(context),
+          textScaler: TextScaler.linear(1.2),
+        ),
         Text('(${unit.symbol})', style: titleUnitsStyle(context)),
       ],
     );
@@ -63,28 +65,28 @@ abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget wit
 
   List<double> get seriesData;
 
-  List<ChartSeries> series(List<double> data);
+  List<CartesianSeries> series(List<double> data);
 
-  ChartAxis? primaryXAxis(BuildContext context, List<double> data) => NumericAxis(
-        majorTickLines: const MajorTickLines(size: 0),
-        desiredIntervals: 4,
-        axisLabelFormatter: (details) => ChartAxisLabel('', null),
-        multiLevelLabels: multiLevelLabels(context, data),
-        multiLevelLabelStyle: multiLevelLabelStyle,
-      );
+  ChartAxis primaryXAxis(BuildContext context, List<double> data) => NumericAxis(
+    majorTickLines: const MajorTickLines(size: 0),
+    desiredIntervals: 4,
+    axisLabelFormatter: (details) => ChartAxisLabel('', null),
+    multiLevelLabels: multiLevelLabels(context, data),
+    multiLevelLabelStyle: multiLevelLabelStyle,
+  );
 
   List<NumericMultiLevelLabel>? multiLevelLabels(BuildContext context, List<double> data) => null;
 
-  MultiLevelLabelStyle? get multiLevelLabelStyle => null;
+  MultiLevelLabelStyle get multiLevelLabelStyle => const MultiLevelLabelStyle();
 
-  ChartAxis? primaryYAxis(BuildContext context, List<double> data) => NumericAxis(
-        isVisible: true,
-        anchorRangeToVisiblePoints: false,
-        rangePadding: null,
-        axisLabelFormatter: primaryYAxisLabelFormatter,
-        minimum: primaryYAxisMinimum,
-        maximum: primaryYAxisMaximum,
-      );
+  ChartAxis primaryYAxis(BuildContext context, List<double> data) => NumericAxis(
+    isVisible: true,
+    anchorRangeToVisiblePoints: false,
+    rangePadding: ChartRangePadding.none,
+    axisLabelFormatter: primaryYAxisLabelFormatter,
+    minimum: primaryYAxisMinimum,
+    maximum: primaryYAxisMaximum,
+  );
 
   ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => null;
   double? get primaryYAxisMinimum => null;
@@ -92,12 +94,13 @@ abstract class ScaleChart<T extends PhysicalProperty<T>> extends ChartWidget wit
 }
 
 abstract class IntensityScaleChart<T extends PhysicalProperty<T>> extends ScaleChart<T> {
-  const IntensityScaleChart(
-      {super.key,
-      super.height,
-      required this.intensityGender,
-      required super.unit,
-      required super.chartName});
+  const IntensityScaleChart({
+    super.key,
+    super.height,
+    required this.intensityGender,
+    required super.unit,
+    required super.chartName,
+  });
 
   Map<ScaleIntensity, List<double>> get intensityMap;
 
@@ -105,11 +108,11 @@ abstract class IntensityScaleChart<T extends PhysicalProperty<T>> extends ScaleC
 
   @override
   List<double> get seriesData => [
-        ...intensityMap[ScaleIntensity.light]!,
-        ...intensityMap[ScaleIntensity.moderate]!,
-        ...intensityMap[ScaleIntensity.strong]!,
-        ...intensityMap[ScaleIntensity.storm]!,
-      ];
+    ...intensityMap[ScaleIntensity.light]!,
+    ...intensityMap[ScaleIntensity.moderate]!,
+    ...intensityMap[ScaleIntensity.strong]!,
+    ...intensityMap[ScaleIntensity.storm]!,
+  ];
 
   @override
   List<NumericMultiLevelLabel>? multiLevelLabels(BuildContext context, List<double> data) {
@@ -126,6 +129,6 @@ abstract class IntensityScaleChart<T extends PhysicalProperty<T>> extends ScaleC
   }
 
   @override
-  MultiLevelLabelStyle? get multiLevelLabelStyle =>
+  MultiLevelLabelStyle get multiLevelLabelStyle =>
       const MultiLevelLabelStyle(borderType: MultiLevelBorderType.rectangle);
 }

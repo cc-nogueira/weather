@@ -68,12 +68,12 @@ class _DesktopAdWidget extends StatelessWidget {
   /// Const constructor.
   const _DesktopAdWidget();
 
-  static final _hashBandDevUrl = Uri.parse('https://hash-bang.dev');
+  static final _florestaDevUrl = Uri.parse('https://dev.floresta.cc');
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _openHashBangUrl,
+      onTap: _openFlorestaDevUrl,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -107,10 +107,10 @@ class _DesktopAdWidget extends StatelessWidget {
     );
   }
 
-  void _openHashBangUrl() async {
-    final canLaunch = await canLaunchUrl(_hashBandDevUrl);
+  void _openFlorestaDevUrl() async {
+    final canLaunch = await canLaunchUrl(_florestaDevUrl);
     if (canLaunch) {
-      await launchUrl(_hashBandDevUrl);
+      await launchUrl(_florestaDevUrl);
     }
   }
 }

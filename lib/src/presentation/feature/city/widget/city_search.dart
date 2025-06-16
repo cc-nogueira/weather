@@ -24,7 +24,7 @@ class CitySearch extends ConsumerWidget {
             cityProvider: cityProvider,
             onCitySelected: onCitySelected,
           ),
-          error: (_, __) => Container(),
+          error: (_, _) => Container(),
           data: (data) => _CitySearch(
             cityProvider: cityProvider,
             onCitySelected: onCitySelected,

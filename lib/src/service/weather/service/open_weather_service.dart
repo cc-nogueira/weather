@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meta/meta.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,6 +17,7 @@ part 'open_weather_service.g.dart';
 
 /// Weather service implementation provider.
 @Riverpod(keepAlive: true)
+// ignore: deprecated_member_use_from_same_package
 OpenWeatherService weatherService(WeatherServiceRef ref) =>
     OpenWeatherService(appId: ServiceLayer.openWeatherAppId, ref: ref);
 
@@ -29,10 +28,7 @@ OpenWeatherService weatherService(WeatherServiceRef ref) =>
 /// Access CurrentWeather by City or Location.
 class OpenWeatherService implements WeatherService {
   /// Constructor must receive a valid OpenWeather AppID and a Riverpod Reader.
-  OpenWeatherService({
-    required String appId,
-    required this.ref,
-  }) : client = OpenWeatherClient(appId: appId);
+  OpenWeatherService({required String appId, required this.ref}) : client = OpenWeatherClient(appId: appId);
 
   /// OpenWeather client.
   @internal
@@ -119,5 +115,5 @@ class OpenWeatherService implements WeatherService {
   }
 
   /// Internal - get selected language option stored in a Riverpod provider or use system locale.
-  String get _language => ref.read(languageOptionProvider).locale?.languageCode ?? window.locale.languageCode;
+  String get _language => ref.read(languageOptionProvider).locale?.languageCode ?? 'en';
 }

@@ -1,7 +1,5 @@
-import 'package:objectbox/internal.dart' show QueryIntegerProperty;
 import 'package:objectbox/objectbox.dart' hide Entity;
 
-import '../../../objectbox.g.dart' show Box, ToMany, ToOne;
 import '../../domain_layer.dart';
 import '../mapper/entity_mapper.dart';
 import '../model/model.dart';
@@ -16,10 +14,10 @@ import '../model/model.dart';
 /// in subclasses with no ToMany relations, where [updataDependetsToMany] may be
 /// invoked.
 abstract class ObjectboxRepository<E extends Entity, M extends Model> implements EntityStreamRepository<E> {
-  /// Const constructor with a Box<M> and a Mapper<E,M>.
+  /// Const constructor with a Box and a Mapper.
   const ObjectboxRepository({required this.box, required this.mapper});
 
-  /// ObjectBox Box<M>
+  /// ObjectBox Box
   final Box<M> box;
 
   /// Mapper for Entity / Model conversions.
@@ -160,7 +158,7 @@ abstract class ObjectboxRepository<E extends Entity, M extends Model> implements
   /// model [ToMany] relations, for example:
   ///
   ///   void updateDependents({required ContactModel toSaveModel, required ContactModel boxModel}) {
-  ///     updateDependentsToMany<ContactPhoneModel>(
+  ///     updateDependentsToMany(
   ///       depBox: phonesBox,
   ///       toSaveList: toSaveModel.phones,
   ///       boxList: boxModel.phones,

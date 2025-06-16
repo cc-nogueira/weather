@@ -14,7 +14,7 @@ abstract class WeatherService {
   ///
   /// Name and Country are required to be filled,
   /// while State is optional to narrow results.
-  Future<List<City>> searchCitiesLike(city, {int limit = 10});
+  Future<List<City>> searchCitiesLike(City city, {int limit = 10});
 
   /// Fetch city location from remote service.
   ///

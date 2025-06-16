@@ -8,7 +8,7 @@ import 'objectbox_repository.dart';
 ///
 /// Implements domain CitiesRepository as an ObjectBoxRepository
 class ObjectboxCitiesRepository extends ObjectboxRepository<City, CityModel> implements CitiesRepository {
-  /// Const construtor receives a Box<CityModel>.
+  /// Const construtor receives a Box.
   const ObjectboxCitiesRepository({required super.box}) : super(mapper: const CityMapper());
 
   /// Id of my model

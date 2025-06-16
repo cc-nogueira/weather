@@ -10,6 +10,7 @@ part 'time_api_service.g.dart';
 
 /// TimeZone service implementaion provider
 @Riverpod(keepAlive: true)
+// ignore: deprecated_member_use_from_same_package
 TimeApiService timeApiService(TimeApiServiceRef ref) => const TimeApiService();
 
 /// Time API service provided by TimeAPI.io.

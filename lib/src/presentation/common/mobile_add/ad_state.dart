@@ -40,17 +40,16 @@ abstract class AdState {
     AdEventCallback? onAdImpression,
     OnPaidEventCallback? onPaidEvent,
     AdEventCallback? onAdClicked,
-  }) =>
-      BannerAdListener(
-        onAdLoaded: onAdLoaded ?? defaultOnLoaded,
-        onAdFailedToLoad: onAdFailedToLoad ?? defaultOnAdFailedToLoad,
-        onAdOpened: onAdOpened ?? defaultOnAdOpened,
-        onAdClosed: onAdClosed ?? defaultOnAdClosed,
-        onAdWillDismissScreen: onAdWillDismissScreen ?? defaultOnAdWillDismissScreen,
-        onAdImpression: onAdImpression ?? defaultOnAdImpression,
-        onPaidEvent: onPaidEvent,
-        onAdClicked: onAdClicked,
-      );
+  }) => BannerAdListener(
+    onAdLoaded: onAdLoaded ?? defaultOnLoaded,
+    onAdFailedToLoad: onAdFailedToLoad ?? defaultOnAdFailedToLoad,
+    onAdOpened: onAdOpened ?? defaultOnAdOpened,
+    onAdClosed: onAdClosed ?? defaultOnAdClosed,
+    onAdWillDismissScreen: onAdWillDismissScreen ?? defaultOnAdWillDismissScreen,
+    onAdImpression: onAdImpression ?? defaultOnAdImpression,
+    onPaidEvent: onPaidEvent,
+    onAdClicked: onAdClicked,
+  );
 
   /// Default onLoaded callback logs a message.
   void defaultOnLoaded(_) => log.fine('Ad loaded.');
@@ -141,22 +140,21 @@ class AdMobState extends AdState {
     AdEventCallback? onAdImpression,
     OnPaidEventCallback? onPaidEvent,
     AdEventCallback? onAdClicked,
-  }) =>
-      BannerAd(
-        size: size ?? AdSize.banner,
-        adUnitId: bannerAdUnitId,
-        listener: listener(
-          onAdLoaded: onAdLoaded,
-          onAdFailedToLoad: onAdFailedToLoad,
-          onAdOpened: onAdOpened,
-          onAdClosed: onAdClosed,
-          onAdWillDismissScreen: onAdWillDismissScreen,
-          onAdImpression: onAdImpression,
-          onPaidEvent: onPaidEvent,
-          onAdClicked: onAdClicked,
-        ),
-        request: const AdRequest(),
-      );
+  }) => BannerAd(
+    size: size ?? AdSize.banner,
+    adUnitId: bannerAdUnitId,
+    listener: listener(
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
+      onAdOpened: onAdOpened,
+      onAdClosed: onAdClosed,
+      onAdWillDismissScreen: onAdWillDismissScreen,
+      onAdImpression: onAdImpression,
+      onPaidEvent: onPaidEvent,
+      onAdClicked: onAdClicked,
+    ),
+    request: const AdRequest(),
+  );
 
   /// Redefines default onAdFailedToLoad to dispose the failing Ad.
   @override
@@ -170,12 +168,7 @@ class AdMobState extends AdState {
 ///
 /// This provides a Fake no actions implementation that only calls the onLoaded listener callback.
 class FakeBannerAd implements BannerAd {
-  FakeBannerAd({
-    required this.size,
-    required this.listener,
-    required this.request,
-    this.responseInfo,
-  });
+  FakeBannerAd({required this.size, required this.listener, required this.request, this.responseInfo});
 
   @override
   AdSize size;
@@ -205,4 +198,7 @@ class FakeBannerAd implements BannerAd {
   Future<void> load() async {
     Future.delayed(const Duration(milliseconds: 300), () => listener.onAdLoaded?.call(this));
   }
+
+  @override
+  bool get isMounted => true;
 }

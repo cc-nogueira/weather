@@ -42,8 +42,9 @@ class WeatherTile extends ConsumerWidget {
   final City city;
   final bool showCountry;
   final VoidCallback onRemove;
-  final temperatureNotifierProvider =
-      StateNotifierProvider<TemperatureNotifier, Celcius?>((_) => TemperatureNotifier());
+  final temperatureNotifierProvider = StateNotifierProvider<TemperatureNotifier, Celcius?>(
+    (_) => TemperatureNotifier(),
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,20 +57,22 @@ class WeatherTile extends ConsumerWidget {
 
     final asyncValue = ref.watch(currentWeatherByLocationAutoRefreshProvider(location));
     final tile = asyncValue.when(
-      loading: () => _WeatherLoadingTile(
-        translations: translations,
-        city: city,
-        showCountry: showCountry,
-        onRemove: onRemove,
-        onTap: () => {},
-      ),
-      error: (_, __) => _WeatherErrorTile(
-        translations: translations,
-        city: city,
-        showCountry: showCountry,
-        onRemove: onRemove,
-        onTap: () {},
-      ),
+      loading:
+          () => _WeatherLoadingTile(
+            translations: translations,
+            city: city,
+            showCountry: showCountry,
+            onRemove: onRemove,
+            onTap: () => {},
+          ),
+      error:
+          (_, _) => _WeatherErrorTile(
+            translations: translations,
+            city: city,
+            showCountry: showCountry,
+            onRemove: onRemove,
+            onTap: () {},
+          ),
       data: (data) {
         _updateTemperature(ref, data.weather);
         return _WeatherTile(
@@ -103,12 +106,12 @@ class WeatherTile extends ConsumerWidget {
   }
 
   SlidableAction get _slideTrashAction => SlidableAction(
-        onPressed: (_) => onRemove(),
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
-        icon: Icons.delete,
-        label: translations.label_remove,
-      );
+    onPressed: (_) => onRemove(),
+    backgroundColor: Colors.red,
+    foregroundColor: Colors.white,
+    icon: Icons.delete,
+    label: translations.label_remove,
+  );
 
   void _updateTemperature(WidgetRef ref, Weather weather) {
     Future.delayed(const Duration(milliseconds: 10), () {
@@ -144,23 +147,14 @@ abstract class _WeatherTileBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: GestureDetector(
-          onTap: onTap,
-          child: weatherDecorated(context, tile(context)),
-        ),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    child: GestureDetector(onTap: onTap, child: weatherDecorated(context, tile(context))),
+  );
 
   Widget weatherDecorated(BuildContext context, Widget child) => child;
 
   Widget tile(BuildContext context) {
-    final info = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        title(context),
-        subtitle(context),
-      ],
-    );
+    final info = Column(crossAxisAlignment: CrossAxisAlignment.start, children: [title(context), subtitle(context)]);
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, top: 12.0, right: 8.0, bottom: 12.0),
       child: Row(
@@ -171,19 +165,16 @@ abstract class _WeatherTileBase extends StatelessWidget {
   }
 
   Widget title(BuildContext context) => WeatherTitleHero(
-        city: city,
-        showCountry: showCountry,
-        style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w500),
-      );
+    city: city,
+    showCountry: showCountry,
+    style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w500),
+  );
 
   Widget get loadingIndicator => const SizedBox(
-        height: 60,
-        width: 60,
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: CircularProgressIndicator(color: Colors.grey),
-        ),
-      );
+    height: 60,
+    width: 60,
+    child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator(color: Colors.grey)),
+  );
 }
 
 class _WeatherLoadingTile extends _WeatherTileBase {
@@ -239,18 +230,15 @@ class _WeatherTile extends _WeatherTileBase with ColorRangeMixin, WeatherMixin, 
 
   @override
   Widget trailing(BuildContext context) => Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              TemperatureHero(city: city, weather: weather),
-              TimeHero(city),
-            ],
-          ),
-          isRefreshing ? loadingIndicator : heroWeatherIcon(city, weather),
-        ],
-      );
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [TemperatureHero(city: city, weather: weather), TimeHero(city)],
+      ),
+      isRefreshing ? loadingIndicator : heroWeatherIcon(city, weather),
+    ],
+  );
 
   @override
   Widget subtitle(BuildContext context) {
@@ -278,17 +266,17 @@ class _WeatherTile extends _WeatherTileBase with ColorRangeMixin, WeatherMixin, 
 
   @override
   Widget weatherDecorated(BuildContext context, Widget child) => Stack(
-        children: [
-          TemperatureGradientBoxHero(
-            city: city,
-            gradient: temperatureGradient(
-              startColor: Theme.of(context).colorScheme.surfaceVariant,
-              celcius: weather.conditions.temperatures.temperature,
-              begin: const Alignment(0.3, -2.8),
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child,
-        ],
-      );
+    children: [
+      TemperatureGradientBoxHero(
+        city: city,
+        gradient: temperatureGradient(
+          startColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+          celcius: weather.conditions.temperatures.temperature,
+          begin: const Alignment(0.3, -2.8),
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child,
+    ],
+  );
 }

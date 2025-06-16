@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meta/meta.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -7,7 +8,7 @@ part 'app_lifecycle_usecase.g.dart';
 
 /// AppLifecycleUsecase singleton provider
 @Riverpod(keepAlive: true)
-AppLifecycleUsecase appLifecycleUsecase(AppLifecycleUsecaseRef ref) => AppLifecycleUsecase(ref: ref);
+AppLifecycleUsecase appLifecycleUsecase(Ref ref) => AppLifecycleUsecase(ref: ref);
 
 /// AppLifecycleUsecase instance is called by the PresentationLayer on App Lifecycle changes.
 ///
@@ -18,7 +19,7 @@ class AppLifecycleUsecase {
 
   /// Internal Riverpod ref used to invalidate metronomes when app goes to background.
   @internal
-  final ProviderRef ref;
+  final Ref ref;
 
   /// onPaused event.
   ///

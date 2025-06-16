@@ -56,11 +56,13 @@ class _HourlySnowChart extends HourlyChartWithTemperature<Speed> with SnowMixin 
 
   @override
   Widget basicChartTitle(BuildContext context, Translations translations) {
-    return Row(children: [
-      Text(translations.snow_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
-      Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
-      helpButton(context, (_) => const SnowScaleWidget()),
-    ]);
+    return Row(
+      children: [
+        Text(translations.snow_chart_title, style: titleStyle(context), textScaler: TextScaler.linear(1.2)),
+        Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
+        helpButton(context, (_) => const SnowScaleWidget()),
+      ],
+    );
   }
 
   @override
@@ -120,20 +122,17 @@ class _HourlySnowChart extends HourlyChartWithTemperature<Speed> with SnowMixin 
 
   @override
   ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => (AxisLabelRenderDetails details) {
-        late final double value;
-        if (unit == Speed().meterPerSecond) {
-          value = details.value.toDouble();
-        } else {
-          value = Quantity(amount: details.value.toDouble(), unit: unit).convertTo(Speed().meterPerSecond).amount;
-        }
-        return ChartAxisLabel(
-          details.text,
-          details.textStyle.copyWith(color: snowColor(value)),
-        );
-      };
+    late final double value;
+    if (unit == Speed().meterPerSecond) {
+      value = details.value.toDouble();
+    } else {
+      value = Quantity(amount: details.value.toDouble(), unit: unit).convertTo(Speed().meterPerSecond).amount;
+    }
+    return ChartAxisLabel(details.text, details.textStyle.copyWith(color: snowColor(value)));
+  };
 
   @override
-  List<ChartSeries> series(List<HourlyWeather> data) {
+  List<CartesianSeries> series(List<HourlyWeather> data) {
     return [
       ColumnSeries<HourlyWeather, DateTime>(
         name: 'Snow',

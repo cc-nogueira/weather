@@ -32,20 +32,22 @@ class OneCallWeatherContainerAppAndTitleBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncValue = ref.watch(currentWeatherByLocationAutoRefreshProvider(city.location!));
     return asyncValue.maybeWhen(
-      data: (data) => _OneCallWeatherAppAndTitleBar(
-        height: preferredSize.height + appWindow.titleBarHeight,
-        city: city,
-        weather: data.weather,
-        isRefreshing: asyncValue.isRefreshing || isRefreshing,
-        child: child,
-      ),
-      orElse: () => _OneCallWeatherAppAndTitleBar(
-        height: preferredSize.height,
-        city: city,
-        weather: initialWeather.weather,
-        isRefreshing: isRefreshing,
-        child: child,
-      ),
+      data:
+          (data) => _OneCallWeatherAppAndTitleBar(
+            height: preferredSize.height + appWindow.titleBarHeight,
+            city: city,
+            weather: data.weather,
+            isRefreshing: asyncValue.isRefreshing || isRefreshing,
+            child: child,
+          ),
+      orElse:
+          () => _OneCallWeatherAppAndTitleBar(
+            height: preferredSize.height,
+            city: city,
+            weather: initialWeather.weather,
+            isRefreshing: isRefreshing,
+            child: child,
+          ),
     );
   }
 }
@@ -75,12 +77,7 @@ class _OneCallWeatherAppAndTitleBar extends StatelessWidget with ColorRangeMixin
           child: Stack(
             children: [
               TemperatureGradientBoxHero(city: city, gradient: _gradient(context)),
-              Column(
-                children: [
-                  _titleBar(context),
-                  _timeAndWeatherBar(context),
-                ],
-              ),
+              Column(children: [_titleBar(context), _timeAndWeatherBar(context)]),
             ],
           ),
         ),
@@ -90,33 +87,17 @@ class _OneCallWeatherAppAndTitleBar extends StatelessWidget with ColorRangeMixin
   }
 
   Widget _titleBar(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        children: [
-          _backButton,
-          _dragTitle(context),
-          _trailingControls(context),
-        ],
-      ),
-    );
+    return IntrinsicHeight(child: Row(children: [_backButton, _dragTitle(context), _trailingControls(context)]));
   }
 
-  Widget get _backButton => const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
-        child: BackButton(),
-      );
+  Widget get _backButton => const Padding(padding: EdgeInsets.symmetric(horizontal: 8.0), child: BackButton());
 
   Widget _dragTitle(BuildContext context) => Expanded(
-        child: GestureDetector(
-          onPanStart: (_) => appWindow.startDragging(),
-          child: WeatherTitleHero(
-            city: city,
-            showCountry: false,
-            style: _titleStyle(context),
-            maxLines: 2,
-          ),
-        ),
-      );
+    child: GestureDetector(
+      onPanStart: (_) => appWindow.startDragging(),
+      child: WeatherTitleHero(city: city, showCountry: false, style: _titleStyle(context), maxLines: 2),
+    ),
+  );
 
   Widget _trailingControls(BuildContext context) {
     final windowButtonColors = WindowButtonColors(iconNormal: Colors.white);
@@ -146,10 +127,7 @@ class _OneCallWeatherAppAndTitleBar extends StatelessWidget with ColorRangeMixin
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
-          children: [
-            OneCallWeatherRefreshButton(city: city),
-            const OpenEndDrawerButton(),
-          ],
+          children: [OneCallWeatherRefreshButton(city: city), const OpenEndDrawerButton()],
         ),
       ],
     );
@@ -165,10 +143,10 @@ class _OneCallWeatherAppAndTitleBar extends StatelessWidget with ColorRangeMixin
   Color _foreColor(BuildContext context) {
     final theme = Theme.of(context);
     final color = theme.appBarTheme.foregroundColor ?? theme.colorScheme.onSurface;
-    if (theme.brightness == Brightness.dark || color.opacity != 1.0) {
+    if (theme.brightness == Brightness.dark || color.a != 1.0) {
       return color;
     }
-    return color.withOpacity(0.7);
+    return color.withAlpha(178);
   }
 
   Widget _timeAndWeatherBar(BuildContext context) {
@@ -177,20 +155,16 @@ class _OneCallWeatherAppAndTitleBar extends StatelessWidget with ColorRangeMixin
       child: Center(
         child: CutAndFlipAd(
           startingCutLength: 65.0,
-          child: TimeAndWeatherBar(
-            city: city,
-            weather: weather,
-            isRefreshing: isRefreshing,
-          ),
+          child: TimeAndWeatherBar(city: city, weather: weather, isRefreshing: isRefreshing),
         ),
       ),
     );
   }
 
   Gradient _gradient(BuildContext context) => temperatureGradient(
-        startColor: Theme.of(context).colorScheme.surfaceVariant,
-        celcius: weather.conditions.temperatures.temperature,
-        begin: const Alignment(-0.5, -1.5),
-        end: Alignment.bottomRight,
-      );
+    startColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+    celcius: weather.conditions.temperatures.temperature,
+    begin: const Alignment(-0.5, -1.5),
+    end: Alignment.bottomRight,
+  );
 }

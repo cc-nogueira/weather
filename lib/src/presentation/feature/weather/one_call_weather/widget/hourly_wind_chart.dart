@@ -60,7 +60,7 @@ class _HourlyWindChart extends HourlyChartWithTemperature<Speed> with WindMixin 
   @override
   Widget basicChartTitle(BuildContext context, Translations translations) {
     return Row(children: [
-      Text(translations.wind_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(translations.wind_chart_title, style: titleStyle(context), textScaler: TextScaler.linear(1.2)),
       Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
       helpButton(context, (_) => const WindScaleWidget()),
     ]);
@@ -99,7 +99,7 @@ class _HourlyWindChart extends HourlyChartWithTemperature<Speed> with WindMixin 
       SplineAreaSeries<HourlyWeather, DateTime>(
         name: 'WindArea',
         dataSource: data,
-        color: palette[0].withOpacity(0.6),
+        color: palette[0].withAlpha(153),
         gradient: colorGrad,
         dataLabelSettings: const DataLabelSettings(labelAlignment: ChartDataLabelAlignment.middle),
         xValueMapper: (item, idx) => item.localShiftedDateTime,

@@ -25,7 +25,7 @@ class OpenWeatherClient {
     final name = city.name.trim();
     final country = city.country.trim();
     if (name.trim().isEmpty) {
-      throw ArgumentError('city and country needed for weather info');
+      throw ArgumentError('city name needed for weather info');
     }
 
     final search = [
@@ -63,7 +63,7 @@ class OpenWeatherClient {
   ///
   /// Returns oneCall JSON for the given location.
   Future<Map<String, dynamic>> getOneCallJson(Location location, String languageCode) async {
-    final uri = Uri.https('api.openweathermap.org', '/data/2.5/onecall', {
+    final uri = Uri.https('api.openweathermap.org', '/data/3.0/onecall', {
       'lat': location.latitude.toString(),
       'lon': location.longitude.toString(),
       'exclude': 'minutely',

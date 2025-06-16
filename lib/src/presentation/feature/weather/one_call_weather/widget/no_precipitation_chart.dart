@@ -57,7 +57,7 @@ class _NoPrecipitationChart extends HourlyChart with ColorRangeMixin, RainMixin,
     final translations = Translations.of(context)!;
     return Row(
       children: [
-        Text(translations.precipitation_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(translations.precipitation_chart_title, style: titleStyle(context), textScaler: TextScaler.linear(1.2)),
         Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
       ],
     );
@@ -107,5 +107,5 @@ class _NoPrecipitationChart extends HourlyChart with ColorRangeMixin, RainMixin,
   }
 
   @override
-  List<ChartSeries> series(List<HourlyWeather> data) => [];
+  List<CartesianSeries> series(List<HourlyWeather> data) => [];
 }

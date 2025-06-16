@@ -14,6 +14,7 @@ import 'state/metronome_state.dart';
 part 'weather_usecase.g.dart';
 
 @Riverpod(keepAlive: true)
+// ignore: deprecated_member_use_from_same_package
 WeatherUsecase weatherUsecase(WeatherUsecaseRef ref) => WeatherUsecase(
       service: domainLayer.serviceProvision.weatherServiceBuilder(),
       log: Logger('usecase'),
@@ -23,6 +24,7 @@ WeatherUsecase weatherUsecase(WeatherUsecaseRef ref) => WeatherUsecase(
 /// This provider auto refreshs on currentWeatherMetronomeProvider.
 @Riverpod(keepAlive: true)
 Future<CurrentWeather> currentWeatherByLocationAutoRefresh(
+  // ignore: deprecated_member_use_from_same_package
     CurrentWeatherByLocationAutoRefreshRef ref, Location location) {
   ref.watch(currentWeatherMetronomeProvider);
   return ref.watch(weatherUsecaseProvider).getCurrentWeatherByLocation(location);
@@ -34,6 +36,7 @@ Future<CurrentWeather> currentWeatherByLocationAutoRefresh(
 /// The timestamp is avalilable to permit frequent refresh prevention.
 @Riverpod(keepAlive: true)
 Future<Tuple2<OneCallWeather, DateTime>> oneCallWeatherTupleByLocation(
+  // ignore: deprecated_member_use_from_same_package
   OneCallWeatherTupleByLocationRef ref,
   Location location,
 ) async {
@@ -47,6 +50,7 @@ Future<Tuple2<OneCallWeather, DateTime>> oneCallWeatherTupleByLocation(
 /// It invalidates the referenced provider when necessary (time elapsed > refreshInterval).
 @riverpod
 Future<OneCallWeather> oneCallWeatherByLocationAutoEvict(
+  // ignore: deprecated_member_use_from_same_package
   OneCallWeatherByLocationAutoEvictRef ref,
   Location location,
 ) async {
@@ -61,6 +65,7 @@ Future<OneCallWeather> oneCallWeatherByLocationAutoEvict(
 
 /// Provider for weather city search service accessed through the usecase.
 @riverpod
+// ignore: deprecated_member_use_from_same_package
 Future<List<City>> weatherCitiesSearch(WeatherCitiesSearchRef ref, City city) {
   return ref.watch(weatherUsecaseProvider).searchCitiesLike(city);
 }

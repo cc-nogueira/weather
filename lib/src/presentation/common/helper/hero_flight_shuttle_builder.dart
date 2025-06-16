@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 /// inside a FittedBox.
 Widget heroFittedBoxFlightShuttleBuilder(
   BuildContext _,
-  Animation<double> __,
-  HeroFlightDirection ___,
-  BuildContext ____,
+  Animation<double> _,
+  HeroFlightDirection _,
+  BuildContext _,
   BuildContext toContext,
 ) =>
     FittedBox(fit: BoxFit.fitWidth, child: toContext.widget);
@@ -19,7 +19,7 @@ Widget heroFittedBoxFlightShuttleBuilder(
 Widget heroTitleFlightShuttleBuilder(
   BuildContext _,
   Animation<double> animation,
-  HeroFlightDirection __,
+  HeroFlightDirection _,
   BuildContext fromContext,
   BuildContext toContext,
 ) =>

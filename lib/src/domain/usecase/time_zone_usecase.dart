@@ -10,11 +10,13 @@ import 'state/metronome_state.dart';
 part 'time_zone_usecase.g.dart';
 
 @Riverpod(keepAlive: true)
+// ignore: deprecated_member_use_from_same_package
 TimeZoneUsecase timeZoneUsecase(TimeZoneUsecaseRef ref) =>
     TimeZoneUsecase(service: domainLayer.serviceProvision.timeZoneServiceBuilder());
 
 /// Provider for a location timezone service accessed through the usecase.
 @riverpod
+// ignore: deprecated_member_use_from_same_package
 Future<TimeZone> timeZone(TimeZoneRef ref, Location location) {
   ref.watch(currentWeatherMetronomeProvider);
   return ref.watch(

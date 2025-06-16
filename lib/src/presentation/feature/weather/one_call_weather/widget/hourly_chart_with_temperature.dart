@@ -39,7 +39,7 @@ abstract class HourlyChartWithTemperature<T extends PhysicalProperty<T>> extends
           children: [
             basicChartTitle(context, translations),
             if (showTemperature && hasChart)
-              Text(' ${translations.word_and} ', style: titleStyle(context), textScaleFactor: 1.2),
+              Text(' ${translations.word_and} ', style: titleStyle(context), textScaler: TextScaler.linear(1.2)),
             if (showTemperature && hasChart)
               Text(' (${tempUnit.symbol})', style: titleUnitsStyle(context)!.copyWith(color: tempC)),
             if (showTemperature && hasChart) helpButton(context, (_) => const TemperatureScaleWidget()),
@@ -61,24 +61,24 @@ abstract class HourlyChartWithTemperature<T extends PhysicalProperty<T>> extends
 
   @override
   List<ChartAxis> get axes => [
-        if (showTemperature)
-          NumericAxis(
-            name: _temperatureYAxisName,
-            opposedPosition: true,
-            majorGridLines: const MajorGridLines(width: 0),
-            anchorRangeToVisiblePoints: anchorRangeToVisiblePoints,
-            rangePadding: ChartRangePadding.additional,
-            decimalPlaces: 0,
-            labelStyle: TextStyle(color: palette[1]),
-            axisLabelFormatter: _temperatureYAxisLabelFormatter,
-          ),
-      ];
+    if (showTemperature)
+      NumericAxis(
+        name: _temperatureYAxisName,
+        opposedPosition: true,
+        majorGridLines: const MajorGridLines(width: 0),
+        anchorRangeToVisiblePoints: anchorRangeToVisiblePoints,
+        rangePadding: ChartRangePadding.additional,
+        decimalPlaces: 0,
+        labelStyle: TextStyle(color: palette[1]),
+        axisLabelFormatter: _temperatureYAxisLabelFormatter,
+      ),
+  ];
 
   ChartLabelFormatterCallback? get _temperatureYAxisLabelFormatter =>
       (AxisLabelRenderDetails details) => ChartAxisLabel(
-            details.text,
-            details.textStyle.copyWith(color: temperatureColor(Celcius(details.value.toDouble()))),
-          );
+        details.text,
+        details.textStyle.copyWith(color: temperatureColor(Celcius(details.value.toDouble()))),
+      );
 
   LineSeries<HourlyWeather, DateTime> temperatureSeries(List<HourlyWeather> data) =>
       LineSeries<HourlyWeather, DateTime>(

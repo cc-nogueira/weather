@@ -7,10 +7,9 @@ class PageRouteBuilderWithFadeTransition extends PageRouteBuilder {
   PageRouteBuilderWithFadeTransition({
     required super.settings,
     required super.pageBuilder,
-    Duration transitionDuration = const Duration(milliseconds: 800),
+    super.transitionDuration = const Duration(milliseconds: 800),
   }) : super(
-          transitionDuration: transitionDuration,
           reverseTransitionDuration: transitionDuration,
-          transitionsBuilder: (_, anim, __, child) => FadeTransition(opacity: anim, child: child),
+         transitionsBuilder: (_, anim, _, child) => FadeTransition(opacity: anim, child: child),
         );
 }

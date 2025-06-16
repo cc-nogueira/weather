@@ -9,7 +9,7 @@ import 'objectbox_repository.dart';
 /// Implements domain PreferencesRepository as an ObjectBoxRepository
 class ObjectboxPreferencesRepository extends ObjectboxRepository<Preference, PreferenceModel>
     implements PreferencesRepository {
-  /// Const constructor receives a Box<PreferenceModel>.
+  /// Const constructor receives a Box.
   const ObjectboxPreferencesRepository({required super.box}) : super(mapper: const PreferenceMapper());
 
   /// Id of my model
@@ -17,7 +17,7 @@ class ObjectboxPreferencesRepository extends ObjectboxRepository<Preference, Pre
   get idProperty => PreferenceModel_.id;
 
   /// key property for query by Uuid
-  get keyProperty => PreferenceModel_.key;
+  QueryStringProperty<PreferenceModel> get keyProperty => PreferenceModel_.key;
 
   /// Get a preference by key.
   ///

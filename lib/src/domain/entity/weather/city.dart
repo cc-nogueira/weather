@@ -14,7 +14,7 @@ part 'city.freezed.dart';
 ///
 /// Provides sorting keys for alphabetical order and alphabetical by country order.
 @freezed
-class City with _$City implements Entity {
+abstract class City with _$City implements Entity {
   /// Freezed factory constructor.
   const factory City({
     @Default(0) int id,

@@ -56,11 +56,13 @@ class _HourlyRainChart extends HourlyChartWithTemperature<Speed> with RainMixin 
 
   @override
   Widget basicChartTitle(BuildContext context, Translations translations) {
-    return Row(children: [
-      Text(translations.rain_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
-      Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
-      helpButton(context, (_) => const RainScaleWidget()),
-    ]);
+    return Row(
+      children: [
+        Text(translations.rain_chart_title, style: titleStyle(context), textScaler: TextScaler.linear(1.2)),
+        Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
+        helpButton(context, (_) => const RainScaleWidget()),
+      ],
+    );
   }
 
   @override
@@ -120,30 +122,27 @@ class _HourlyRainChart extends HourlyChartWithTemperature<Speed> with RainMixin 
 
   @override
   ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => (AxisLabelRenderDetails details) {
-        late final double value;
-        if (unit == Speed().meterPerSecond) {
-          value = details.value.toDouble();
-        } else {
-          value = Quantity(amount: details.value.toDouble(), unit: unit).convertTo(Speed().meterPerSecond).amount;
-        }
-        return ChartAxisLabel(
-          details.text,
-          details.textStyle.copyWith(color: rainColor(value)),
-        );
-      };
+    late final double value;
+    if (unit == Speed().meterPerSecond) {
+      value = details.value.toDouble();
+    } else {
+      value = Quantity(amount: details.value.toDouble(), unit: unit).convertTo(Speed().meterPerSecond).amount;
+    }
+    return ChartAxisLabel(details.text, details.textStyle.copyWith(color: rainColor(value)));
+  };
 
   @override
-  List<ChartSeries> series(List<HourlyWeather> data) => [
-        ColumnSeries<HourlyWeather, DateTime>(
-          name: 'Rain',
-          dataSource: data,
-          xValueMapper: (data, idx) => data.localShiftedDateTime,
-          yValueMapper: (data, _) => _precipitationInChartUnit(data.conditions.rain1h ?? 0.0),
-          yAxisName: primaryYAxisName,
-          pointColorMapper: (hourly, idx) => rainColor(hourly.conditions.rain1h ?? 0.0),
-        ),
-        if (showTemperature) temperatureSeries(data),
-      ];
+  List<CartesianSeries> series(List<HourlyWeather> data) => [
+    ColumnSeries<HourlyWeather, DateTime>(
+      name: 'Rain',
+      dataSource: data,
+      xValueMapper: (data, idx) => data.localShiftedDateTime,
+      yValueMapper: (data, _) => _precipitationInChartUnit(data.conditions.rain1h ?? 0.0),
+      yAxisName: primaryYAxisName,
+      pointColorMapper: (hourly, idx) => rainColor(hourly.conditions.rain1h ?? 0.0),
+    ),
+    if (showTemperature) temperatureSeries(data),
+  ];
 
   double _precipitationInChartUnit(double dataValue) => Speed.millimetersPerHour(dataValue).convertTo(unit).amount;
 }

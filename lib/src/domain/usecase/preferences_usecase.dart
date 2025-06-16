@@ -67,6 +67,7 @@ final precipitationUnitProvider = Provider<Unit<Speed>>((ref) {
 });
 
 @Riverpod(keepAlive: true)
+// ignore: deprecated_member_use_from_same_package
 PreferencesUsecase preferencesUsecase(PreferencesUsecaseRef ref) =>
     PreferencesUsecase(ref: ref, repository: domainLayer.dataProvision.preferencesRepositoryBuilder());
 
@@ -108,9 +109,9 @@ class PreferencesUsecase {
   static const _initialTheme = ThemeMode.dark;
   static const _initialAddTempToCharts = false;
   static const _initialWeatherOrder = WeatherOrder.byTemp;
-  static get _initialTemperatureUnit => Temperature().celcius;
-  static get _initialWindSpeedUnit => Speed().knot;
-  static get _initialPrecipitationUnit => Speed().millimeterPerHour;
+  static Unit<Temperature> get _initialTemperatureUnit => Temperature().celcius;
+  static Unit<Speed> get _initialWindSpeedUnit => Speed().knot;
+  static Unit<Speed> get _initialPrecipitationUnit => Speed().millimeterPerHour;
 
   /// Internal Riverpod [Reader].
   @internal

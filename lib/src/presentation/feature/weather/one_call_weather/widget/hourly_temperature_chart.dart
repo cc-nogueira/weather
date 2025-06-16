@@ -58,7 +58,7 @@ class _HourlyTemperatureChart extends HourlyChart with ColorRangeMixin, Temperat
     final translations = Translations.of(context)!;
     return Row(
       children: [
-        Text(translations.temp_chart_title, style: titleStyle(context), textScaleFactor: 1.2),
+        Text(translations.temp_chart_title, style: titleStyle(context), textScaler: TextScaler.linear(1.2)),
         Text(' (${unit.symbol})', style: titleUnitsStyle(context)),
         helpButton(context, (_) => const TemperatureScaleWidget())
       ],
@@ -112,7 +112,7 @@ class _HourlyTemperatureChart extends HourlyChart with ColorRangeMixin, Temperat
       );
 
   @override
-  ChartRangePadding? get primaryYAxisRangePadding => ChartRangePadding.additional;
+  ChartRangePadding get primaryYAxisRangePadding => ChartRangePadding.additional;
 
   @override
   ChartLabelFormatterCallback? get primaryYAxisLabelFormatter => (AxisLabelRenderDetails details) {

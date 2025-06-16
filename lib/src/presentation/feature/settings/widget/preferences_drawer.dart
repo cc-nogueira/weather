@@ -9,7 +9,7 @@ import 'temperature_unit_dropdown.dart';
 import 'wind_speed_unit_dropdown.dart';
 
 class PreferencesDrawer extends StatelessWidget {
-  const PreferencesDrawer({Key? key}) : super(key: key);
+  const PreferencesDrawer({super.key});
 
   static const _padding = EdgeInsets.symmetric(horizontal: 12.0);
 

@@ -49,7 +49,10 @@ void main() {
   runApp(
     ProviderScope(
       child: Consumer(
-        builder: (_, ref, __) => ref.watch(appProvider).when(
+        builder:
+            (_, ref, _) => ref
+                .watch(appProvider)
+                .when(
               loading: () => loadingWidget,
               data: (app) => app,
               error: (error, _) => WeatherApp.error(error),

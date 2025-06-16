@@ -14,12 +14,7 @@ import 'one_call_weather_refresh_button.dart';
 import 'time_and_weather_bar.dart';
 
 class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  const OneCallWeatherAppBar({
-    super.key,
-    required this.city,
-    required this.initialWeather,
-    required this.isRefreshing,
-  });
+  const OneCallWeatherAppBar({super.key, required this.city, required this.initialWeather, required this.isRefreshing});
 
   @override
   final Size preferredSize = const Size.fromHeight(120);
@@ -32,29 +27,26 @@ class OneCallWeatherAppBar extends ConsumerWidget implements PreferredSizeWidget
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncValue = ref.watch(currentWeatherByLocationAutoRefreshProvider(city.location!));
     return asyncValue.maybeWhen(
-      data: (data) => _WeatherAppBar(
-        height: preferredSize.height,
-        city: city,
-        weather: data.weather,
-        isRefreshing: asyncValue.isRefreshing || isRefreshing,
-      ),
-      orElse: () => _WeatherAppBar(
-        height: preferredSize.height,
-        city: city,
-        weather: initialWeather.weather,
-        isRefreshing: isRefreshing,
-      ),
+      data:
+          (data) => _WeatherAppBar(
+            height: preferredSize.height,
+            city: city,
+            weather: data.weather,
+            isRefreshing: asyncValue.isRefreshing || isRefreshing,
+          ),
+      orElse:
+          () => _WeatherAppBar(
+            height: preferredSize.height,
+            city: city,
+            weather: initialWeather.weather,
+            isRefreshing: isRefreshing,
+          ),
     );
   }
 }
 
 class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMixin {
-  _WeatherAppBar({
-    required this.height,
-    required this.city,
-    required this.weather,
-    required this.isRefreshing,
-  });
+  _WeatherAppBar({required this.height, required this.city, required this.weather, required this.isRefreshing});
 
   final double height;
   final City city;
@@ -67,11 +59,7 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
     return AppBar(
       leading: const BackButton(),
       foregroundColor: _foreColor(context),
-      title: WeatherTitleHero(
-        city: city,
-        showCountry: false,
-        style: _titleStyle(context),
-      ),
+      title: WeatherTitleHero(city: city, showCountry: false, style: _titleStyle(context)),
       actions: [
         if (!Platform.isAndroid && !Platform.isIOS) OneCallWeatherRefreshButton(city: city),
         const OpenEndDrawerButton(),
@@ -88,10 +76,10 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
   Color _foreColor(BuildContext context) {
     final theme = Theme.of(context);
     final color = theme.appBarTheme.foregroundColor ?? theme.colorScheme.onSurface;
-    if (theme.brightness == Brightness.dark || color.opacity != 1.0) {
+    if (theme.brightness == Brightness.dark || color.a != 1.0) {
       return color;
     }
-    return color.withOpacity(0.7);
+    return color.withAlpha(178);
   }
 
   Widget _timeAndWeatherBar(BuildContext context) {
@@ -104,11 +92,7 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
           child: Center(
             child: CutAndFlipAd(
               startingCutLength: 65.0,
-              child: TimeAndWeatherBar(
-                city: city,
-                weather: weather,
-                isRefreshing: isRefreshing,
-              ),
+              child: TimeAndWeatherBar(city: city, weather: weather, isRefreshing: isRefreshing),
             ),
           ),
         ),
@@ -117,9 +101,9 @@ class _WeatherAppBar extends StatelessWidget with ColorRangeMixin, TemperatureMi
   }
 
   Gradient _gradient(BuildContext context) => temperatureGradient(
-        startColor: Theme.of(context).colorScheme.surfaceVariant,
-        celcius: weather.conditions.temperatures.temperature,
-        begin: const Alignment(-0.5, -1.5),
-        end: Alignment.bottomRight,
-      );
+    startColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+    celcius: weather.conditions.temperatures.temperature,
+    begin: const Alignment(-0.5, -1.5),
+    end: Alignment.bottomRight,
+  );
 }

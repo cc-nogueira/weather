@@ -22,7 +22,7 @@ class TimeHero extends ConsumerWidget {
 
     return ref.watch(timeZoneProvider(city.location!)).when(
           loading: () => Text('--:--', style: style),
-          error: (_, __) => Text('--:--', style: style),
+          error: (_, _) => Text('--:--', style: style),
           data: (data) => _TimeHero(city: city, timeZone: data, style: style),
         );
   }

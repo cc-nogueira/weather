@@ -13,18 +13,20 @@ import '../common/mobile_add/weather_ad_unit_ids.dart';
 
 /// AdUnitIds for the right Platform
 final adUnitIds = Provider<AdUnitIds>(
-  (_) => Platform.isAndroid
-      ? const WeatherAndroidAdUnitIds()
-      : Platform.isIOS
+  (_) =>
+      Platform.isAndroid
+          ? const WeatherAndroidAdUnitIds()
+          : Platform.isIOS
           ? const WeatherIosAdUnitIds()
           : NoAdUnitIds(),
 );
 
 /// AdState for Mobile or FakeAdState for Desktop
 final adStateProvider = Provider(
-  (ref) => Platform.isAndroid || Platform.isIOS
-      ? AdMobState(adUnitIds: ref.watch(adUnitIds), useTestAdUnit: false)
-      : FakeAdState(),
+  (ref) =>
+      Platform.isAndroid || Platform.isIOS
+          ? AdMobState(adUnitIds: ref.watch(adUnitIds), useTestAdUnit: false)
+          : FakeAdState(),
 );
 
 // -- Theme:

@@ -43,7 +43,7 @@ abstract class ChartWidget extends ConsumerWidget {
               barrierLabel: 'Label',
               barrierDismissible: true,
               transitionDuration: const Duration(milliseconds: 500),
-              pageBuilder: (_, __, ___) => widgetBuilder(context),
+          pageBuilder: (_, _, _) => widgetBuilder(context),
             );
           },
         ),
