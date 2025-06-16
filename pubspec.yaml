@@ -2,7 +2,7 @@ name: weather_colors
 description: Current weather and forecast with colors 
 
 publish_to: 'none'
-version: 1.0.0
+version: 1.0.0+3
 
 environment:
   sdk: '^3.7.0'
